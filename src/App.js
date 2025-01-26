@@ -1,14 +1,21 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import MainPage from "./pages/MainPage";
+//import MainPage from "./pages/MainPage";
+//import MainVideo from "./pages/MainVideo/MainVideo";
+
+import { GlobalStyle } from './styles/GlobalStyle';
+import Login from './pages/Login/Login';
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<MainPage />} />
-      </Routes>
-    </Router>
+    <>
+      <GlobalStyle />
+      <Router>
+        <Routes>
+          <Route path="/" element={<Login />} />
+        </Routes>
+      </Router>
+    </>
   );
 }
 
