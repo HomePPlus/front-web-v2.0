@@ -1,32 +1,77 @@
 .main-container {
   width: 100%;
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background: #ffffff;
+  height: 200vh;
+  overflow-y: auto;
+  background: linear-gradient(to right, #ffffff);
   position: relative;
+}
+
+.typing-text-section {
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: transform 1s ease-out;
+  position: relative;
 }
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow-x: hidden;
+.typing-text-section.move-up {
+  transform: translateY(-30vh);
 }
 
 .typing-text {
   font-size: 5rem;
   font-weight: bold;
-  color: rgb(1, 148, 70);
   white-space: pre;
+  margin-bottom: -200px;
   border-right: 2px solid #2c3e50;
   animation: blink 0.7s infinite;
+}
+
+.carousel-section {
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  top: 100vh;
+  background: linear-gradient(180deg, 
+    transparent 0%,
+    rgba(183, 201, 194, 0.8) 15%,
+    rgba(242, 200, 200, 1) 100%
+  );
+  transition: transform 1s ease-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.carousel-section.show {
+  transform: translateY(-30vh);
+}
+
+.carousel-intro-text {
+  font-size: 3rem;
+  color: rgba(34, 32, 32, 0.8);
+  font-weight: bold;
+  opacity: 0;
+  margin-top: -200px;
+  transform: translateY(50px);
+  transition: all 1s ease-out;
+  margin-bottom: 10rem;
+}
+
+.carousel-intro-text.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.carousel-container {
+  opacity: 1;
+  transition: none;
+}
+
+.carousel-container.show {
+  opacity: 1;
 }
 
 @keyframes blink {

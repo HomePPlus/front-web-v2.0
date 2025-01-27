@@ -1,9 +1,43 @@
-// styles/GlobalStyle.js
+// // styles/GlobalStyle.js
 import { createGlobalStyle } from 'styled-components';
 
-export const GlobalStyle = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900');
+// export const GlobalStyle = createGlobalStyle`
 
+//   * {
+//     margin: 0;
+//     padding: 0;
+//     box-sizing: border-box;
+//   }
+  
+
+//   body {
+//     font-family: 'eBold', sans-serif;
+//     font-weight: 300;
+//     font-size: 15px;
+//     line-height: 1.7;
+//     color: #c4c3ca;
+//     background-color: #ffffff;  /* 기본 배경색을 흰색으로 변경 */
+//     overflow-x: hidden;
+//   }
+
+//   a {
+//     cursor: pointer;
+//     transition: all 200ms linear;
+//     text-decoration: none;
+//   }
+
+//   h4 {
+//     font-weight: 600;
+//   }
+
+//   .header {
+//     background-color: #ffffff;
+//     box-shadow: none;
+//   }
+// `;
+// export default GlobalStyle;
+export const GlobalStyle = createGlobalStyle`
+  /* 전역 스타일은 최소한으로 유지 */
   * {
     margin: 0;
     padding: 0;
@@ -12,22 +46,9 @@ export const GlobalStyle = createGlobalStyle`
 
   body {
     font-family: 'eBold', sans-serif;
-    font-weight: 300;
-    font-size: 15px;
-    line-height: 1.7;
-    color: #c4c3ca;
-    background-color: #1f2029;
+    background-color: #ffffff;
     overflow-x: hidden;
   }
 
-  a {
-    cursor: pointer;
-    transition: all 200ms linear;
-    text-decoration: none;
-  }
-
-  h4 {
-    font-weight: 600;
-  }
+  /* AuthForm에만 적용될 스타일은 제거 */
 `;
-export default GlobalStyle;

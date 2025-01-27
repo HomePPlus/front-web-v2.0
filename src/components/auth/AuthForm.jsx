@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-const AuthForm = () => {
+const AuthForm = ({ email, setEmail, password, setPassword, handleSubmit, error, isLoading }) => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [showEmailVerification, setShowEmailVerification] = useState(false);
   const [showAddressModal, setShowAddressModal] = useState(false);
@@ -51,27 +51,39 @@ const AuthForm = () => {
                     <CenterWrap>
                       <FormContent>
                         <h4>LOG IN</h4>
-                        <FormGroup>
-                          <FormInput 
-                            type="email" 
-                            placeholder="Email"
-                          />
-                          <InputIcon className="uil uil-at" />
-                        </FormGroup>
-                        <FormGroup>
-                          <FormInput 
-                            type="password" 
-                            placeholder="Password"
-                          />
-                          <InputIcon className="uil uil-lock-alt" />
-                        </FormGroup>
-                        <SubmitButton>Submit</SubmitButton>
-                        <ForgotPassword href="#">
-                          Forgot your ID or PASSWORD?
-                        </ForgotPassword>
+                        <form onSubmit={handleSubmit}>
+                          <FormGroup>
+                            <FormInput 
+                              type="email" 
+                              value={email}
+                              onChange={(e) => setEmail(e.target.value)}
+                              placeholder="Email"
+                              required
+                            />
+                            <InputIcon className="uil uil-at" />
+                          </FormGroup>
+                          <FormGroup>
+                            <FormInput 
+                              type="password" 
+                              value={password}
+                              onChange={(e) => setPassword(e.target.value)}
+                              placeholder="Password"
+                              required
+                            />
+                            <InputIcon className="uil uil-lock-alt" />
+                          </FormGroup>
+                          {error && <div className="error-message">{error}</div>}
+                          <SubmitButton type="submit" disabled={isLoading}>
+                            {isLoading ? "Logging in..." : "Log In"}
+                          </SubmitButton>
+                          <ForgotPassword href="#">
+                            Forgot your ID or PASSWORD?
+                          </ForgotPassword>
+                        </form>
                       </FormContent>
                     </CenterWrap>
                   </CardFront>
+
 
                   <CardBack>
                     <CenterWrap>
@@ -179,8 +191,9 @@ const Section = styled.div`
   position: relative;
   width: 98%;
   display: block;
-  min-height: 70vh;//검은색 길이
-  background-color: #1f2029;
+  min-height: 70vh;
+  // background-color: #1f2029;
+  background-color:rgb(54, 81, 74);
   overflow-x: hidden;
   border-radius: 20px;
   font-family: 'Poppins', sans-serif;
@@ -248,7 +261,7 @@ const CheckboxLabel = styled.label`
     height: 36px;
     border-radius: 50%;
     color: #ffeba7;
-    background-color: #102770;
+    background-color:rgb(14, 42, 11);
     content: '\u2196';  // → 화살표
     font-family: "unicons";
     z-index: 20;
@@ -296,7 +309,8 @@ const Card3dWrapper = styled.div`
 const CardFront = styled.div`
   width: 100%;
   min-height: 510px; // 최소 높이 설정
-  background-color: #2a2b38;
+  // background-color: rgba(31, 41, 36);  // 어두운 초록색 배경
+  background-color:rgb(54, 81, 74);
   background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg');
   background-position: bottom center;
   background-repeat: no-repeat;
@@ -345,7 +359,7 @@ const FormInput = styled.input`
   letter-spacing: 0.5px;
   outline: none;
   color: #c4c3ca;
-  background-color: #1f2029;
+  background-color: rgba(31, 41, 36, 0.8);
   border: none;
   transition: all 200ms linear;
   box-shadow: 0 4px 8px 0 rgba(21,21,21,.2);
@@ -355,7 +369,7 @@ const FormInput = styled.input`
   }
 
   &:focus {
-    background-color: #2a2b38;
+    background-color: rgba(50, 205, 50, 0.2);
   }
 `;
 
@@ -386,14 +400,14 @@ const SubmitButton = styled.button`
   text-align: center;
   border: none;
   background-color: #ffeba7;
-  color: #102770;
+  color:rgb(11, 52, 56);
   box-shadow: 0 8px 24px 0 rgba(255,235,167,.2);
   margin-top: 10px;
   
   &:hover {
-    background-color: #102770;
+    background-color:rgb(11, 52, 56);
     color: #ffeba7;
-    box-shadow: 0 8px 24px 0 rgba(16,39,112,.2);
+    box-shadow: 0 8px 24px 0 rgb(11, 52, 56);
   }
 `;
 
@@ -429,13 +443,13 @@ const VerificationButton = styled.button`
   padding: 8px 12px;
   border-radius: 4px;
   background-color: #ffeba7;
-  color: #102770;
+  color:rgb(11, 52, 56);
   border: none;
   cursor: pointer;
   font-size: 12px;
 
   &:hover {
-    background-color: #102770;
+    background-color:rgb(11, 52, 56);
     color: #ffeba7;
   }
 `;

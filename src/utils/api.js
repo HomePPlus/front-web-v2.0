@@ -27,6 +27,32 @@ const api = {
   // 프로필 조회
   getProfile: () => {
     return axios.get('/api/users/profile');
+  },
+
+  // 신고 점검 일정 관련 API
+  getReportSchedules: () => {
+    return axios.get('/api/schedules/reports');
+  },
+
+  createReportSchedule: (data) => {
+    return axios.post('/api/schedules/reports', data);
+  },
+
+  getReportScheduleDetail: (scheduleId) => {
+    return axios.get(`/api/schedules/reports/${scheduleId}`);
+  },
+
+  // 정기 점검 일정 관련 API
+  getRegularSchedules: () => {
+    return axios.get('/api/schedules/regular');
+  },
+
+  createRegularSchedule: (data) => {
+    return axios.post('/api/schedules/regular', data);
+  },
+
+  getRegularScheduleDetail: (scheduleId) => {
+    return axios.get(`/api/schedules/regular/${scheduleId}`);
   }
 };
 export default api;
