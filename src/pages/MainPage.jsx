@@ -102,7 +102,7 @@ const MainPage = () => {
   }, []);
 
   const getTextColor = (word) => {
-    return word === "안주" ? "rgb(1, 65, 31)" :"rgb(134, 139, 134)";
+    return word === "안주" ? "rgb(1, 65, 31)" :"rgb(168, 176, 168)";
   };
 //"#c8c8c8"
   return (
