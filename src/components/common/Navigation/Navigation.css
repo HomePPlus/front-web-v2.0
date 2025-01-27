@@ -1,0 +1,30 @@
+.nav {
+  --link-color: rgb(95, 97, 95);      /* 기본 색상 */
+  --link-hover-color:rgb(99, 144, 113);  /* 호버시 색상 */
+  display: flex;
+  gap: 20px;
+}
+
+.nav-item {
+  color: var(--link-color);  /* 여기서 기본 색상이 적용됨 */
+  text-decoration: none;
+  position: relative;
+  padding: 1rem;
+}
+
+.nav-item:hover .svg-border,
+.nav-item.is-active .svg-border {
+  color: var(--link-hover-color);  /* 여기서 호버/활성화시 색상이 적용됨 */
+  stroke-dashoffset: 202;
+}
+
+.svg-border {
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  stroke-dashoffset: 101;
+  stroke-dasharray: 101 101;
+  stroke-width: 7px;
+  top: 0;
+  transition: all .5s, stroke .3s;
+}

@@ -11,7 +11,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'eBold', sans-serif;
     font-weight: 300;
     font-size: 15px;
     line-height: 1.7;

@@ -4,14 +4,13 @@
   margin: 0;
   padding: 0;
   overflow: hidden;
-  /* background: #7fa5d7;*/
-  background: #0f1923;
+  background: #ffffff;
   position: relative;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-/* 전체 페이지 스타일 리셋 */
 html,
 body {
   margin: 0;
@@ -22,29 +21,16 @@ body {
 }
 
 .typing-text {
-  position: relative;
-  text-align: center;
-  margin: auto;
-  font-size: 3rem;
+  font-size: 5rem;
   font-weight: bold;
-  color: #c8d7e6;
+  color: rgb(1, 148, 70);
   white-space: pre;
   border-right: 2px solid #2c3e50;
   animation: blink 0.7s infinite;
 }
 
-.button-container {
-  margin-top: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  
-}
-
-.nav-wrapper {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  z-index: 1000;
+@keyframes blink {
+  50% {
+    border-color: transparent;
+  }
 }

@@ -1,8 +1,12 @@
+@font-face {
+  font-family: 'eBold';
+  /* src: url('../src/assets/fonts/funflow.ttf') format('truetype'); */
+  src: url('../src/assets/fonts/eBold.ttf') format('truetype');
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'eBold',sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
