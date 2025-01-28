@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import SvgBorder from './SvgBorder';
 import './Navigation.css';
 
@@ -6,22 +7,20 @@ const Navigation = ({ links }) => {
   const [active, setActive] = useState(null);
 
   return (
-    
     <nav className="nav">
       {links.map(({ url, label }, index) => (
-        <a
+        <Link
           key={index}
-          href={url}
-          className={`nav-item ${active === index ? 'is-active' : ''}`}
-          onClick={(e) => {
-            e.preventDefault();
-            setActive(index);
-          }}
+          to={url}
+          className={`nav-item ${active === index ? 'is-active' : ''} ${
+            label === '로그인&회원가입' ? 'login-button' : ''
+          }`}
+          onClick={() => setActive(index)}
         >
           <SvgBorder />
           <SvgBorder />
           {label}
-        </a>
+        </Link>
       ))}
     </nav>
   );

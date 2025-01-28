@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import AuthForm from "../../components/auth/AuthForm";
-import backgroundImage from "../../assets/images/busan.jpg";
 import { login } from "../../api/apiClient";
 import "./Login.css";
 
@@ -18,10 +17,8 @@ function Login() {
     try {
       const response = await login({ email, password });
       if (response.data.status === 200) {
-        // 로그인 성공 시 알림 표시
         alert(response.data.message);
         console.log("Login successful:", response.data);
-        // Redirect or update app state here
       } else {
         setError("Login failed. Please check your credentials.");
       }
@@ -34,19 +31,17 @@ function Login() {
   };
 
   return (
-    <div className="login-page">
-      <div className="form-container">
-        <div className="auth-form-wrapper">
-          <AuthForm
-            email={email}
-            setEmail={setEmail}
-            password={password}
-            setPassword={setPassword}
-            handleSubmit={handleSubmit}
-            error={error}
-            isLoading={isLoading}
-          />
-        </div>
+    <div className="login-wrapper">
+      <div className="login-container">
+        <AuthForm
+          email={email}
+          setEmail={setEmail}
+          password={password}
+          setPassword={setPassword}
+          handleSubmit={handleSubmit}
+          error={error}
+          isLoading={isLoading}
+        />
       </div>
     </div>
   );

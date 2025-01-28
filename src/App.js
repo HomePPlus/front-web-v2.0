@@ -7,12 +7,12 @@ import Login from './pages/Login/Login';
 
 function App() {
   return (
-    <>
-      {/* <GlobalStyle /> */}
+    <>{/* <GlobalStyle /> */}
       <Router>
         <Header />
         <Routes>
           <Route path="/" element={<MainPage />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </Router>
     </>
