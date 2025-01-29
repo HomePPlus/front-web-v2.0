@@ -54,23 +54,29 @@ export const login = (data) => apiClient.post("/api/auth/login", data);
 
 // * 입주민 커뮤니티 관련 API
 
-
 // * 신고 점검 일정 관련 API
-export const getReportSchedules = () => 
-  apiClient.get("/api/schedules/reports");
+export const getReportSchedules = () => apiClient.get("/api/schedules/reports");
 
-export const createReportSchedule = (data) => 
+export const createReportSchedule = (data) =>
   apiClient.post("/api/schedules/reports", data);
 
-export const getReportScheduleDetail = (scheduleId) => 
+export const getReportScheduleDetail = (scheduleId) =>
   apiClient.get(`/api/schedules/reports/${scheduleId}`);
 
 // * 정기 점검 일정 관련 API
-export const getRegularSchedules = () => 
+export const getRegularSchedules = () =>
   apiClient.get("/api/schedules/regular");
 
-export const createRegularSchedule = (data) => 
+export const createRegularSchedule = (data) =>
   apiClient.post("/api/schedules/regular", data);
 
-export const getRegularScheduleDetail = (scheduleId) => 
+export const getRegularScheduleDetail = (scheduleId) =>
   apiClient.get(`/api/schedules/regular/${scheduleId}`);
+
+// * 결함 검출 관련 API
+export const createDefect = (formData) =>
+  apiClient.post("/api/model/detect", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
