@@ -27,21 +27,33 @@ export const checkServerHealth = async () => {
 // * 회원가입 관련 API
 // 입주민 회원가입
 export const registerResident = (data) =>
-  apiClient.post("/api/users/resident/join", data);
+  apiClient.post("/api/users/resident/join", data, {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
 
-// 점검자 회원가입
+//점검자 회원가입
 export const registerInspector = (data) =>
-  apiClient.post("/api/users/inspector/join", data);
+  apiClient.post("/api/users/inspector/join", data, {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
 
 // * 이메일 관련 API
 export const checkEmail = (email) =>
-  apiClient.get(`/api/users/check-email?email=${email}`);
+  apiClient.get(`/api/users/check-email`, { params: { email } });
 
 export const sendVerificationCode = (email) =>
-  apiClient.post("/api/users/send-verification", { email });
+  apiClient.post(`/api/users/send-verification`, null, { params: { email } });
 
-export const verifyEmail = (token) =>
-  apiClient.get(`/api/users/verify?token=${token}`);
+export const verifyEmail = (email, code) => 
+  apiClient.post(`/api/users/verify-code`, {}, {  // 빈 객체를 본문으로 전송
+    params: { email, code },
+    headers: { 'Content-Type': 'application/json' }  // 명시적 헤더 설정
+  });
+
 // * 로그인 관련 API
 export const login = (data) => apiClient.post("/api/auth/login", data);
 
