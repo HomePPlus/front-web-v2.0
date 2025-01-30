@@ -4,6 +4,7 @@ import Header from "./components/common/Header/Header";
 import MainPage from "./pages/MainPage";
 import Auth from './pages/Auth/Auth';
 import Test from './pages/Test/Test';
+import Report from "./pages/Report/Report";
 import Layout from './components/layout/Layout';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
           <Route path="/" element={<MainPage />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/test" element={<Test />} />
+          <Route path="/report" element={<Report />} />
         </Routes>
       </Layout>
     </Router>
