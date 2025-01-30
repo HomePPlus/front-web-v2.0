@@ -5,12 +5,15 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@gsap/react": "^2.1.2",
     "@iconscout/react-unicons-solid": "^1.1.2",
     "@mui/icons-material": "^6.4.0",
     "@mui/material": "^6.4.0",
     "@react-spring/web": "^9.7.1",
+    "@types/three": "^0.172.0",
     "axios": "^1.7.9",
     "cra-template": "1.2.0",
+    "gsap": "^3.12.7",
     "react": "^18.3.1",
     "react-daum-postcode": "^3.2.0",
     "react-dom": "^18.3.1",
@@ -20,7 +23,10 @@
     "react-spring": "^9.7.5",
     "react-toastify": "^11.0.3",
     "react-tsparticles": "^2.9.3",
+    "snap": "^1.1.0",
+    "snapsvg-cjs": "^0.0.6",
     "styled-components": "^6.1.14",
+    "three": "^0.172.0",
     "tsparticles": "^2.9.3",
     "web-vitals": "^4.2.4"
   },
@@ -34,7 +40,11 @@
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "rules": {
+      "react/react-in-jsx-scope": "off",
+      "react/jsx-uses-react": "off"
+    }
   },
   "browserslist": {
     "production": [
@@ -47,5 +57,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.7",
+    "@babel/preset-react": "^7.26.3"
   }
 }

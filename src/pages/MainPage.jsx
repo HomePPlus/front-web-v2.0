@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Card, Carousel } from "../components/common/Carousel/Carousel";
-import { createDefect } from "../api/apiClient"; // API import 추가
+import { createDefect } from "../api/apiClient";
+import MainAnimation from "../components/main/MainAnimation"; // MainAnimation 컴포넌트 import
 import "./MainPage.css";
 
 const MainPage = () => {
   const [text, setText] = useState("");
   const [showCarouselText, setShowCarouselText] = useState(false);
+  const [animationDone, setAnimationDone] = useState(false);
   const [moveUp, setMoveUp] = useState(false);
   const [results, setResults] = useState({}); // 이미지별 결과 저장
   const [loadingStates, setLoadingStates] = useState({}); // 로딩 상태 관리
 
-  const fullText = "당신의 안전한 주택, 안주";
   const defectImages = [
     {
       url: require("../assets/images/model/CoatingDamage.jpg"),
@@ -35,29 +36,17 @@ const MainPage = () => {
     },
   ];
 
-  useEffect(() => {
-    let currentIndex = 0;
-    const typingInterval = setInterval(() => {
-      if (currentIndex < fullText.length) {
-        setText((prev) => fullText.slice(0, currentIndex + 1));
-        currentIndex++;
-      } else {
-        clearInterval(typingInterval);
-        // 타이핑 효과 완료 후 1.5초 뒤에 애니메이션 시작
-        setTimeout(() => {
-          setMoveUp(true);
-          setTimeout(() => {
-            setShowCarouselText(true);
-          }, 1000);
-        }, 1500);
-      }
-    }, 150);
-
-    return () => clearInterval(typingInterval);
-  }, []);
-
-  const getTextColor = (word) => {
-    return word === "안주" ? "rgb(1, 65, 31)" : "rgb(168, 176, 168)";
+  // 애니메이션 완료 핸들러
+  const handleAnimationComplete = () => {
+    // animationDone이 false일 때만 실행
+    if (!animationDone) {
+      setMoveUp(true);
+      setTimeout(() => {
+        setShowCarouselText(true);
+        // 애니메이션 한 번 완료했으므로 true로 설정
+        setAnimationDone(true);
+      }, 1000);
+    }
   };
 
   const handleImageTest = async (image, index) => {
@@ -95,20 +84,13 @@ const MainPage = () => {
 
   return (
     <div className="main-container">
-      <div className={`typing-text-section ${moveUp ? "move-up" : ""}`}>
-        <div className="typing-text">
-          {text.split(" ").map((word, index) => (
-            <span key={index} style={{ color: getTextColor(word) }}>
-              {word}
-              {index < text.split(" ").length - 1 ? " " : ""}
-            </span>
-          ))}
-        </div>
+      <div className={`animation-section ${moveUp ? "move-up" : ""}`}>
+        {!animationDone && (
+          <MainAnimation onComplete={handleAnimationComplete} />
+        )}
       </div>
       <div className={`carousel-section ${moveUp ? "show" : ""}`}>
-        <div
-          className={`carousel-intro-text ${showCarouselText ? "show" : ""}`}
-        >
+        <div className={`carousel-intro-text ${showCarouselText ? "show" : ""}`}>
           안전한 주거 공간의 시작, AI 결함 진단을 체험해보세요!
         </div>
         <div className={`carousel-container ${showCarouselText ? "show" : ""}`}>
@@ -131,4 +113,4 @@ const MainPage = () => {
   );
 };
 
-export default MainPage;
+export default MainPage
