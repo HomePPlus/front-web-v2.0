@@ -1,0 +1,55 @@
+/* 드롭다운 컨테이너 */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* 드롭다운 버튼 */
+.dropdown-button {
+  display: flex;
+  justify-content: space-between; /* 텍스트와 아이콘을 양 끝으로 배치 */
+  align-items: center;
+  width: 110px; /* 버튼과 메뉴의 너비를 동일하게 설정 */
+  background-color: #ffffff;
+  border: none;
+  padding: 5px;
+  font-family: "eBold"; /* 글꼴 설정 */
+  font-size: 16px; /* 글꼴 크기 */
+  cursor: pointer;
+  border-radius: 10px;
+  box-shadow: inset 2px 2px 4px #d1d9e6, inset -2px -2px 4px #f9f9f9;
+}
+
+/* 텍스트 스타일 */
+.dropdown-text {
+  text-align: left; /* 텍스트를 좌측 정렬 */
+}
+
+/* 아이콘 스타일 */
+.dropdown-icon {
+  margin-left: auto; /* 아이콘을 우측 끝으로 밀기 */
+}
+
+/* 드롭다운 메뉴 */
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% - 17px); /* 버튼과 메뉴가 일체형으로 보이도록 설정 */
+  left: 0;
+  padding-left: 1px;
+  width: 97.5%; /* 버튼과 동일한 너비로 설정 */
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  /* box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); */
+}
+
+/* 드롭다운 항목 */
+.dropdown-item {
+  list-style: none; /* 기본 목록 표시 스타일 제거 */
+  padding: 5px 10px;
+  font-size: inherit; /* 부모 요소의 글꼴 크기 상속 */
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #f1f1f1; /* 호버 시 배경색 변경 */
+}

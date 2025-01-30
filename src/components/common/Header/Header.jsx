@@ -6,7 +6,7 @@ import './Header.css';
 
 const Header = () => {
   const navLinks = [
-    { url: '#', label: '신고하기' },
+    { url: '/report', label: '신고하기' },
     { url: '#', label: '커뮤니티' },
     { url: '/login', label: '로그인&회원가입' },
     { url: '#', label: '인스타그램' }

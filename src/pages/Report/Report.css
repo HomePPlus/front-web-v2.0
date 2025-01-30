@@ -1,0 +1,191 @@
+/* 전체 화면 배경색 설정 */
+.report-wrapper {
+  margin: 0; /* 기본 여백 제거 */
+  padding: 0; /* 기본 패딩 제거 */
+  height: 910px; /* 화면 높이를 100%로 설정 */
+  background: linear-gradient(180deg, #ffffff, #ebe8d5); /* 원하는 배경색*/
+}
+
+/* 컨테이너 스타일 (중앙 정렬 및 레이아웃 유지) */
+.report-container {
+  width: 100%;
+  max-width: 1200px; /* 콘텐츠 최대 너비 */
+  margin: 0 auto; /* 수평 중앙 정렬 */
+  padding: 50px;
+}
+
+.report-button {
+  margin-top: 30px;
+  margin-left: 880px;
+  background-color: rgb(255, 255, 255) !important;
+  color: rgb(0, 0, 0) !important;
+}
+
+.report-button:hover {
+  background-color: rgb(224, 224, 224) !important;
+  color: rgb(49, 49, 49) !important;
+  transform: scale(1.04);
+}
+
+.address-search {
+  position: relative;
+  left: 4px !important;
+  display: inline-block;
+  background-color: #1e5a32 !important;
+  border-radius: 5px !important;
+  color: white !important;
+  width: auto;
+  height: auto;
+  text-align: center;
+  font-family: eBold; /*eLight로 바꾸세요*/
+  font-size: 14px !important;
+  white-space: nowrap;
+  margin-top: -1000px;
+}
+
+.address-search:hover {
+  background-color: rgb(10, 110, 24) !important;
+  color: white !important;
+}
+
+.report-cancel {
+  margin-top: -39px;
+  margin-left: 705px;
+  background-color: rgb(10, 90, 24) !important;
+  color: rgb(255, 255, 255) !important;
+}
+.report-cancel:hover {
+  background-color: rgb(10, 110, 24) !important;
+  color: white !important;
+  transform: scale(1.02);
+}
+
+.address-input {
+  position: relative;
+  width: 240px;
+  height: 14px;
+  margin: 8px 0;
+  padding: 14px;
+  /* padding-left: 25px; */
+  /* margin-left: -400px; */
+  font-family: "eBold";
+  font-size: 13px;
+  border: none;
+  outline: none;
+  background-color: #f1f1f1;
+  border-radius: 8px;
+  box-shadow: inset 2px 2px 4px #d5d2ba, inset -2px -2px 4px #fcfcfa !important;
+  transition: all 0.3s ease;
+}
+/* 주소 그룹 스타일 */
+.address-group {
+  display: flex;
+  align-items: center;
+  margin-left: 277px;
+}
+
+.form-row {
+  display: flex; /* 가로로 배치 */
+  align-items: center; /* 수직 중앙 정렬 */
+  margin-bottom: 15px; /* 각 행 간격 */
+  margin-left: -450px;
+}
+.form-row-text {
+  display: flex; /* 가로로 배치 */
+  align-items: center; /* 수직 상단 정렬 */
+  margin-bottom: 15px; /* 각 행 간격 */
+  margin-left: -270px;
+}
+
+/* Label 스타일 */
+.form-label {
+  font-size: 16px; /* 텍스트 크기 조정 */
+  white-space: nowrap;
+  font-weight: bold; /* 텍스트 굵게 */
+  min-width: 100px; /* 모든 라벨의 너비를 동일하게 설정 */
+  text-align: right; /* 라벨 텍스트를 오른쪽 정렬 */
+  margin-right: 20px; /* Input과 간격 추가 */
+}
+
+.detailAddress-input {
+  position: relative;
+  left: 20px;
+  width: 250px;
+  box-shadow: inset 2px 2px 4px #d5d2ba, inset -2px -2px 4px #fcfcfa !important;
+}
+
+.title-input {
+  width: 350px;
+  height: 14px;
+  margin: 8px 0;
+  padding: 14px;
+  /* padding-left: 25px; */
+  /* margin-left: -400px; */
+  font-family: "eBold";
+  font-size: 13px;
+  border: none;
+  outline: none;
+  background-color: #f1f1f1 !important;
+  border-radius: 8px;
+  box-shadow: inset 2px 2px 4px #d5d2ba, inset -2px -2px 4px #fcfcfa !important;
+  transition: all 0.3s ease;
+}
+
+.form-content-label {
+  position: relative;
+  font-size: 16px; /* 텍스트 크기 조정 */
+  white-space: nowrap;
+  font-weight: bold; /* 텍스트 굵게 */
+  min-width: 100px; /* 모든 라벨의 너비를 동일하게 설정 */
+  bottom: 52px;
+  text-align: right; /* 라벨 텍스트를 오른쪽 정렬 */
+  margin-right: 20px; /* Input과 간격 추가 */
+}
+
+.name-input {
+  width: 350px;
+  height: 14px;
+  margin: 8px 0;
+  padding: 14px;
+  /* padding-left: 25px; */
+  /* margin-left: -400px; */
+  font-family: "eBold";
+  font-size: 13px;
+  border: none;
+  outline: none;
+  background-color: #e2e2e2 !important;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.report-input {
+  position: relative;
+  width: 530px;
+  height: 120px;
+  margin: 8px 0;
+  padding: 14px;
+  /* padding-left: 25px; */
+  /* margin-left: -400px; */
+  font-family: "eBold";
+  font-size: 13px;
+  border: none;
+  outline: none;
+  background-color: #f1f1f1 !important;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: inset 2px 2px 4px #d5d2ba, inset -2px -2px 4px #fcfcfa !important;
+  resize: none;
+  /* padding-top: 17px; */
+}
+
+.dropdown {
+  bottom: 172px;
+  left: 268px;
+}
+
+.report-upload {
+  position: relative; /* 위치 조정을 가능하게 설정 */
+  bottom: 80px;
+  border-radius: 5px;
+  border: 1px solid rgba(27, 31, 35, 0.15);
+}
