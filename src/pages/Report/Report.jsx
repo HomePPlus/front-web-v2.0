@@ -51,14 +51,14 @@ const Report = () => {
                 <label className="form-label">주소</label>
                 <Input
                   className="address-input"
-                  placeholder="주소 검색으로 주소 찾기를 진행해주세요."
+                  placeholder="신고할 주소를 입력해주세요"
                   onChange={() => {}}
                   disabled
                 />
                 <Button className="address-search">주소 검색</Button>
                 <Input
                   className="detailAddress-input"
-                  placeholder="상세주소를 입력해주세요."
+                  placeholder="상세주소를 입력해주세요"
                   value={address}
                   onChange={(e) => setText(e.target.value)}
                 />
@@ -68,7 +68,7 @@ const Report = () => {
               <label className="form-label">제목</label>
               <Input
                 className="title-input"
-                placeholder="글의 제목을을 입력해주세요."
+                placeholder="신고 제목을 입력해주세요"
                 value={title}
                 onChange={(e) => titleText(e.target.value)}
               />
@@ -77,20 +77,20 @@ const Report = () => {
               <label className="form-content-label">내용</label>
               <textarea
                 className="report-input"
-                placeholder="신고내용을 자세히 입력해주세요."
+                placeholder="신고 내용을 자세히 입력해주세요"
                 value={report}
                 onChange={(e) => reportText(e.target.value)}
               />
             </div>
             <DropDown
               options={[
-                "선택",
                 "균열",
                 "박리",
                 "백태/누수",
                 "철근 노출",
                 "강재 손상",
                 "도장 손상",
+                "모름"
               ]}
               placeholder="선택"
               onSelect={handleDropdownSelect}

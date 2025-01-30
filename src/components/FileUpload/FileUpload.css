@@ -10,6 +10,7 @@
     color: rgb(44, 44, 44);
     padding: 7px 15px;
     border-radius: 5px;
+    font-family: 'eMedium';
     font-size: 12px;
     cursor: pointer;
     white-space: nowrap; /* 텍스트 줄바꿈 방지 */
@@ -29,6 +30,7 @@
     font-size: 11px; /* 텍스트 크기 조정 */
     color: rgb(100, 100, 100); /* 텍스트 색상 */
     white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+    font-family: 'eMedium';
     overflow: hidden; /* 넘치는 텍스트 숨김 */
     text-overflow: ellipsis; /* 넘치는 텍스트를 "..."로 표시 */
   }

@@ -1,5 +1,4 @@
 .custom-button {
-  font-size: 16px;
   font-weight: 500;
   padding: 8px 25px;
   background-color: #fafbfc;
@@ -7,8 +6,12 @@
   border-radius: 4px;
   color: #24292e;
   cursor: pointer;
+  font-family: 'eMedium';
   top: 500px;
   left: 300px;
+  font-size: 10px;
+  height: 35px;
+  min-width: 10.5vh;
   
 }
 
