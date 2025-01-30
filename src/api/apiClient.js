@@ -53,6 +53,36 @@ export const login = (data) => apiClient.post("/api/auth/login", data);
 //   });
 
 // * 입주민 커뮤니티 관련 API
+export const createCommunityPost = (requestDto) =>
+  apiClient.post("/api/resident_communities", requestDto);
+
+export const getCommunityPost = (communityPostId) =>
+  apiClient.get(`/api/resident_communities/${communityPostId}`);
+
+export const getAllCommunityPosts = () =>
+  apiClient.get("/api/resident_communities");
+
+export const updateCommunityPost = (communityPostId, requestDto) =>
+  apiClient.put(`/api/resident_communities/${communityPostId}`, requestDto);
+
+export const deleteCommunityPost = (communityPostId) =>
+  apiClient.delete(`/api/resident_communities/${communityPostId}`);
+
+// 커뮤니티 댓글 관련 API
+export const createCommunityComment = (communityId, requestDto) =>
+  apiClient.post(
+    `/api/resident_communities/comments/${communityId}`,
+    requestDto
+  );
+
+export const getCommunityComments = (communityId) =>
+  apiClient.get(`/api/resident_communities/comments/${communityId}`);
+
+export const updateCommunityComment = (commentId, requestDto) =>
+  apiClient.put(`/api/resident_communities/comments/${commentId}`, requestDto);
+
+export const deleteCommunityComment = (commentId) =>
+  apiClient.delete(`/api/resident_communities/comments/${commentId}`);
 
 // * 신고 점검 일정 관련 API
 export const getReportSchedules = () => apiClient.get("/api/schedules/reports");
