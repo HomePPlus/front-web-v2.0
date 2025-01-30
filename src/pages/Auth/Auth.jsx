@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import AuthForm from "../../components/auth/AuthForm";
+
 import { 
   login, 
   registerResident, 
