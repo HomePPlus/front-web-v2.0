@@ -6,7 +6,10 @@ import "./CommunityBoard.css";
 
 const PostItem = ({ post, onDelete }) => {
   const formatDate = (dateString) => {
-    return format(new Date(dateString), "yyyy-MM-dd HH:mm");
+    const date = new Date(dateString);
+    // 한국 시간으로 변환 (UTC+9)
+    const koreanTime = new Date(date.getTime() + 9 * 60 * 60 * 1000);
+    return format(koreanTime, "yyyy-MM-dd HH:mm");
   };
 
   return (
