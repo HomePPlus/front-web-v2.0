@@ -1,5 +1,5 @@
 .custom-button {
-  font-weight: 500;
+  font-weight: 500px;
   padding: 8px 25px;
   background-color: #fafbfc;
   border: 1px solid rgba(27, 31, 35, 0.15);
@@ -11,7 +11,7 @@
   left: 300px;
   font-size: 10px;
   height: 35px;
-  min-width: 10.5vh;
+  min-width: 10%;
   
 }
 

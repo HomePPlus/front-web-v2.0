@@ -1,5 +1,9 @@
 /* 전체 화면 배경색 설정 */
 .report-wrapper {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; 
   margin: 0; /* 기본 여백 제거 */
   padding: 0; /* 기본 패딩 제거 */
   height: 910px; /* 화면 높이를 100%로 설정 */
@@ -17,7 +21,7 @@
 .report-button {
   position: relative;
   top: 10px !important;
-  margin-left: 265px;
+  margin-left: 24%;
   font-size: 11px !important;
   background-color: rgb(10, 90, 24) !important;
   color: rgb(255, 255, 255)!important;
@@ -65,7 +69,8 @@
 .address-group {
   display: flex;
   align-items: center;
-  margin-left: 274px;
+  margin-left: 17.5%;
+  
 }
 
 .address-input {
@@ -87,7 +92,7 @@
 .form-row {
   display: flex; /* 가로로 배치 */
   align-items: center; /* 수직 중앙 정렬 */
-  margin-bottom: 15px; /* 각 행 간격 */
+  margin-bottom: 30px !important; /* 각 행 간격 */
   margin-left: -450px;
 }
 .form-row-text {
