@@ -8,6 +8,7 @@ import {
   createCommunityComment,
 } from "../../api/apiClient";
 import CommentList from "./CommentList";
+import FormGroup from "../../components/FormGroup/FormGroup";
 import "./CommunityBoard.css";
 
 const PostDetail = () => {
@@ -70,49 +71,66 @@ const PostDetail = () => {
 
   return (
     <div className="post-detail-container">
-      <div className="post-header">
-        <h1>{post.communityTitle}</h1>
-        <div className="post-meta">
-          <span className="author">{post.userName}</span>
-          <span className="date">
-            작성일:{" "}
-            {new Date(post.communityCreatedAt).toLocaleDateString("ko-KR")}
-          </span>
-          {post.communityUpdatedAt !== post.communityCreatedAt && (
-            <span className="date">
-              수정일:{" "}
-              {new Date(post.communityUpdatedAt).toLocaleDateString("ko-KR")}
-            </span>
-          )}
-          <span className="views">조회수: {post.communityViews}</span>
-        </div>
-      </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          marginTop: "100px",
+        }}
+      >
+        <h1>입주민 커뮤니티</h1>
+        <FormGroup>
+          <div className="post-header">
+            <h1>{post.communityTitle}</h1>
+            <div className="post-meta">
+              <span className="author">{post.userName}</span>
+              <span className="date">
+                작성일:{" "}
+                {new Date(post.communityCreatedAt).toLocaleDateString("ko-KR")}
+              </span>
+              {post.communityUpdatedAt !== post.communityCreatedAt && (
+                <span className="date">
+                  수정일:{" "}
+                  {new Date(post.communityUpdatedAt).toLocaleDateString(
+                    "ko-KR"
+                  )}
+                </span>
+              )}
+              <span className="views">조회수: {post.communityViews}</span>
+            </div>
+          </div>
 
-      <div className="post-content">
-        <p>{post.communityContent}</p>
-      </div>
+          <div className="post-content">
+            <p>{post.communityContent}</p>
+          </div>
 
-      <div className="post-actions">
-        <button onClick={() => navigate("/community")} className="list-button">
-          목록으로
-        </button>
-        <button onClick={handleDeletePost} className="delete-button">
-          삭제
-        </button>
-      </div>
+          <div className="post-actions">
+            <button
+              onClick={() => navigate("/community")}
+              className="list-button"
+            >
+              목록으로
+            </button>
+            <button onClick={handleDeletePost} className="delete-button">
+              삭제
+            </button>
+          </div>
 
-      <div className="comment-section">
-        <h3>댓글 ({comments.length})</h3>
-        <form onSubmit={handleCommentSubmit}>
-          <textarea
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            placeholder="댓글을 입력하세요"
-            required
-          />
-          <button type="submit">댓글 작성</button>
-        </form>
-        <CommentList comments={comments} />
+          <div className="comment-section">
+            <h3>댓글 ({comments.length})</h3>
+            <form onSubmit={handleCommentSubmit}>
+              <textarea
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder="댓글을 입력하세요"
+                required
+              />
+              <button type="submit">확인</button>
+            </form>
+            <CommentList comments={comments} />
+          </div>
+        </FormGroup>
       </div>
     </div>
   );
