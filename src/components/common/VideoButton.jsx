@@ -1,17 +1,17 @@
 // VideoButton.jsx
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import backgroundVideo from '../../assets/video/draw_ai.mp4'; // 비디오 파일 경로
+import React, { useState } from "react";
+import styled from "styled-components";
+import backgroundVideo from "../../assets/video/draw_ai.mp4"; // 비디오 파일 경로
 
 // styled-components 정의
 const Wrapper = styled.div`
-  --color: #1F242D;
+  --color: #1f242d;
   --color-invert: #ffffff;
   // 동그라미 크기 조절 - 기본, 호버, 클릭 시 크기
-  --clip-path: circle(35px at left);  // 기본 크기 증가
-  --clip-path-hover: circle(100px at left);  // 호버 시 크기 증가
+  --clip-path: circle(35px at left); // 기본 크기 증가
+  --clip-path-hover: circle(100px at left); // 호버 시 크기 증가
   --clip-path-clicked: circle(100vw at left);
-  --duration: .4s;
+  --duration: 0.4s;
   --timing-function: ease;
   position: relative;
   display: flex;
@@ -33,7 +33,8 @@ const VideoContainer = styled.div`
   justify-content: center;
   align-items: center;
   margin-left: 15px;
-  clip-path: ${props => props.isChecked ? 'var(--clip-path-clicked)' : 'var(--clip-path)'};
+  clip-path: ${(props) =>
+    props.isChecked ? "var(--clip-path-clicked)" : "var(--clip-path)"};
   transition: clip-path var(--duration) var(--timing-function);
 
   // 호버 효과 추가
@@ -58,10 +59,10 @@ const Text = styled.div`
   position: relative;
   text-transform: uppercase;
   font-weight: 600;
-  letter-spacing: .2px;
+  letter-spacing: 0.2px;
   // 체크박스 상태에 따라 텍스트 숨김 처리
-  opacity: ${props => props.isChecked ? 0 : 1};
-  transition: opacity .3s var(--timing-function);
+  opacity: ${(props) => (props.isChecked ? 0 : 1)};
+  transition: opacity 0.3s var(--timing-function);
   color: #ffffff; // 원하는 색상으로 변경
 `;
 
@@ -77,7 +78,7 @@ const TextSpan = styled.span`
   }
 
   &::after {
-    color: #FFB800; // 두 번째 텍스트 색상 (호버/활성화 시)
+    color: #ffb800; // 두 번째 텍스트 색상 (호버/활성화 시)
     clip-path: var(--clip-path);
     transition: clip-path var(--duration) var(--timing-function);
     position: absolute;
@@ -114,19 +115,13 @@ const VideoButton = () => {
 
   return (
     <Wrapper>
-      <Input 
-        type="checkbox" 
+      <Input
+        type="checkbox"
         checked={isChecked}
         onChange={(e) => setIsChecked(e.target.checked)}
       />
       <VideoContainer isChecked={isChecked}>
-        <Video 
-          src={backgroundVideo}
-          loop 
-          muted 
-          autoPlay 
-          playsInline 
-        />
+        <Video src={backgroundVideo} loop muted autoPlay playsInline />
       </VideoContainer>
       {/* Text 컴포넌트에 isChecked prop 전달 */}
       <Text isChecked={isChecked}>

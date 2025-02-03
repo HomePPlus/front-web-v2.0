@@ -10,6 +10,7 @@ import CommunityBoard from "./pages/Community/CommunityBoard";
 import PostDetail from "./pages/Community/PostDetail";
 import NaverMap from "./components/map/NaverMap";
 import HealthCheck from "./HealthCheck";
+import CreateCommunityPost from "./pages/Community/CreateCommunityPost";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/community/:postId" element={<PostDetail />} />
           <Route path="/map" element={<NaverMap />} />
           <Route path="/health" element={<HealthCheck />} />
+          <Route path="/create-post" element={<CreateCommunityPost />} />
         </Routes>
       </Layout>
     </Router>

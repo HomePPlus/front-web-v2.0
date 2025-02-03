@@ -7,10 +7,12 @@ import {
 import PostList from "./PostList";
 import CreatePost from "./CreatePost";
 import Pagination from "../../components/common/Pagination/Pagination";
-import FormGroup from "../../components/FormGroup/FormGroup"; // 직접 만든 FormGroup
+import FormGroup from "../../components/FormGroup/FormGroup";
 import "./CommunityBoard.css";
+import { useNavigate } from "react-router-dom";
 
 const CommunityBoard = () => {
+  const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 상태 추가
   const [postsPerPage] = useState(7); // 한 페이지당 7개의 게시글로 수정
@@ -66,35 +68,26 @@ const CommunityBoard = () => {
   if (error) return <div className="error">{error}</div>;
 
   return (
-    <div className="community-board">
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          marginTop: "100px",
-        }}
-      >
+    <div className="report-wrapper">
+      <div className="community-container">
         <h1>입주민 커뮤니티</h1>
         <FormGroup>
-          <PostList posts={currentPosts} onDelete={handleDeletePost} />{" "}
+          <PostList posts={currentPosts} onDelete={handleDeletePost} />
           <div className="pagination-container">
-            {/* Pagination 컴포넌트 */}
             <Pagination
-              totalPage={Math.ceil(posts.length / postsPerPage)} // 총 페이지 수 계산
-              page={currentPage} // 현재 페이지 번호 전달
-              setPage={setCurrentPage} // 페이지 변경 핸들러 전달
+              totalPage={Math.ceil(posts.length / postsPerPage)}
+              page={currentPage}
+              setPage={setCurrentPage}
             />
           </div>
-          
           {showCreateForm && <CreatePost onCreate={handleCreatePost} />}
         </FormGroup>
         <button
-            className="write-button"
-            onClick={() => setShowCreateForm(!showCreateForm)}
-          >
-            {showCreateForm ? "작성 취소" : "글쓰기"}
-          </button>
+          className="write-button"
+          onClick={() => navigate("/create-post")}
+        >
+          글쓰기
+        </button>
       </div>
     </div>
   );
