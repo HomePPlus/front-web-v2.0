@@ -136,3 +136,9 @@ export const createDefect = (formData) =>
       "Content-Type": "multipart/form-data",
     },
   });
+
+// * 대시보드 관련 API
+export const getDefectStats = (area) =>
+  apiClient.get(`/api/dashboard/defects/stats`, {
+    params: { area },
+  });
