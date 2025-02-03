@@ -1,16 +1,16 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-const AnimatedButton = ({ 
+const AnimatedButton = ({
   text = "Button", // 버튼 텍스트
   variant = "default", // 버튼 스타일 (default, white, transparent)
   href = "#", // 링크 주소
   onClick, // 클릭 이벤트
-  className // 추가 스타일 클래스
+  className, // 추가 스타일 클래스
 }) => {
   return (
-    <StyledLink 
-      href={href} 
+    <StyledLink
+      href={href}
       className={`${variant} ${className}`}
       onClick={onClick}
     >
@@ -25,28 +25,28 @@ const AnimatedButton = ({
 
 const StyledLink = styled.a`
   // 전역 변수 - 버튼의 기본 색상과 크기 설정
-  --base: #0f1923;    // 배경색/어두운 색상
-  --white: #ece8e1;   // 밝은 색상
-  --pink: #ff4655;    // 강조 색상
-  --height: 54px;     // 버튼 높이
-  --transition: 0.3s ease-out all;  // 애니메이션 속도와 방식
-  
-  width: 100%;              // 버튼 너비
-  max-width: 240px;         // 최대 너비 제한
-  height: var(--height);    // 버튼 높이
-  padding: 8px;             // 내부 여백
-  font-size: 0.8rem;        // 글자 크기
-  font-weight: 900;         // 글자 굵기
-  color: var(--pink);       // 글자 색상
+  --base: #0f1923; // 배경색/어두운 색상
+  --white: #ece8e1; // 밝은 색상
+  --pink: #ff4655; // 강조 색상
+  --height: 54px; // 버튼 높이
+  --transition: 0.3s ease-out all; // 애니메이션 속도와 방식
+
+  width: 100%; // 버튼 너비
+  max-width: 240px; // 최대 너비 제한
+  height: var(--height); // 버튼 높이
+  padding: 8px; // 내부 여백
+  font-size: 0.8rem; // 글자 크기
+  font-weight: 900; // 글자 굵기
+  color: var(--pink); // 글자 색상
   text-align: center;
   text-transform: uppercase;
   text-decoration: none;
   position: relative;
   margin: 10px 0;
   background: transparent;
-  
+
   // 테두리 설정 - 이 부분을 수정하여 테두리 스타일 변경
-  box-shadow: 0 0 0 1px inset var(--white);     // 테두리 두께와 색상
+  box-shadow: 0 0 0 1px inset var(--white); // 테두리 두께와 색상
   border: none; // 기본 테두리 제거
 
   &.white:hover > p {
@@ -55,15 +55,16 @@ const StyledLink = styled.a`
 
   // 흰색 버전
   &.white > p {
-    background: var(--white);       // 흰색 배경
-    color: var(--base);             // 어두운 글자색
+    background: var(--white); // 흰색 배경
+    color: var(--base); // 어두운 글자색
     span.base {
       border: 1px solid transparent;
     }
   }
   // 투명 버전
-  &.transparent:hover > p {          // 어두운 배경
-    color: var(--white);             // 밝은 글자색
+  &.transparent:hover > p {
+    // 어두운 배경
+    color: var(--white); // 밝은 글자색
     span.text {
       box-shadow: 0 0 0 1px var(--white);
     }
@@ -127,14 +128,14 @@ const StyledLink = styled.a`
     }
 
     span.bg {
-      left: -5%;                      // 시작 위치
+      left: -5%; // 시작 위치
       position: absolute;
       background: var(--pink);
       width: 0;
       height: 100%;
       z-index: 3;
-      transition: var(--transition);  // 애니메이션 속도
-      transform: skewX(-10deg);       // 기울기 각도
+      transition: var(--transition); // 애니메이션 속도
+      transform: skewX(-10deg); // 기울기 각도
     }
 
     span.text {
@@ -160,13 +161,19 @@ const StyledLink = styled.a`
   }
 
   &:hover {
-    color: var(--white);    // 호버 시 글자 색상
+    color: var(--white); // 호버 시 글자 색상
     span.bg {
-      width: 110%;          // 호버 시 배경 확장 정도
+      width: 110%; // 호버 시 배경 확장 정도
     }
     span.text:after {
-      background: var(--white);  // 호버 시 텍스트 배경색
+      background: var(--white); // 호버 시 텍스트 배경색
     }
+  }
+
+  &.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+    cursor: not-allowed;
   }
 `;
 

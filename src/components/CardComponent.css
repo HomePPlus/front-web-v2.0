@@ -1,0 +1,45 @@
+.card-perspective {
+  width: 100%;
+  perspective: 1000px;
+}
+
+.card {
+  width: 270px;
+  height: 413px;
+  margin: auto;
+  box-shadow: 0 70px 63px -60px #494848;
+  transform-style: preserve-3d;
+  transition: transform 0.05s linear;
+  position: relative;
+}
+
+.card-thumb {
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+  border-radius: 15px;
+}
+
+.card-title {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 40px;
+  font-weight: 100;
+  transform: translateZ(100px);
+  color: #ffffff;
+  text-align: center;
+  text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.7);
+}
+
+.card-subtitle {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 0) translateZ(50px);
+  font-size: 37px;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+  text-shadow: 4px 4px 10px rgba(255, 255, 255, 0.7);
+}

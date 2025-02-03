@@ -1,0 +1,117 @@
+/* report-wrapper 클래스를 직접 사용할 것이므로 wrapper 관련 스타일은 제거 */
+.report-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  height: 910px;
+  background: linear-gradient(180deg, #ffffff, #ebe8d5);
+}
+
+.community-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* 버튼 스타일 수정 */
+.community-post-button-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+  width: 100%;
+}
+
+.create-community-submit-button {
+  padding: 8px 30px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  min-width: 100px;
+  background-color: rgb(10, 90, 24) !important;
+  color: rgb(255, 255, 255) !important;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.create-community-submit-button:hover {
+  background-color: rgb(10, 110, 24) !important;
+  color: rgb(240, 227, 108) !important;
+  transform: scale(1.04);
+}
+
+.create-community-cancel-button {
+  padding: 8px 30px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  min-width: 100px;
+  background-color: #ffd84d;
+  color: #333;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.create-community-cancel-button:hover {
+  background-color: rgb(10, 110, 24) !important;
+  color: white !important;
+  transform: scale(1.02);
+}
+
+.write-button,
+.cancel-button {
+  padding: 8px 30px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  min-width: 100px;
+  margin: 0;
+}
+
+.write-button {
+  background-color: rgb(10, 90, 24) !important;
+  color: rgb(255, 255, 255) !important;
+  margin-right: 10px;
+}
+
+.write-button:hover {
+  background-color: rgb(10, 90, 24) !important;
+  color: rgb(240, 227, 108) !important;
+  transform: scale(1.04);
+}
+
+.cancel-button {
+  margin-left: 0;
+}
+
+.cancel-button:hover {
+  background-color: rgb(10, 110, 24) !important;
+  color: white !important;
+  transform: scale(1.02);
+}
+
+@media (max-width: 768px) {
+  .community-container {
+    padding: 10px;
+  }
+
+  .write-button,
+  .cancel-button {
+    margin-left: -50;
+    width: 100%;
+  }
+}

@@ -257,7 +257,7 @@
 .post-header {
   display: flex;
   flex-direction: column;
-  
+
   margin-top: -2rem;
   padding-bottom: -1rem;
 }
@@ -316,7 +316,6 @@
 .comment-section {
   /* margin-top: -1rem; */
   margin-left: -24rem;
-
 }
 
 .comment-section h3 {
@@ -346,7 +345,7 @@
 }
 
 .comment-section button {
-  position : relative;
+  position: relative;
   left: 3px;
   bottom: 36px;
   height: 67px;
@@ -400,4 +399,24 @@
 .pagination-wrapper {
   display: flex;
   justify-content: center;
+}
+
+.community-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+}
+
+@media (max-width: 768px) {
+  .community-container {
+    padding: 10px;
+  }
 }

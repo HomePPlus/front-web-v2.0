@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthForm from "../../components/auth/AuthForm";
 import { login } from "../../api/apiClient";
@@ -34,6 +34,9 @@ function Auth() {
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [verificationError, setVerificationError] = useState("");
 
+  const [codeRequestTime, setCodeRequestTime] = useState(null); // 인증 코드 요청 시간
+  const [isCodeExpired, setIsCodeExpired] = useState(false); // 코드 만료 상태
+
   // 로그인 핸들러
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -63,10 +66,18 @@ function Auth() {
     try {
       const checkResponse = await checkEmail(email);
       if (checkResponse.data.status === 200) {
+        // 이미 인증 코드가 전송된 이메일인지 확인
+        if (checkResponse.data.isCodeSent) {
+          alert("이미 인증 코드가 전송된 이메일입니다.");
+          return; // 함수 종료
+        }
+
         const response = await sendVerificationCode(email);
         if (response.data.status === 200) {
           alert(response.data.message);
           setShowEmailVerification(true);
+          setCodeRequestTime(Date.now()); // 현재 시간을 저장
+          setIsCodeExpired(false); // 코드 만료 상태 초기화
         }
       }
     } catch (error) {
@@ -118,6 +129,22 @@ function Auth() {
     }
   };
 
+  // 타이머 설정
+  useEffect(() => {
+    if (codeRequestTime) {
+      const timer = setInterval(() => {
+        const currentTime = Date.now();
+        if (currentTime - codeRequestTime >= 180000) {
+          // 3분(180초) 경과
+          setIsCodeExpired(true);
+          clearInterval(timer); // 타이머 정리
+        }
+      }, 1000); // 1초마다 체크
+
+      return () => clearInterval(timer); // 컴포넌트 언마운트 시 타이머 정리
+    }
+  }, [codeRequestTime]);
+
   return (
     <div className="login-wrapper">
       <div className="login-container">
@@ -152,6 +179,7 @@ function Auth() {
           handleRegister={handleRegister}
           isEmailVerified={isEmailVerified}
           verificationError={verificationError}
+          isCodeExpired={isCodeExpired} // 만료 상태 전달
         />
       </div>
     </div>
