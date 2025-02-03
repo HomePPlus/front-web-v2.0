@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/common/Header/Header";
 import Layout from './components/layout/Layout';
@@ -8,7 +8,7 @@ import Test from './pages/Test/Test';
 import Report from "./pages/Report/Report";
 import CommunityBoard from "./pages/Community/CommunityBoard";
 import PostDetail from "./pages/Community/PostDetail";
-
+import ReportList from "./pages/Report/ReportList";
 
 function App() {
   return (
@@ -22,6 +22,7 @@ function App() {
           <Route path="/report" element={<Report />} />
           <Route path="/community" element={<CommunityBoard />} />
           <Route path="/community/:postId" element={<PostDetail />} />
+          <Route path="/report/list" element={<ReportList />} />
         </Routes>
       </Layout>
     </Router>
