@@ -134,13 +134,35 @@ export const createDefect = (formData) =>
   apiClient.post("/api/model/detect", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
-    }});
+    },
+  });
 
 // * 오늘 예약된 점검 일정 API
-export const getTodayInspections = (date) => 
+export const getTodayInspections = (date) =>
   apiClient.get(`/api/inspections/today?date=${date}`, {
     headers: {
       Authorization: `Bearer ${getToken()}`,
     },
   });
 
+// * 대시보드 관련 API
+export const getDefectStats = (area) =>
+  apiClient.get(`/api/dashboard/defects/stats`, {
+    params: { area },
+  });
+
+// * 점검 관련 API
+export const getInspectionReports = () =>
+  apiClient.get("/api/inspections/report");
+
+// * 점검 통계 API
+export const getInspectorStats = () =>
+  apiClient.get("/api/inspections/statistics/inspector");
+
+// * 오늘의 점검 일정 API
+// export const getTodayInspections = () =>
+// apiClient.get("/api/inspections/today");
+
+// * 점검 상태 변경 API
+export const updateInspectionStatus = (inspectionId, status) =>
+  apiClient.patch(`/api/inspections/${inspectionId}/status`, { status });

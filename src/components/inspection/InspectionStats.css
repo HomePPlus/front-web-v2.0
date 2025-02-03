@@ -1,0 +1,92 @@
+.stats-container {
+  padding: 20px;
+  margin: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.stats-container h2 {
+  color: #333;
+  margin-bottom: 20px;
+  font-family: "eMedium";
+  text-align: center;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 10px;
+}
+
+.stat-card {
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.stat-card h3 {
+  margin: 0;
+  font-family: "eMedium";
+  font-size: 1.1em;
+  margin-bottom: 10px;
+}
+
+.stat-number {
+  font-size: 2em;
+  font-weight: bold;
+  font-family: "eBold";
+}
+
+/* 상태별 카드 스타일 */
+.stat-card.scheduled {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.stat-card.in-progress {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+.stat-card.completed {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.stat-card.cancelled {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+/* 로딩 및 에러 상태 스타일 */
+.loading,
+.error {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-family: "eMedium";
+}
+
+.error {
+  color: #dc3545;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}

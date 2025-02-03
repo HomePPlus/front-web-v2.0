@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthForm from "../../components/auth/AuthForm";
 import { login } from "../../api/apiClient";
-import { getToken, setToken } from "../../utils/auth";
+import { setUserType, setAuthenticated } from "../../utils/auth";
 import Cookies from "js-cookie";
 import "./Auth.css";
 
@@ -40,28 +40,16 @@ function Auth() {
     setError("");
     setIsLoading(true);
 
-    // 로그인 버튼을 누르기 전 토큰 확인
-    console.log("Before login, token:", getToken());
-
     try {
       const response = await login({ email, password });
-      console.log("응답 헤더:", response.headers);
       if (response.data.status === 200) {
-        alert(response.data.message); // 백엔드 메시지 사용
+        alert(response.data.message);
 
-        // 쿠키에서 JWT 토큰 가져오기
-        const token = Cookies.get("JWT_TOKEN");
-        console.log("Is login, token:", token); // 로그인 후 토큰 확인
-        if (token) {
-          setToken(token); // JWT 토큰 저장
-          console.log("After login, token:", getToken()); // 로그인 후 토큰 확인
-        } else {
-          console.error("JWT 토큰을 쿠키에서 찾을 수 없습니다.");
-        }
+        // userType 저장
+        setUserType(response.data.data.userType);
+        setAuthenticated(true);
 
-        navigate("/"); // 홈으로 리다이렉션
-      } else {
-        setError(response.data.message); // 백엔드 메시지 사용
+        navigate("/");
       }
     } catch (err) {
       setError(err.response?.data?.message || "로그인 중 오류가 발생했습니다.");

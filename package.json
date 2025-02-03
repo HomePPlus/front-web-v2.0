@@ -30,6 +30,7 @@
     "react-spring": "^9.7.5",
     "react-toastify": "^11.0.3",
     "react-tsparticles": "^2.9.3",
+    "recharts": "^2.15.1",
     "snap": "^1.1.0",
     "snapsvg-cjs": "^0.0.6",
     "styled-components": "^6.1.14",

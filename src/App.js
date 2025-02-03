@@ -10,6 +10,11 @@ import CommunityBoard from "./pages/Community/CommunityBoard";
 import PostDetail from "./pages/Community/PostDetail";
 import NaverMap from "./components/map/NaverMap";
 import HealthCheck from "./HealthCheck";
+import DefectStats from "./components/dashboard/DefectStats";
+import ProtectedInspectorRoute from "./components/auth/ProtectedInspectorRoute";
+import InspectionTable from "./components/inspection/InspectionTable";
+import InspectionStats from "./components/inspection/InspectionStats";
+import TodayInspection from "./components/inspection/TodayInspection";
 
 function App() {
   return (
@@ -25,6 +30,17 @@ function App() {
           <Route path="/community/:postId" element={<PostDetail />} />
           <Route path="/map" element={<NaverMap />} />
           <Route path="/health" element={<HealthCheck />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedInspectorRoute>
+                <DefectStats />
+                <InspectionTable />
+                <InspectionStats />
+                <TodayInspection />
+              </ProtectedInspectorRoute>
+            }
+          />
         </Routes>
       </Layout>
     </Router>
