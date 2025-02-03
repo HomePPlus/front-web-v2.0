@@ -28,7 +28,7 @@ const Header = () => {
     { url: "/community", label: "커뮤니티" },
     {
       url: loggedIn ? "#" : "/auth",
-      label: loggedIn ? "로그아웃" : "로그인&회원가입",
+      label: loggedIn ? "로그아웃" : "로그인",
       onClick: loggedIn ? handleLogout : null,
     },
     { url: "#", label: "인스타그램" },

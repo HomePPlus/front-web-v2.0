@@ -12,8 +12,8 @@ const Navigation = ({ links }) => {
         <Link
           key={index}
           to={url}
-          className={`nav-item ${active === index ? "is-active" : ""} ${
-            label === "로그인&회원가입" ? "login-button" : ""
+          className={`nav-item ${active === index ? 'is-active' : ''} ${
+            label === '로그인' ? 'login-button' : ''
           }`}
           onClick={onClick}
         >
