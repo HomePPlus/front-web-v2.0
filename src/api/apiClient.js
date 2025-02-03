@@ -134,5 +134,13 @@ export const createDefect = (formData) =>
   apiClient.post("/api/model/detect", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
+    }});
+
+// * 오늘 예약된 점검 일정 API
+export const getTodayInspections = (date) => 
+  apiClient.get(`/api/inspections/today?date=${date}`, {
+    headers: {
+      Authorization: `Bearer ${getToken()}`,
     },
   });
+
