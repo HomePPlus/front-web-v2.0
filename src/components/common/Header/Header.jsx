@@ -8,7 +8,7 @@ const Header = () => {
   const navLinks = [
     { url: '/report', label: '신고하기' },
     { url: "/community", label: "커뮤니티" },
-    { url: "/auth", label: "로그인&회원가입" },
+    { url: "/auth", label: "로그인" },
     { url: "#", label: "인스타그램" },
   ];
 

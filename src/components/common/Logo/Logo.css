@@ -1,6 +1,6 @@
 .logo-container {
-  position: absolute;
-  top: 20px;
+  position: relative;
+  top: 5px;
   left: 40px;
   margin-left: 350px;
   z-index: 1000;
@@ -15,9 +15,9 @@
 }
 
 .logo-text {
-  font-size: 23px;
+  font-size: 40px !important;
   margin-top: 8px;
   margin-left: -10px;
   font-weight: bold;
-  color: rgb(8, 68, 13);
+  color: rgb(8, 68, 13) !important;
 }

@@ -13,7 +13,7 @@ const Navigation = ({ links }) => {
           key={index}
           to={url}
           className={`nav-item ${active === index ? 'is-active' : ''} ${
-            label === '로그인&회원가입' ? 'login-button' : ''
+            label === '로그인' ? 'login-button' : ''
           }`}
           onClick={() => setActive(index)}
         >
