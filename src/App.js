@@ -1,7 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/common/Header/Header";
-import Layout from "./components/layout/Layout";
 import MainPage from "./pages/MainPage";
 import Auth from "./pages/Auth/Auth";
 import TestPage from "./pages/TestPage";
@@ -16,11 +15,12 @@ import ProtectedInspectorRoute from "./components/auth/ProtectedInspectorRoute";
 import InspectionTable from "./components/inspection/InspectionTable";
 import InspectionStats from "./components/inspection/InspectionStats";
 import TodayInspection from "./components/inspection/TodayInspection";
+import MiniCalendar from "./components/common/Calendar/MiniCalendar";
+import Dashboard2 from "./pages/Dashboard/Dashboard";
 
 function App() {
   return (
     <Router>
-      <Layout>
         <Header />
         <Routes>
           <Route path="/" element={<MainPage />} />
@@ -31,6 +31,7 @@ function App() {
           <Route path="/community/:postId" element={<PostDetail />} />
           <Route path="/map" element={<NaverMap />} />
           <Route path="/health" element={<HealthCheck />} />
+          <Route path="/dashboard2" element={<Dashboard2 />} />
           <Route
             path="/dashboard"
             element={
@@ -39,12 +40,12 @@ function App() {
                 <InspectionTable />
                 <InspectionStats />
                 <TodayInspection />
+                <MiniCalendar />
               </ProtectedInspectorRoute>
             }
           />
           <Route path="/create-post" element={<CreateCommunityPost />} />
         </Routes>
-      </Layout>
     </Router>
   );
 }
