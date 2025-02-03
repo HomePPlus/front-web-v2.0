@@ -99,30 +99,55 @@ const NaverMap = () => {
   };
 
   useEffect(() => {
-    const initializeMap = async () => {
-      try {
-        if (!process.env.REACT_APP_NAVER_MAP_CLIENT_ID) {
-          throw new Error("Naver Client ID is not defined!");
+    const loadNaverMap = () => {
+      const script = document.createElement("script");
+      script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${process.env.REACT_APP_NAVER_MAP_CLIENT_ID}&submodules=geocoder`;
+      script.async = true;
+
+      script.onerror = () => {
+        console.error("Failed to load Naver Maps script");
+        setError("지도를 불러오는데 실패했습니다.");
+        setLoading(false);
+      };
+
+      script.onload = () => {
+        console.log("Naver Maps script loaded");
+        if (!window.naver || !window.naver.maps) {
+          console.error("Naver Maps not available");
+          setError("네이버 지도 API를 초기화하는데 실패했습니다.");
+          setLoading(false);
+          return;
         }
 
-        // 스크립트 동적 로드
-        const script = document.createElement("script");
-        script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${process.env.REACT_APP_NAVER_MAP_CLIENT_ID}&submodules=geocoder`;
-        script.async = true;
-
-        // 스크립트 로드 에러 처리
-        script.onerror = () => {
-          setError("지도를 불러오는데 실패했습니다.");
+        if (!mapRef.current) {
+          console.error("Map container not found");
+          setError("지도 컨테이너를 찾을 수 없습니다.");
           setLoading(false);
-        };
+          return;
+        }
 
-        const initNaverMap = () => {
-          // mapRef.current가 존재하는지 확인
-          if (!mapRef.current) {
-            setError("지도를 초기화할 수 없습니다.");
-            setLoading(false);
-            return;
-          }
+        try {
+          // 기본 위치(부산)
+          const defaultLocation = new window.naver.maps.LatLng(
+            35.1795543,
+            129.0756416
+          );
+
+          const mapOptions = {
+            center: defaultLocation,
+            zoom: 14,
+            mapTypeControl: true,
+            zoomControl: true,
+            zoomControlOptions: {
+              position: window.naver.maps.Position.TOP_RIGHT,
+            },
+          };
+
+          const mapInstance = new window.naver.maps.Map(
+            mapRef.current,
+            mapOptions
+          );
+          console.log("Map instance created");
 
           // 현재 위치 가져오기
           if (navigator.geolocation) {
@@ -133,22 +158,7 @@ const NaverMap = () => {
                   latitude,
                   longitude
                 );
-
-                // 지도 초기화
-                const mapOptions = {
-                  center: currentLocation,
-                  zoom: 14,
-                  mapTypeControl: true,
-                  zoomControl: true,
-                  zoomControlOptions: {
-                    position: window.naver.maps.Position.TOP_RIGHT,
-                  },
-                };
-
-                const mapInstance = new window.naver.maps.Map(
-                  mapRef.current,
-                  mapOptions
-                );
+                mapInstance.setCenter(currentLocation);
 
                 // 현재 위치 마커
                 new window.naver.maps.Marker({
@@ -159,83 +169,44 @@ const NaverMap = () => {
                     anchor: new window.naver.maps.Point(15, 15),
                   },
                 });
-
-                setMap(mapInstance);
-                setLoading(false);
               },
               (error) => {
-                console.error("Geolocation error:", error);
-                // 위치 정보를 가져올 수 없는 경우 기본 위치(부산) 사용
-                const defaultLocation = new window.naver.maps.LatLng(
-                  35.1795543,
-                  129.0756416
-                );
-
-                const mapOptions = {
-                  center: defaultLocation,
-                  zoom: 14,
-                  mapTypeControl: true,
-                  zoomControl: true,
-                  zoomControlOptions: {
-                    position: window.naver.maps.Position.TOP_RIGHT,
-                  },
-                };
-
-                const mapInstance = new window.naver.maps.Map(
-                  mapRef.current,
-                  mapOptions
-                );
-                setMap(mapInstance);
-                setLoading(false);
+                console.warn("Geolocation error:", error);
               }
             );
-          } else {
-            setError("위치 정보를 사용할 수 없습니다.");
-            setLoading(false);
-          }
-        };
-
-        script.onload = () => {
-          // 스크립트 로드 완료 후 window.naver 객체 확인
-          if (!window.naver || !window.naver.maps) {
-            setError("네이버 지도 API를 초기화하는데 실패했습니다.");
-            setLoading(false);
-            return;
           }
 
-          // 지도 초기화 함수 호출
-          initNaverMap();
-        };
+          setMap(mapInstance);
+          setLoading(false);
+        } catch (error) {
+          console.error("Error initializing map:", error);
+          setError("지도를 초기화하는데 실패했습니다.");
+          setLoading(false);
+        }
+      };
 
-        document.head.appendChild(script);
-        return () => {
-          if (script.parentNode) {
-            script.parentNode.removeChild(script);
-          }
-        };
-      } catch (error) {
-        console.error("Map initialization error:", error);
-        setError(error.message);
-        setLoading(false);
-      }
+      document.head.appendChild(script);
+      return () => {
+        if (script.parentNode) {
+          script.parentNode.removeChild(script);
+        }
+      };
     };
 
-    initializeMap();
+    loadNaverMap();
   }, []);
 
-  // 지도가 초기화되면 마커 생성
   useEffect(() => {
     if (map) {
       createMarkers();
     }
   }, [map]);
 
-  if (loading) return <div className="loading">지도를 불러오는 중...</div>;
-  if (error) return <div className="error">{error}</div>;
-
   return (
-    <div className="map-container">
-      <div ref={mapRef} className="naver-map" />
+    <div className="map-wrapper">
+      {loading && <div className="loading">지도를 불러오는 중...</div>}
+      {error && <div className="error">{error}</div>}
+      <div ref={mapRef} style={{ width: "100%", height: "600px" }} />
     </div>
   );
 };
