@@ -4,7 +4,7 @@ import Header from "./components/common/Header/Header";
 import Layout from "./components/layout/Layout";
 import MainPage from "./pages/MainPage";
 import Auth from "./pages/Auth/Auth";
-import Test from "./pages/Test/Test";
+import TestPage from "./pages/TestPage";
 import Report from "./pages/Report/Report";
 import CommunityBoard from "./pages/Community/CommunityBoard";
 import PostDetail from "./pages/Community/PostDetail";
@@ -20,7 +20,7 @@ function App() {
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/auth" element={<Auth />} />
-          <Route path="/test" element={<Test />} />
+          <Route path="/test" element={<TestPage />} />
           <Route path="/report" element={<Report />} />
           <Route path="/community" element={<CommunityBoard />} />
           <Route path="/community/:postId" element={<PostDetail />} />

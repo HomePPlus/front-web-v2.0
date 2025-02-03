@@ -90,7 +90,9 @@ const MainPage = () => {
         )}
       </div>
       <div className={`carousel-section ${moveUp ? "show" : ""}`}>
-        <div className={`carousel-intro-text ${showCarouselText ? "show" : ""}`}>
+        <div
+          className={`carousel-intro-text ${showCarouselText ? "show" : ""}`}
+        >
           안전한 주거 공간의 시작, AI 결함 진단을 체험해보세요!
         </div>
         <div className={`carousel-container ${showCarouselText ? "show" : ""}`}>
@@ -109,8 +111,11 @@ const MainPage = () => {
           </Carousel>
         </div>
       </div>
+      <div className="fixed-scroll-image">
+        <img src={require("../assets/images/scroll.png")} alt="Scroll" />
+      </div>
     </div>
   );
 };
 
-export default MainPage
+export default MainPage;
