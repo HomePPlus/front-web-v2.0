@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import SvgBorder from './SvgBorder';
-import './Navigation.css';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import SvgBorder from "./SvgBorder";
+import "./Navigation.css";
 
 const Navigation = ({ links }) => {
   const [active, setActive] = useState(null);
 
   return (
     <nav className="nav">
-      {links.map(({ url, label }, index) => (
+      {links.map(({ url, label, onClick }, index) => (
         <Link
           key={index}
           to={url}
-          className={`nav-item ${active === index ? 'is-active' : ''} ${
-            label === '로그인&회원가입' ? 'login-button' : ''
+          className={`nav-item ${active === index ? "is-active" : ""} ${
+            label === "로그인&회원가입" ? "login-button" : ""
           }`}
-          onClick={() => setActive(index)}
+          onClick={onClick}
         >
           <SvgBorder />
           <SvgBorder />

@@ -1,17 +1,21 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AuthForm from "../../components/auth/AuthForm";
-
-import { 
-  login, 
-  registerResident, 
-  registerInspector, 
-  sendVerificationCode, 
-  verifyEmail, 
-  checkEmail 
-} from "../../api/apiClient";
+import { login } from "../../api/apiClient";
+import { getToken, setToken } from "../../utils/auth";
+import Cookies from "js-cookie";
 import "./Auth.css";
 
+import {
+  registerResident,
+  registerInspector,
+  sendVerificationCode,
+  verifyEmail,
+  checkEmail,
+} from "../../api/apiClient";
+
 function Auth() {
+  const navigate = useNavigate();
   // 로그인 상태
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -36,11 +40,26 @@ function Auth() {
     setError("");
     setIsLoading(true);
 
+    // 로그인 버튼을 누르기 전 토큰 확인
+    console.log("Before login, token:", getToken());
+
     try {
       const response = await login({ email, password });
+      console.log("응답 헤더:", response.headers);
       if (response.data.status === 200) {
         alert(response.data.message); // 백엔드 메시지 사용
-        console.log("Login successful:", response.data);
+
+        // 쿠키에서 JWT 토큰 가져오기
+        const token = Cookies.get("JWT_TOKEN");
+        console.log("Is login, token:", token); // 로그인 후 토큰 확인
+        if (token) {
+          setToken(token); // JWT 토큰 저장
+          console.log("After login, token:", getToken()); // 로그인 후 토큰 확인
+        } else {
+          console.error("JWT 토큰을 쿠키에서 찾을 수 없습니다.");
+        }
+
+        navigate("/"); // 홈으로 리다이렉션
       } else {
         setError(response.data.message); // 백엔드 메시지 사용
       }
@@ -80,18 +99,17 @@ function Auth() {
         alert("인증 성공: " + response.data.message);
       }
     } catch (error) {
-      const errorMessage = error.response?.data?.message 
-        || "인증 처리 실패";
+      const errorMessage = error.response?.data?.message || "인증 처리 실패";
       setVerificationError(errorMessage);
       alert("오류: " + errorMessage);
     }
   };
 
-
   // 회원가입 핸들러
   const handleRegister = async (userType, userData) => {
     try {
-      const registerFn = userType === 'resident' ? registerResident : registerInspector;
+      const registerFn =
+        userType === "resident" ? registerResident : registerInspector;
       const response = await registerFn(userData);
       if (response.data.status === 200) {
         alert(response.data.message);
@@ -102,7 +120,7 @@ function Auth() {
       if (error.response?.data) {
         const validationErrors = error.response.data;
         // 유효성 검증 에러 메시지 표시
-        Object.keys(validationErrors).forEach(key => {
+        Object.keys(validationErrors).forEach((key) => {
           alert(`${key}: ${validationErrors[key]}`);
         });
       } else {
@@ -111,7 +129,7 @@ function Auth() {
       throw error;
     }
   };
-  
+
   return (
     <div className="login-wrapper">
       <div className="login-container">
@@ -124,7 +142,6 @@ function Auth() {
           handleSubmit={handleLogin}
           error={error}
           isLoading={isLoading}
-          
           // 회원가입 props
           registerEmail={registerEmail}
           setRegisterEmail={setRegisterEmail}
@@ -137,7 +154,7 @@ function Auth() {
           companyName={companyName}
           setCompanyName={setCompanyName}
           employeeNumber={employeeNumber}
-          setEmployeeNumber={setEmployeeNumber}  
+          setEmployeeNumber={setEmployeeNumber}
           showEmailVerification={showEmailVerification}
           setShowEmailVerification={setShowEmailVerification}
           verificationCode={verificationCode}
