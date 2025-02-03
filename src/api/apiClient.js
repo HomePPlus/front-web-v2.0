@@ -142,3 +142,19 @@ export const getDefectStats = (area) =>
   apiClient.get(`/api/dashboard/defects/stats`, {
     params: { area },
   });
+
+// * 점검 관련 API
+export const getInspectionReports = () =>
+  apiClient.get("/api/inspections/report");
+
+// * 점검 통계 API
+export const getInspectorStats = () =>
+  apiClient.get("/api/inspections/statistics/inspector");
+
+// * 오늘의 점검 일정 API
+export const getTodayInspections = () =>
+  apiClient.get("/api/inspections/today");
+
+// * 점검 상태 변경 API
+export const updateInspectionStatus = (inspectionId, status) =>
+  apiClient.patch(`/api/inspections/${inspectionId}/status`, { status });

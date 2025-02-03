@@ -12,6 +12,9 @@ import NaverMap from "./components/map/NaverMap";
 import HealthCheck from "./HealthCheck";
 import DefectStats from "./components/dashboard/DefectStats";
 import ProtectedInspectorRoute from "./components/auth/ProtectedInspectorRoute";
+import InspectionTable from "./components/inspection/InspectionTable";
+import InspectionStats from "./components/inspection/InspectionStats";
+import TodayInspection from "./components/inspection/TodayInspection";
 
 function App() {
   return (
@@ -32,6 +35,9 @@ function App() {
             element={
               <ProtectedInspectorRoute>
                 <DefectStats />
+                <InspectionTable />
+                <InspectionStats />
+                <TodayInspection />
               </ProtectedInspectorRoute>
             }
           />
