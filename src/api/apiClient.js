@@ -1,5 +1,6 @@
 import axios from "axios";
 import serverConfig from "../config/serverConfig";
+import { getToken } from "../utils/auth"; // JWT 토큰 가져오기
 
 export const apiClient = axios.create({
   baseURL: serverConfig.serverUrl,
@@ -29,16 +30,16 @@ export const checkServerHealth = async () => {
 export const registerResident = (data) =>
   apiClient.post("/api/users/resident/join", data, {
     headers: {
-      'Content-Type': 'application/json'
-    }
+      "Content-Type": "application/json",
+    },
   });
 
 //점검자 회원가입
 export const registerInspector = (data) =>
   apiClient.post("/api/users/inspector/join", data, {
     headers: {
-      'Content-Type': 'application/json'
-    }
+      "Content-Type": "application/json",
+    },
   });
 
 // * 이메일 관련 API
@@ -48,15 +49,28 @@ export const checkEmail = (email) =>
 export const sendVerificationCode = (email) =>
   apiClient.post(`/api/users/send-verification`, null, { params: { email } });
 
-export const verifyEmail = (email, code) => 
-  apiClient.post(`/api/users/verify-code`, {}, {  // 빈 객체를 본문으로 전송
-    params: { email, code },
-    headers: { 'Content-Type': 'application/json' }  // 명시적 헤더 설정
-  });
+export const verifyEmail = (email, code) =>
+  apiClient.post(
+    `/api/users/verify-code`,
+    {},
+    {
+      // 빈 객체를 본문으로 전송
+      params: { email, code },
+      headers: { "Content-Type": "application/json" }, // 명시적 헤더 설정
+    }
+  );
 
 // * 로그인 관련 API
 export const login = (data) => apiClient.post("/api/auth/login", data);
 
+export const logout = () => {
+  const token = getToken(); // JWT 토큰 가져오기
+  return apiClient.post("/api/auth/logout", null, {
+    headers: {
+      Authorization: `Bearer ${token}`, // Authorization 헤더에 토큰 추가
+    },
+  });
+};
 // export const getProfile = () =>
 //   apiClient.get("/api/users/profile", {
 //     headers: {
