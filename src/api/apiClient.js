@@ -166,3 +166,30 @@ export const getInspectorStats = () =>
 // * 점검 상태 변경 API
 export const updateInspectionStatus = (inspectionId, status) =>
   apiClient.patch(`/api/inspections/${inspectionId}/status`, { status });
+
+// 신고 생성 API
+export const createReport = (formData) =>
+  apiClient.post("/api/reports", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+// 신고 목록 조회
+export const getAllReports = () => apiClient.get("/api/reports");
+
+// 신고 상세 조회
+export const getReportDetail = (reportId) => 
+  apiClient.get(`/api/reports/${reportId}`);
+
+// 신고 수정
+export const updateReport = (reportId, formData) =>
+  apiClient.put(`/api/reports/${reportId}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+// 신고 삭제
+export const deleteReport = (reportId) =>
+  apiClient.delete(`/api/reports/${reportId}`);

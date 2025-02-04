@@ -6,10 +6,18 @@ import "./CommunityBoard.css";
 
 const PostItem = ({ post, onDelete }) => {
   const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    // 한국 시간으로 변환 (UTC+9)
-    const koreanTime = new Date(date.getTime() + 9 * 60 * 60 * 1000);
-    return format(koreanTime, "yyyy-MM-dd HH:mm");
+    if (!dateString) return '';
+    
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) {
+        return ''; // 유효하지 않은 날짜인 경우 빈 문자열 반환
+      }
+      return format(date, 'yyyy-MM-dd HH:mm');
+    } catch (error) {
+      console.error('Date formatting error:', error);
+      return '';
+    }
   };
 
   return (
