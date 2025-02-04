@@ -42,6 +42,7 @@ export const decodeToken = () => {
 };
 
 // 유저 정보 가져오기
+// 유저 정보 가져오기
 export const getUserInfo = () => {
   const decodedToken = decodeToken();
   if (!decodedToken) return null;
@@ -49,8 +50,6 @@ export const getUserInfo = () => {
   return {
     email: decodedToken.sub,
     role: decodedToken.role,
-    // iat: decodedToken.iat,
-    // exp: decodedToken.exp,
-    // 토큰에 포함된 다른 정보들도 필요하다면 추가
+    userId: decodedToken.userId, // JWT 토큰에서 userId 추가
   };
 };

@@ -1,22 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { apiClient } from "../../api/apiClient";
-import "./TodayInspection.css";
+import React, { useState, useEffect } from 'react';
+import { apiClient } from '../../api/apiClient';
+import './TodayInspection.css';
+import Loading from '../common/Loading/Loading';
 
 const TodayInspection = () => {
   const [inspections, setInspections] = useState([]);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchTodayInspections = async () => {
       try {
-        const response = await apiClient.get("/api/inspections/today");
+        const response = await apiClient.get('/api/inspections/today');
         setInspections(response.data.data);
         setMessage(response.data.message);
         setError(null);
       } catch (error) {
-        setError("오늘의 점검 일정을 불러오는데 실패했습니다.");
+        setError('오늘의 점검 일정을 불러오는데 실패했습니다.');
         console.error("Error fetching today's inspections:", error);
       } finally {
         setLoading(false);
@@ -26,7 +27,7 @@ const TodayInspection = () => {
     fetchTodayInspections();
   }, []);
 
-  if (loading) return <div className="loading">로딩 중...</div>;
+  if (loading) return <Loading />;
   if (error) return <div className="error">{error}</div>;
 
   return (
@@ -40,9 +41,7 @@ const TodayInspection = () => {
             <div key={inspection.inspectionId} className="inspection-card">
               <div className="inspection-header">
                 <span className="inspection-type">{inspection.type}</span>
-                <span className={`inspection-status ${inspection.status}`}>
-                  {inspection.status}
-                </span>
+                <span className={`inspection-status ${inspection.status}`}>{inspection.status}</span>
               </div>
               <div className="inspection-body">
                 <div className="inspection-detail">

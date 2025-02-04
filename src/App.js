@@ -5,6 +5,8 @@ import MainPage from "./pages/MainPage";
 import Auth from "./pages/Auth/Auth";
 // import TestPage from "./pages/TestPage";
 import Report from "./pages/Report/Report";
+import ReportList from "./pages/Report/ReportList";
+import ReportDetail from "./pages/Report/ReportDetail";
 import CommunityBoard from "./pages/Community/CommunityBoard";
 import PostDetail from "./pages/Community/PostDetail";
 import NaverMap from "./components/map/NaverMap";
@@ -18,7 +20,6 @@ import TodayInspection from "./components/inspection/TodayInspection";
 import MiniCalendar from "./components/common/Calendar/MiniCalendar";
 import Dashboard2 from "./pages/Dashboard/Dashboard";
 import { getUserInfo } from "./utils/auth";
-import ReportList from "./pages/Report/ReportList";
 
 function App() {
   const userInfo = getUserInfo();
@@ -33,6 +34,7 @@ function App() {
         {/* <Route path="/test" element={<TestPage />} /> */}
         <Route path="/report" element={<Report />} />
         <Route path="/report/list" element={<ReportList />} />
+        <Route path="/report/:reportId" element={<ReportDetail />} />
         <Route path="/community" element={<CommunityBoard />} />
         <Route path="/community/:postId" element={<PostDetail />} />
         <Route path="/map" element={<NaverMap />} />

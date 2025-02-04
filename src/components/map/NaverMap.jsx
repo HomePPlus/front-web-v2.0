@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
-import { getInspectionReports } from "../../api/apiClient";
-import "./NaverMap.css";
+import React, { useEffect, useRef, useState } from 'react';
+import { getInspectionReports } from '../../api/apiClient';
+import './NaverMap.css';
 
 const NaverMap = () => {
   const mapRef = useRef(null);
@@ -13,7 +13,7 @@ const NaverMap = () => {
   const getCoordinatesFromAddress = async (address) => {
     return new Promise((resolve, reject) => {
       if (!window.naver || !window.naver.maps || !window.naver.maps.Service) {
-        reject(new Error("Naver Maps Service is not loaded"));
+        reject(new Error('Naver Maps Service is not loaded'));
         return;
       }
 
@@ -23,11 +23,11 @@ const NaverMap = () => {
         },
         function (status, response) {
           if (status === window.naver.maps.Service.Status.ERROR) {
-            reject(new Error("Geocoding failed"));
+            reject(new Error('Geocoding failed'));
             return;
           }
           if (response.v2.meta.totalCount === 0) {
-            reject(new Error("No results found"));
+            reject(new Error('No results found'));
             return;
           }
           const item = response.v2.addresses[0];
@@ -50,9 +50,7 @@ const NaverMap = () => {
 
       for (const inspection of inspections) {
         try {
-          const position = await getCoordinatesFromAddress(
-            inspection.reportInfo.detailAddress
-          );
+          const position = await getCoordinatesFromAddress(inspection.reportInfo.detailAddress);
 
           const marker = new window.naver.maps.Marker({
             position,
@@ -74,7 +72,7 @@ const NaverMap = () => {
           });
 
           // 마커 클릭 이벤트
-          window.naver.maps.Event.addListener(marker, "click", () => {
+          window.naver.maps.Event.addListener(marker, 'click', () => {
             if (infoWindow.getMap()) {
               infoWindow.close();
             } else {
@@ -84,54 +82,48 @@ const NaverMap = () => {
 
           newMarkers.push(marker);
         } catch (error) {
-          console.error(
-            `주소 변환 실패: ${inspection.reportInfo.detailAddress}`,
-            error
-          );
+          console.error(`주소 변환 실패: ${inspection.reportInfo.detailAddress}`, error);
         }
       }
 
       setMarkers(newMarkers);
     } catch (error) {
-      console.error("점검 목록 로딩 실패:", error);
-      setError("점검 위치를 불러오는데 실패했습니다.");
+      console.error('점검 목록 로딩 실패:', error);
+      setError('점검 위치를 불러오는데 실패했습니다.');
     }
   };
 
   useEffect(() => {
     const loadNaverMap = () => {
-      const script = document.createElement("script");
+      const script = document.createElement('script');
       script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${process.env.REACT_APP_NAVER_MAP_CLIENT_ID}&submodules=geocoder`;
       script.async = true;
 
       script.onerror = () => {
-        console.error("Failed to load Naver Maps script");
-        setError("지도를 불러오는데 실패했습니다.");
+        console.error('Failed to load Naver Maps script');
+        setError('지도를 불러오는데 실패했습니다.');
         setLoading(false);
       };
 
       script.onload = () => {
-        console.log("Naver Maps script loaded");
+        console.log('Naver Maps script loaded');
         if (!window.naver || !window.naver.maps) {
-          console.error("Naver Maps not available");
-          setError("네이버 지도 API를 초기화하는데 실패했습니다.");
+          console.error('Naver Maps not available');
+          setError('네이버 지도 API를 초기화하는데 실패했습니다.');
           setLoading(false);
           return;
         }
 
         if (!mapRef.current) {
-          console.error("Map container not found");
-          setError("지도 컨테이너를 찾을 수 없습니다.");
+          console.error('Map container not found');
+          setError('지도 컨테이너를 찾을 수 없습니다.');
           setLoading(false);
           return;
         }
 
         try {
           // 부산시청 좌표
-          const busanCityHall = new window.naver.maps.LatLng(
-            35.1798159,
-            129.0750222
-          );
+          const busanCityHall = new window.naver.maps.LatLng(35.1798159, 129.0750222);
 
           const mapOptions = {
             center: busanCityHall,
@@ -143,24 +135,21 @@ const NaverMap = () => {
             },
           };
 
-          const mapInstance = new window.naver.maps.Map(
-            mapRef.current,
-            mapOptions
-          );
-          console.log("Map instance created");
+          const mapInstance = new window.naver.maps.Map(mapRef.current, mapOptions);
+          console.log('Map instance created');
 
           // 부산시청 마커
           new window.naver.maps.Marker({
             position: busanCityHall,
             map: mapInstance,
-            title: "부산광역시청",
+            title: '부산광역시청',
           });
 
           setMap(mapInstance);
           setLoading(false);
         } catch (error) {
-          console.error("Error initializing map:", error);
-          setError("지도를 초기화하는데 실패했습니다.");
+          console.error('Error initializing map:', error);
+          setError('지도를 초기화하는데 실패했습니다.');
           setLoading(false);
         }
       };
@@ -186,7 +175,7 @@ const NaverMap = () => {
     <div className="map-wrapper">
       {loading && <div className="loading">지도를 불러오는 중...</div>}
       {error && <div className="error">{error}</div>}
-      <div ref={mapRef} style={{ width: "100%", height: "600px" }} />
+      <div ref={mapRef} style={{ width: '100%', height: '600px' }} />
     </div>
   );
 };

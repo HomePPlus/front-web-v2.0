@@ -1,22 +1,23 @@
 // src/components/community/PostDetail.jsx
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
   getCommunityPost,
   deleteCommunityPost,
   getCommunityComments,
   createCommunityComment,
-} from "../../api/apiClient";
-import CommentList from "./CommentList";
-import FormGroup from "../../components/FormGroup/FormGroup";
-import "./CommunityBoard.css";
+} from '../../api/apiClient';
+import CommentList from './CommentList';
+import FormGroup from '../../components/FormGroup/FormGroup';
+import './CommunityBoard.css';
+import Loading from '../../components/common/Loading/Loading';
 
 const PostDetail = () => {
   const { postId } = useParams();
   const navigate = useNavigate();
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState("");
+  const [newComment, setNewComment] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -30,7 +31,7 @@ const PostDetail = () => {
         setComments(commentsResponse.data.data);
         setError(null);
       } catch (error) {
-        setError("게시글을 불러오는데 실패했습니다.");
+        setError('게시글을 불러오는데 실패했습니다.');
       } finally {
         setLoading(false);
       }
@@ -40,12 +41,12 @@ const PostDetail = () => {
   }, [postId]);
 
   const handleDeletePost = async () => {
-    if (window.confirm("정말 삭제하시겠습니까?")) {
+    if (window.confirm('정말 삭제하시겠습니까?')) {
       try {
         await deleteCommunityPost(postId);
-        navigate("/community");
+        navigate('/community');
       } catch (error) {
-        console.error("게시글 삭제 오류:", error);
+        console.error('게시글 삭제 오류:', error);
       }
     }
   };
@@ -59,13 +60,13 @@ const PostDetail = () => {
         commentContent: newComment,
       });
       setComments([...comments, response.data.data]);
-      setNewComment("");
+      setNewComment('');
     } catch (error) {
-      console.error("댓글 작성 오류:", error);
+      console.error('댓글 작성 오류:', error);
     }
   };
 
-  if (loading) return <div className="loading">로딩 중...</div>;
+  if (loading) return <Loading />;
   if (error) return <div className="error">{error}</div>;
   if (!post) return null;
 
@@ -73,10 +74,10 @@ const PostDetail = () => {
     <div className="post-detail-container">
       <div
         style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          marginTop: "100px",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          marginTop: '100px',
         }}
       >
         <h1>입주민 커뮤니티</h1>
@@ -85,17 +86,9 @@ const PostDetail = () => {
             <h1>{post.communityTitle}</h1>
             <div className="post-meta">
               <span className="author">{post.userName}</span>
-              <span className="date">
-                작성일:{" "}
-                {new Date(post.communityCreatedAt).toLocaleDateString("ko-KR")}
-              </span>
+              <span className="date">작성일: {new Date(post.communityCreatedAt).toLocaleDateString('ko-KR')}</span>
               {post.communityUpdatedAt !== post.communityCreatedAt && (
-                <span className="date">
-                  수정일:{" "}
-                  {new Date(post.communityUpdatedAt).toLocaleDateString(
-                    "ko-KR"
-                  )}
-                </span>
+                <span className="date">수정일: {new Date(post.communityUpdatedAt).toLocaleDateString('ko-KR')}</span>
               )}
               <span className="views">조회수: {post.communityViews}</span>
             </div>
@@ -106,10 +99,7 @@ const PostDetail = () => {
           </div>
 
           <div className="post-actions">
-            <button
-              onClick={() => navigate("/community")}
-              className="list-button"
-            >
+            <button onClick={() => navigate('/community')} className="list-button">
               목록으로
             </button>
             <button onClick={handleDeletePost} className="delete-button">

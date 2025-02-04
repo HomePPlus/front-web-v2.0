@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from "react";
-import {
-  getInspectionReports,
-  updateInspectionStatus,
-} from "../../api/apiClient";
-import "./InspectionTable.css";
+import React, { useState, useEffect } from 'react';
+import { getInspectionReports, updateInspectionStatus } from '../../api/apiClient';
+import './InspectionTable.css';
+import Loading from '../common/Loading/Loading';
 
 const InspectionTable = () => {
   const [inspections, setInspections] = useState([]);
@@ -17,8 +15,8 @@ const InspectionTable = () => {
       console.log(response.data.data);
       setError(null);
     } catch (error) {
-      setError("점검 목록을 불러오는데 실패했습니다.");
-      console.error("Error fetching inspections:", error);
+      setError('점검 목록을 불러오는데 실패했습니다.');
+      console.error('Error fetching inspections:', error);
     } finally {
       setLoading(false);
     }
@@ -34,12 +32,12 @@ const InspectionTable = () => {
       // 상태 변경 후 목록 새로고침
       fetchInspections();
     } catch (error) {
-      console.error("상태 변경 실패:", error);
-      alert("상태 변경에 실패했습니다.");
+      console.error('상태 변경 실패:', error);
+      alert('상태 변경에 실패했습니다.');
     }
   };
 
-  if (loading) return <div className="loading">로딩 중...</div>;
+  if (loading) return <Loading />;
   if (error) return <div className="error">{error}</div>;
 
   return (
@@ -61,19 +59,14 @@ const InspectionTable = () => {
         </thead>
         <tbody>
           {inspections.map((inspection) => (
-            <tr
-              key={inspection.inspectionId}
-              className={`status-${inspection.status}`}
-            >
+            <tr key={inspection.inspectionId} className={`status-${inspection.status}`}>
               <td>{inspection.inspectionId}</td>
               <td>{inspection.type}</td>
               <td>
                 <select
                   className={`status-select ${inspection.status}`}
                   value={inspection.status}
-                  onChange={(e) =>
-                    handleStatusChange(inspection.inspectionId, e.target.value)
-                  }
+                  onChange={(e) => handleStatusChange(inspection.inspectionId, e.target.value)}
                 >
                   <option value="예정됨">예정됨</option>
                   <option value="진행중">진행중</option>
@@ -82,7 +75,7 @@ const InspectionTable = () => {
                 </select>
               </td>
               <td>{inspection.scheduleDate}</td>
-              <td>{inspection.endDate || "-"}</td>
+              <td>{inspection.endDate || '-'}</td>
               <td>{inspection.inspectorName}</td>
               <td>{inspection.reportInfo.description}</td>
               <td>{inspection.reportInfo.detailAddress}</td>

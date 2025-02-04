@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { getAllReports, deleteReport } from "../../api/apiClient";
-import PostList from "../Community/PostList";
-import Pagination from "../../components/common/Pagination/Pagination";
-import FormGroup from "../../components/FormGroup/FormGroup";
-import "./ReportList.css";
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getAllReports, deleteReport } from '../../api/apiClient';
+import PostList from '../Community/PostList';
+import Pagination from '../../components/common/Pagination/Pagination';
+import FormGroup from '../../components/FormGroup/FormGroup';
+import './ReportList.css';
+import Loading from '../../components/common/Loading/Loading';
 
 const ReportList = () => {
   const [reports, setReports] = useState([]);
@@ -13,25 +14,31 @@ const ReportList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  
-  // 신고 삭제 처리
-  const handleDeleteReport = async (reportId) => {
-    try {
-      await deleteReport(reportId);
-      setReports(reports.filter(report => report.id !== reportId));
-    } catch (error) {
-      console.error("신고 삭제 중 오류:", error);
-      alert("신고 삭제 중 오류가 발생했습니다.");
+
+  const handleReportClick = (reportId, isAuthor) => {
+    if (!isAuthor) {
+      alert('본인이 작성한 글만 확인할 수 있습니다.');
+      return;
     }
+    navigate(`/report/${reportId}`);
   };
+
   useEffect(() => {
     const fetchReports = async () => {
       try {
         const response = await getAllReports();
-        setReports(response.data.data); // 응답 구조에 맞게 수정
+        // 필요한 필드만 추출
+        const formattedReports = response.data.data.map((report) => ({
+          id: report.id,
+          reportTitle: report.reportTitle,
+          userId: report.userId,
+          reportDate: report.reportDate,
+          defectType: report.defectType,
+        }));
+        setReports(formattedReports);
         setLoading(false);
       } catch (err) {
-        setError("데이터를 불러오는 중 오류가 발생했습니다.");
+        setError('데이터를 불러오는 중 오류가 발생했습니다.');
         setLoading(false);
       }
     };
@@ -52,7 +59,7 @@ const ReportList = () => {
         month: '2-digit',
         day: '2-digit',
         hour: '2-digit',
-        minute: '2-digit'
+        minute: '2-digit',
       }).format(date);
     } catch (error) {
       console.error('Date formatting error:', error);
@@ -60,64 +67,99 @@ const ReportList = () => {
     }
   };
 
+  // 이메일 마스킹 함수
+  const maskEmail = (email) => {
+    if (!email) return '';
+    const [username, domain] = email.split('@');
+    const maskedUsername = username.slice(0, 3) + '*'.repeat(username.length - 3);
+    return `${maskedUsername}@${domain}`;
+  };
+
   const indexOfLastReport = currentPage * reportsPerPage;
   const indexOfFirstReport = indexOfLastReport - reportsPerPage;
   const currentReports = reports.slice(indexOfFirstReport, indexOfLastReport);
 
-  if (loading) return <div className="loading">로딩 중...</div>;
+  if (loading) return <Loading />;
   if (error) return <div className="error">{error}</div>;
 
+  // localStorage에서 현재 로그인한 사용자의 email과 userId를 가져옴
+  const loggedInEmail = localStorage.getItem('email');
+  const loggedInUserId = localStorage.getItem('userId'); // 로그인 시 저장된 userId
+
   return (
-    <div className="report-board">
-      <div style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        marginTop: "100px",
-      }}>
-        <h1>신고 내역</h1>
-        <FormGroup>
-          <table className="report-table">
-            <thead>
-              <tr>
-                <th>번호</th>
-                <th>제목</th>
-                <th>내용</th>
-                <th>작성일</th>
-                <th>조회수</th>
-                <th>관리</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentReports.map((report) => (
-                <tr key={report.id}>
-                  <td>{report.id}</td>
-                  <td>{report.reportTitle}</td>
-                  <td>{report.reportDescription}</td>
-                  <td>{formatDate(report.reportDate)}</td>
-                  <td>{report.defectType}</td>
-                  <td>
-                    <button onClick={() => handleDeleteReport(report.id)}>삭제</button>
-                  </td>
+    <div className="report-wrapper">
+      <div className="reportlist-container">
+        <div className="report-board">
+          <h1>신고 내역</h1>
+          <FormGroup>
+            <table className="report-table">
+              <thead>
+                <tr>
+                  <th>번호</th>
+                  <th>제목</th>
+                  <th>작성자</th>
+                  <th>작성일</th>
+                  <th>결함 유형</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-          <div className="pagination-container-report">
-            <Pagination
-              totalPage={Math.ceil(reports.length / reportsPerPage)}
-              page={currentPage}
-              setPage={setCurrentPage}
-            />
-          </div>
-        </FormGroup>
-        <button className="button-report" onClick={() => navigate("/report")}>
-          신고하기
-        </button>
+              </thead>
+              <tbody>
+                {currentReports.map((report) => {
+                  console.log('Report Data:', {
+                    reportId: report.id,
+                    reportUserId: report.userId,
+                    loggedInUserId: loggedInUserId,
+                  });
+
+                  // userId 비교
+                  const isAuthor = Number(report.userId) === Number(loggedInUserId);
+                  console.log('Is Author:', isAuthor);
+
+                  const handleClick = (e) => {
+                    if (!isAuthor) {
+                      e.preventDefault();
+                      alert('본인이 작성한 글만 확인할 수 있습니다.');
+                      return;
+                    }
+                  };
+
+                  return (
+                    <tr key={report.id}>
+                      <td>{report.id}</td>
+                      <td>
+                        <span
+                          onClick={() => handleReportClick(report.id, isAuthor)}
+                          style={{
+                            cursor: isAuthor ? 'pointer' : 'not-allowed',
+                            textDecoration: 'none',
+                            color: 'inherit',
+                          }}
+                        >
+                          {isAuthor ? report.reportTitle : '비밀글입니다'}
+                        </span>
+                      </td>
+                      <td>{isAuthor ? maskEmail(loggedInEmail) : '-'}</td>
+                      <td>{isAuthor ? formatDate(report.reportDate) : '-'}</td>
+                      <td>{isAuthor ? report.defectType : '-'}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            <div className="pagination-container-report">
+              <Pagination
+                totalPage={Math.ceil(reports.length / reportsPerPage)}
+                page={currentPage}
+                setPage={setCurrentPage}
+              />
+            </div>
+          </FormGroup>
+          <button className="button-report" onClick={() => navigate('/report')}>
+            신고하기
+          </button>
+        </div>
       </div>
     </div>
   );
 };
-
 
 export default ReportList;

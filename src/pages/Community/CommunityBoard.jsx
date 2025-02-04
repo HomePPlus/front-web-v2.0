@@ -1,16 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 // import React from "react";
-import {
-  getAllCommunityPosts,
-  createCommunityPost,
-  deleteCommunityPost,
-} from "../../api/apiClient";
-import PostList from "./PostList";
-import CreatePost from "./CreatePost";
-import Pagination from "../../components/common/Pagination/Pagination";
-import FormGroup from "../../components/FormGroup/FormGroup";
-import "./CommunityBoard.css";
-import { useNavigate } from "react-router-dom";
+import { getAllCommunityPosts, createCommunityPost, deleteCommunityPost } from '../../api/apiClient';
+import PostList from './PostList';
+import CreatePost from './CreatePost';
+import Pagination from '../../components/common/Pagination/Pagination';
+import FormGroup from '../../components/FormGroup/FormGroup';
+import './CommunityBoard.css';
+import { useNavigate } from 'react-router-dom';
+import Loading from '../../components/common/Loading/Loading';
 
 const CommunityBoard = () => {
   const navigate = useNavigate();
@@ -27,7 +24,7 @@ const CommunityBoard = () => {
       setPosts(response.data.data);
       setError(null);
     } catch (error) {
-      setError("게시글을 불러오는데 실패했습니다.");
+      setError('게시글을 불러오는데 실패했습니다.');
     } finally {
       setLoading(false);
     }
@@ -47,25 +44,25 @@ const CommunityBoard = () => {
       await fetchPosts();
       setShowCreateForm(false);
     } catch (error) {
-      console.error("게시글 생성 오류:", error);
+      console.error('게시글 생성 오류:', error);
     }
   };
 
   const handleDeletePost = async (postId) => {
-    if (window.confirm("정말 삭제하시겠습니까?")) {
+    if (window.confirm('정말 삭제하시겠습니까?')) {
       try {
         await deleteCommunityPost(postId);
         await fetchPosts();
       } catch (error) {
-        console.error("게시글 삭제 오류:", error);
+        console.error('게시글 삭제 오류:', error);
       }
     }
   };
-  console.log("Total Posts:", posts.length); // 전체 게시글 수
-  console.log("Posts Per Page:", postsPerPage); // 한 페이지당 게시글 수
-  console.log("Total Pages:", Math.ceil(posts.length / postsPerPage)); // 총 페이지 수
+  console.log('Total Posts:', posts.length); // 전체 게시글 수
+  console.log('Posts Per Page:', postsPerPage); // 한 페이지당 게시글 수
+  console.log('Total Pages:', Math.ceil(posts.length / postsPerPage)); // 총 페이지 수
 
-  if (loading) return <div className="loading">로딩 중...</div>;
+  if (loading) return <Loading />;
   if (error) return <div className="error">{error}</div>;
 
   return (
@@ -83,10 +80,7 @@ const CommunityBoard = () => {
           </div>
           {showCreateForm && <CreatePost onCreate={handleCreatePost} />}
         </FormGroup>
-        <button
-          className="write-button"
-          onClick={() => navigate("/create-post")}
-        >
+        <button className="write-button" onClick={() => navigate('/create-post')}>
           글쓰기
         </button>
       </div>
