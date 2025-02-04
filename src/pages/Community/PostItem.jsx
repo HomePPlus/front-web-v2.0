@@ -1,5 +1,5 @@
 // src/components/community/PostItem.jsx
-import React from "react";
+// import React from "react";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import "./CommunityBoard.css";

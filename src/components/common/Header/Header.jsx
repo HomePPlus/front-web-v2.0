@@ -35,7 +35,7 @@ const Header = () => {
   };
 
   const navLinks = [
-    { url: "/report", label: "신고하기" },
+    { url: "/report/list", label: '신고하기' },
     { url: "/community", label: "커뮤니티" },
     {
       url: loggedIn ? "#" : "/auth",

@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/common/Header/Header";
 import MainPage from "./pages/MainPage";
@@ -18,6 +18,7 @@ import TodayInspection from "./components/inspection/TodayInspection";
 import MiniCalendar from "./components/common/Calendar/MiniCalendar";
 import Dashboard2 from "./pages/Dashboard/Dashboard";
 import { getUserInfo } from "./utils/auth";
+import ReportList from "./pages/Report/ReportList";
 
 function App() {
   const userInfo = getUserInfo();
@@ -26,7 +27,6 @@ function App() {
   return (
     <Router>
       <Header />
-
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/auth" element={<Auth />} />
@@ -51,6 +51,19 @@ function App() {
         />
         <Route path="/create-post" element={<CreateCommunityPost />} />
       </Routes>
+=======
+      <Layout>
+        <Header />
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/test" element={<Test />} />
+          <Route path="/report" element={<Report />} />
+          <Route path="/community" element={<CommunityBoard />} />
+          <Route path="/community/:postId" element={<PostDetail />} />
+          <Route path="/report/list" element={<ReportList />} />
+        </Routes>
+      </Layout>
     </Router>
   );
 }
