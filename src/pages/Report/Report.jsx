@@ -1,30 +1,59 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Input from "../../components/common/Input/Input"; // Input 컴포넌트 임포트
 import "./Report.css"; // CSS 파일을 별도로 만들어 스타일 적용
 import Button from "../../components/common/Button/Button"; // Button 컴포넌트 임포트
 import DropDown from "../../components/common/DropDown/DropDown"; // DropDown 컴포넌트 임포트
 import FormGroup from "../../components/FormGroup/FormGroup";
 import FileUpload from "../../components/FileUpload/FileUpload";
+import { getUserInfo } from "../../utils/auth";
 
 const Report = () => {
-  const [address, setText] = useState("");
-  const [title, titleText] = useState("");
-  const [report, reportText] = useState("");
+  const [address, setAddress] = useState(""); // 기본 주소
+  const [detailAddress, setDetailAddress] = useState(""); // 상세 주소
+  const [title, setTitle] = useState("");
+  const [report, setReport] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
 
+  useEffect(() => {
+    // Daum 우편번호 스크립트 로드
+    const script = document.createElement("script");
+    script.src =
+      "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
+    script.async = true;
+    document.head.appendChild(script);
+
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, []);
+
+  const handleAddressSearch = () => {
+    new window.daum.Postcode({
+      oncomplete: function (data) {
+        // 도로명 주소 또는 지번 주소를 선택했을 때의 처리
+        const addr = data.roadAddress || data.jibunAddress;
+        setAddress(addr);
+
+        // 상세주소 입력 필드로 포커스 이동
+        document.querySelector(".detailAddress-input").focus();
+      },
+    }).open();
+  };
+
   const handleDropdownSelect = (value) => {
+    setSelectedOption(value);
     console.log("선택된 값:", value);
-    // 선택된 값을 처리하는 로직 추가
   };
 
   const handleSubmit = () => {
-    if (!address || !report || !selectedOption) {
+    if (!address || !detailAddress || !report || !selectedOption) {
       alert("모든 항목을 입력해주세요.");
     } else {
       alert("신고가 성공적으로 제출되었습니다!");
     }
   };
+
   return (
     <div className="report-wrapper">
       <div className="report-container">
@@ -42,46 +71,55 @@ const Report = () => {
               <label className="form-label">작성자</label>
               <Input
                 className="name-input"
-                value="kim2sangw@naver.com" // username에서 가입한 email을 자동으로 받아오게 변경
+                value={getUserInfo()?.email || ""}
                 disabled
               />
             </div>
+
             <div className="form-row">
               <div className="address-group">
                 <label className="form-label">주소</label>
                 <Input
                   className="address-input"
-                  placeholder="신고할 주소를 입력해주세요"
-                  onChange={() => {}}
+                  placeholder="주소를 검색해주세요"
+                  value={address}
                   disabled
                 />
-                <Button className="address-search">주소 검색</Button>
+                <Button
+                  className="address-search"
+                  onClick={handleAddressSearch}
+                >
+                  주소 검색
+                </Button>
                 <Input
                   className="detailAddress-input"
                   placeholder="상세주소를 입력해주세요"
-                  value={address}
-                  onChange={(e) => setText(e.target.value)}
+                  value={detailAddress}
+                  onChange={(e) => setDetailAddress(e.target.value)}
                 />
               </div>
             </div>
+
             <div className="form-row">
               <label className="form-label">제목</label>
               <Input
                 className="title-input"
                 placeholder="신고 제목을 입력해주세요"
                 value={title}
-                onChange={(e) => titleText(e.target.value)}
+                onChange={(e) => setTitle(e.target.value)}
               />
             </div>
+
             <div className="form-row-text">
               <label className="form-content-label">내용</label>
               <textarea
                 className="report-input"
                 placeholder="신고 내용을 자세히 입력해주세요"
                 value={report}
-                onChange={(e) => reportText(e.target.value)}
+                onChange={(e) => setReport(e.target.value)}
               />
             </div>
+
             <DropDown
               options={[
                 "균열",
@@ -90,7 +128,7 @@ const Report = () => {
                 "철근 노출",
                 "강재 손상",
                 "도장 손상",
-                "모름"
+                "모름",
               ]}
               placeholder="선택"
               onSelect={handleDropdownSelect}

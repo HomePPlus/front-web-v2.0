@@ -16,12 +16,17 @@ import ProtectedInspectorRoute from "./components/auth/ProtectedInspectorRoute";
 import InspectionTable from "./components/inspection/InspectionTable";
 import InspectionStats from "./components/inspection/InspectionStats";
 import TodayInspection from "./components/inspection/TodayInspection";
+import { getUserInfo } from "./utils/auth";
 
 function App() {
+  const userInfo = getUserInfo();
+  console.log("User Info:", userInfo);
+
   return (
     <Router>
       <Layout>
         <Header />
+
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/auth" element={<Auth />} />

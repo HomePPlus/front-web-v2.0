@@ -127,14 +127,14 @@ const NaverMap = () => {
         }
 
         try {
-          // 기본 위치(부산)
-          const defaultLocation = new window.naver.maps.LatLng(
-            35.1795543,
-            129.0756416
+          // 부산시청 좌표
+          const busanCityHall = new window.naver.maps.LatLng(
+            35.1798159,
+            129.0750222
           );
 
           const mapOptions = {
-            center: defaultLocation,
+            center: busanCityHall,
             zoom: 14,
             mapTypeControl: true,
             zoomControl: true,
@@ -149,32 +149,12 @@ const NaverMap = () => {
           );
           console.log("Map instance created");
 
-          // 현재 위치 가져오기
-          if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-              (position) => {
-                const { latitude, longitude } = position.coords;
-                const currentLocation = new window.naver.maps.LatLng(
-                  latitude,
-                  longitude
-                );
-                mapInstance.setCenter(currentLocation);
-
-                // 현재 위치 마커
-                new window.naver.maps.Marker({
-                  position: currentLocation,
-                  map: mapInstance,
-                  icon: {
-                    content: '<div class="current-location-marker"></div>',
-                    anchor: new window.naver.maps.Point(15, 15),
-                  },
-                });
-              },
-              (error) => {
-                console.warn("Geolocation error:", error);
-              }
-            );
-          }
+          // 부산시청 마커
+          new window.naver.maps.Marker({
+            position: busanCityHall,
+            map: mapInstance,
+            title: "부산광역시청",
+          });
 
           setMap(mapInstance);
           setLoading(false);
