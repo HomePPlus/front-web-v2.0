@@ -54,10 +54,16 @@ function Auth() {
       if (response.data.status === 200) {
         alert(response.data.message);
         // 쿠키에 userId 저장 추가
-        Cookies.set('userId', response.data.data.userId, { expires: 1 });
+        // Cookies.set('userId', response.data.data.userId, { expires: 1 });
         // userType 저장
+        // setUserType(response.data.data.userType);
+        // setAuthenticated(true);
+        // JWT 토큰 저장
         setUserType(response.data.data.userType);
         setAuthenticated(true);
+
+        // userId를 쿠키에 저장
+        Cookies.set('userId', response.data.data.userId);
 
         navigate('/');
       }

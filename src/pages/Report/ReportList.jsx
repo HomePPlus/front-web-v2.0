@@ -6,6 +6,7 @@ import Pagination from '../../components/common/Pagination/Pagination';
 import FormGroup from '../../components/FormGroup/FormGroup';
 import './ReportList.css';
 import Loading from '../../components/common/Loading/Loading';
+import { getUserInfo } from '../../utils/auth';
 
 const ReportList = () => {
   const [reports, setReports] = useState([]);
@@ -14,6 +15,11 @@ const ReportList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  // localStorage 대신 쿠키나 디코딩된 토큰에서 정보 가져오기
+  const userInfo = getUserInfo();
+  const loggedInEmail = userInfo?.email;
+  const loggedInUserId = userInfo?.userId;
 
   const handleReportClick = (reportId, isAuthor) => {
     if (!isAuthor) {
@@ -42,9 +48,16 @@ const ReportList = () => {
         setLoading(false);
       }
     };
+    // 로그인 상태일 때만 데이터 가져오기
+    if (userInfo) {
+      fetchReports();
+    }
+  }, [userInfo]); // userInfo를 의존성 배열에 추가
 
-    fetchReports();
-  }, []);
+  // userId 비교 로직 수정
+  const isAuthor = (reportUserId) => {
+    return Number(reportUserId) === Number(userInfo?.userId);
+  };
 
   // 날짜 포맷팅 함수
   const formatDate = (dateString) => {
@@ -81,10 +94,6 @@ const ReportList = () => {
 
   if (loading) return <Loading />;
   if (error) return <div className="error">{error}</div>;
-
-  // localStorage에서 현재 로그인한 사용자의 email과 userId를 가져옴
-  const loggedInEmail = localStorage.getItem('email');
-  const loggedInUserId = localStorage.getItem('userId'); // 로그인 시 저장된 userId
 
   return (
     <div className="report-wrapper">
