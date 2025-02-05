@@ -1,16 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import Logo from "../Logo/Logo";
-import Navigation from "../Navigation/Navigation";
-import {
-  isAuthenticated,
-  removeToken,
-  removeUserType,
-  isInspector,
-  removeAuthenticated,
-} from "../../../utils/auth";
-import { logout } from "../../../api/apiClient";
-import "./Header.css";
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import Logo from '../Logo/Logo';
+import Navigation from '../Navigation/Navigation';
+import { isAuthenticated, removeToken, removeUserType, isInspector, removeAuthenticated } from '../../../utils/auth';
+import { logout } from '../../../api/apiClient';
+import Cookies from 'js-cookie';
+import './Header.css';
 
 const Header = () => {
   const [loggedIn, setLoggedIn] = useState(isAuthenticated());
@@ -27,24 +22,26 @@ const Header = () => {
       removeToken();
       removeUserType();
       removeAuthenticated();
+      Cookies.remove('email');
+      Cookies.remove('userId');
       setLoggedIn(false);
       setIsInspectorUser(false);
     } catch (error) {
-      console.error("로그아웃 실패:", error);
+      console.error('로그아웃 실패:', error);
     }
   };
 
   const navLinks = [
-    { url: "/report/list", label: '신고하기' },
-    { url: "/community", label: "커뮤니티" },
+    { url: '/report/list', label: '신고하기' },
+    { url: '/community', label: '커뮤니티' },
     {
-      url: loggedIn ? "#" : "/auth",
-      label: loggedIn ? "로그아웃" : "로그인",
+      url: loggedIn ? '#' : '/auth',
+      label: loggedIn ? '로그아웃' : '로그인',
       onClick: loggedIn ? handleLogout : null,
     },
     {
-      url: isInspectorUser ? "/dashboard" : "#",
-      label: isInspectorUser ? "대시보드" : "인스타그램",
+      url: isInspectorUser ? '/dashboard' : '#',
+      label: isInspectorUser ? '대시보드' : '인스타그램',
     },
   ];
 

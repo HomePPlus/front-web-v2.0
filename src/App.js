@@ -1,29 +1,29 @@
 // import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Header from "./components/common/Header/Header";
-import MainPage from "./pages/MainPage";
-import Auth from "./pages/Auth/Auth";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Header from './components/common/Header/Header';
+import MainPage from './pages/MainPage';
+import Auth from './pages/Auth/Auth';
 // import TestPage from "./pages/TestPage";
-import Report from "./pages/Report/Report";
-import ReportList from "./pages/Report/ReportList";
-import ReportDetail from "./pages/Report/ReportDetail";
-import CommunityBoard from "./pages/Community/CommunityBoard";
-import PostDetail from "./pages/Community/PostDetail";
-import NaverMap from "./components/map/NaverMap";
-import HealthCheck from "./HealthCheck";
-import CreateCommunityPost from "./pages/Community/CreateCommunityPost";
-import DefectStats from "./components/dashboard/DefectStats";
-import ProtectedInspectorRoute from "./components/auth/ProtectedInspectorRoute";
-import InspectionTable from "./components/inspection/InspectionTable";
-import InspectionStats from "./components/inspection/InspectionStats";
-import TodayInspection from "./components/inspection/TodayInspection";
-import MiniCalendar from "./components/common/Calendar/MiniCalendar";
-import Dashboard2 from "./pages/Dashboard/Dashboard";
-import { getUserInfo } from "./utils/auth";
+import Report from './pages/Report/Report';
+import ReportList from './pages/Report/ReportList';
+import ReportDetail from './pages/Report/ReportDetail';
+import CommunityBoard from './pages/Community/CommunityBoard';
+import PostDetail from './pages/Community/PostDetail';
+import NaverMap from './components/map/NaverMap';
+import HealthCheck from './HealthCheck';
+import CreateCommunityPost from './pages/Community/CreateCommunityPost';
+import DefectStats from './components/dashboard/DefectStats';
+import ProtectedInspectorRoute from './components/auth/ProtectedInspectorRoute';
+import InspectionTable from './components/inspection/InspectionTable';
+import InspectionStats from './components/inspection/InspectionStats';
+import TodayInspection from './components/inspection/TodayInspection';
+import MiniCalendar from './components/common/Calendar/MiniCalendar';
+import Dashboard2 from './pages/Dashboard/Dashboard';
+import { getUserInfo } from './utils/auth';
 
 function App() {
   const userInfo = getUserInfo();
-  console.log("User Info:", userInfo);
+  console.log('User Info:', userInfo);
 
   return (
     <Router>
