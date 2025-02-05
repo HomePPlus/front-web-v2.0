@@ -4,6 +4,7 @@ import { getReportDetail, deleteReport, updateReport } from '../../api/apiClient
 import FormGroup from '../../components/FormGroup/FormGroup';
 import './ReportDetail.css';
 import Loading from '../../components/common/Loading/Loading';
+import { getUserInfo } from '../../utils/auth';
 
 const ReportDetail = () => {
   const { reportId } = useParams();
@@ -11,9 +12,18 @@ const ReportDetail = () => {
   const [report, setReport] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const loggedInUserId = localStorage.getItem('userId');
   const [isEditing, setIsEditing] = useState(false); //수정
   const [editedReport, setEditedReport] = useState(null); //수정
+  // localStorage 대신 쿠키나 디코딩된 토큰에서 정보 가져오기
+  // 사용자 정보 가져오기
+  const userInfo = getUserInfo();
+  const loggedInEmail = userInfo?.email;
+  const loggedInUserId = userInfo?.userId;
+
+  // userId 비교 로직
+  const isAuthor = (reportUserId) => {
+    return Number(reportUserId) === Number(userInfo?.userId);
+  };
 
   useEffect(() => {
     const fetchReport = async () => {
@@ -85,10 +95,6 @@ const ReportDetail = () => {
   if (loading) return <Loading />;
   if (error) return <div className="error">{error}</div>;
   if (!report) return <div className="error">신고를 찾을 수 없습니다.</div>;
-
-  // localStorage에서 현재 로그인한 사용자의 email과 userId를 가져옴
-  const loggedInEmail = localStorage.getItem('email');
-  const isAuthor = Number(report.userId) === Number(loggedInUserId);
 
   // 수정 함수
   const handleEdit = () => {
