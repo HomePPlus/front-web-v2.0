@@ -2,10 +2,61 @@ import axios from "axios";
 import serverConfig from "../config/serverConfig";
 import { getToken } from "../utils/auth"; // JWT 토큰 가져오기
 
+// axios 전역 설정
+axios.defaults.withCredentials = true;
+
 export const apiClient = axios.create({
   baseURL: serverConfig.serverUrl,
   withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+    // CSRF 토큰이 필요한 경우 추가
+    // 'X-XSRF-TOKEN': getCookie('XSRF-TOKEN'),
+  },
+  // 리다이렉션 최대 횟수 설정
+  maxRedirects: 5,
 });
+
+// 응답 인터셉터 수정
+apiClient.interceptors.response.use(
+  (response) => {
+    // 로그인 응답에서 토큰 확인
+    if (
+      response.config.url === "/api/auth/login" &&
+      response.data.data?.token
+    ) {
+      console.log("Login response received with token");
+    }
+    return response;
+  },
+  (error) => {
+    // 401 에러 처리 (인증 실패)
+    if (error.response && error.response.status === 401) {
+      console.log("인증 실패:", error);
+    }
+    return Promise.reject(error);
+  }
+);
+
+// 요청 인터셉터 추가
+apiClient.interceptors.request.use(
+  (config) => {
+    // API 요청 URL에 /api 접두사가 없으면 추가
+    if (!config.url.startsWith("/api")) {
+      config.url = `/api${config.url}`;
+    }
+
+    const token = getToken();
+    console.log("token:", token);
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 // * Health check API
 export const checkServerHealth = async () => {
@@ -61,7 +112,12 @@ export const verifyEmail = (email, code) =>
   );
 
 // * 로그인 관련 API
-export const login = (data) => apiClient.post("/api/auth/login", data);
+export const login = (data) =>
+  apiClient.post("/api/auth/login", data, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 
 export const logout = () => {
   const token = getToken(); // JWT 토큰 가져오기
@@ -179,7 +235,7 @@ export const createReport = (formData) =>
 export const getAllReports = () => apiClient.get("/api/reports");
 
 // 신고 상세 조회
-export const getReportDetail = (reportId) => 
+export const getReportDetail = (reportId) =>
   apiClient.get(`/api/reports/${reportId}`);
 
 // 신고 수정

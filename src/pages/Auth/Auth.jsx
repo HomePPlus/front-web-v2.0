@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import AuthForm from '../../components/auth/AuthForm';
-import { login } from '../../api/apiClient';
-import { setUserType, setAuthenticated } from '../../utils/auth';
-import Cookies from 'js-cookie';
-import './Auth.css';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import AuthForm from "../../components/auth/AuthForm";
+import { login } from "../../api/apiClient";
+import { setUserType, setToken, getToken } from "../../utils/auth";
+import Cookies from "js-cookie";
+import "./Auth.css";
 
 import {
   registerResident,
@@ -12,63 +12,59 @@ import {
   sendVerificationCode,
   verifyEmail,
   checkEmail,
-} from '../../api/apiClient';
+} from "../../api/apiClient";
 
 function Auth() {
   const navigate = useNavigate();
   // 로그인 상태
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showEmailVerification, setShowEmailVerification] = useState(false);
 
   // 회원가입 상태
-  const [registerEmail, setRegisterEmail] = useState('');
-  const [registerPassword, setRegisterPassword] = useState('');
-  const [userName, setUserName] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [verificationCode, setVerificationCode] = useState('');
-  const [companyName, setCompanyName] = useState('');
-  const [employeeNumber, setEmployeeNumber] = useState('');
+  const [registerEmail, setRegisterEmail] = useState("");
+  const [registerPassword, setRegisterPassword] = useState("");
+  const [userName, setUserName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [verificationCode, setVerificationCode] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [employeeNumber, setEmployeeNumber] = useState("");
   const [isEmailVerified, setIsEmailVerified] = useState(false);
-  const [verificationError, setVerificationError] = useState('');
+  const [verificationError, setVerificationError] = useState("");
 
   const [codeRequestTime, setCodeRequestTime] = useState(null); // 인증 코드 요청 시간
   const [isCodeExpired, setIsCodeExpired] = useState(false); // 코드 만료 상태
 
   // 로그인 성공 시 사용자 정보를 쿠키에 저장
   const handleLoginSuccess = (email, userId) => {
-    Cookies.set('email', email, { expires: 1 }); // 만료일 설정
-    Cookies.set('userId', userId, { expires: 1 }); // 만료일 설정
+    Cookies.set("email", email, { expires: 1 }); // 만료일 설정
+    Cookies.set("userId", userId, { expires: 1 }); // 만료일 설정
   };
 
   // 로그인 핸들러
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setIsLoading(true);
 
     try {
       const response = await login({ email, password });
       if (response.data.status === 200) {
-        alert(response.data.message);
-        // 쿠키에 userId 저장 추가
-        // Cookies.set('userId', response.data.data.userId, { expires: 1 });
-        // userType 저장
-        // setUserType(response.data.data.userType);
-        // setAuthenticated(true);
-        // JWT 토큰 저장
+        // 응답 데이터에서 토큰을 직접 가져와서 저장
+        const token = response.data.data.token;
+        setToken(token);
         setUserType(response.data.data.userType);
-        setAuthenticated(true);
-
         // userId를 쿠키에 저장
-        Cookies.set('userId', response.data.data.userId);
+        Cookies.set("userId", response.data.data.userId);
 
-        navigate('/');
+        // 루트 페이지로 이동 후 새로고침
+        navigate("/", { replace: true }); // replace: true로 설정하여 뒤로가기 방지
+        window.location.reload();
       }
     } catch (err) {
-      setError(err.response?.data?.message || '로그인 중 오류가 발생했습니다.');
+      setError(err.response?.data?.message || "로그인 중 오류가 발생했습니다.");
     } finally {
       setIsLoading(false);
     }
@@ -81,7 +77,7 @@ function Auth() {
       if (checkResponse.data.status === 200) {
         // 이미 인증 코드가 전송된 이메일인지 확인
         if (checkResponse.data.isCodeSent) {
-          alert('이미 인증 코드가 전송된 이메일입니다.');
+          alert("이미 인증 코드가 전송된 이메일입니다.");
           return; // 함수 종료
         }
 
@@ -95,7 +91,7 @@ function Auth() {
       }
     } catch (error) {
       const errorMessage = error.response?.data?.message;
-      setVerificationError(errorMessage || '인증 코드 전송에 실패했습니다.');
+      setVerificationError(errorMessage || "인증 코드 전송에 실패했습니다.");
       alert(errorMessage);
     }
   };
@@ -107,20 +103,21 @@ function Auth() {
       const response = await verifyEmail(registerEmail, verificationCode);
       if (response.data.status === 200) {
         setIsEmailVerified(true);
-        setVerificationError('');
-        alert('인증 성공: ' + response.data.message);
+        setVerificationError("");
+        alert("인증 성공: " + response.data.message);
       }
     } catch (error) {
-      const errorMessage = error.response?.data?.message || '인증 처리 실패';
+      const errorMessage = error.response?.data?.message || "인증 처리 실패";
       setVerificationError(errorMessage);
-      alert('오류: ' + errorMessage);
+      alert("오류: " + errorMessage);
     }
   };
 
   // 회원가입 핸들러
   const handleRegister = async (userType, userData) => {
     try {
-      const registerFn = userType === 'resident' ? registerResident : registerInspector;
+      const registerFn =
+        userType === "resident" ? registerResident : registerInspector;
       const response = await registerFn(userData);
       if (response.data.status === 200) {
         alert(response.data.message);
@@ -135,7 +132,7 @@ function Auth() {
           alert(`${key}: ${validationErrors[key]}`);
         });
       } else {
-        alert('회원가입에 실패했습니다.');
+        alert("회원가입에 실패했습니다.");
       }
       throw error;
     }

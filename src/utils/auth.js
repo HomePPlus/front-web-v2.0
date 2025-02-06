@@ -1,32 +1,35 @@
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
-// 방법 1: HttpOnly가 false인 경우
-export const getToken = () => Cookies.get('JWT_TOKEN');
+// JWT 토큰 관리
+export const getToken = () => Cookies.get("JWT_TOKEN");
 
-// 인증 상태 관리
-export const isAuthenticated = () => Cookies.get('isAuthenticated') === 'true';
-export const setAuthenticated = (bool) => Cookies.set('isAuthenticated', bool);
-
-export const removeAuthenticated = () => Cookies.remove('isAuthenticated');
-
-export const setToken = (token) => Cookies.set('JWT_TOKEN', token);
+// 토큰 설정 함수 추가 (응답 데이터에서 받은 토큰 저장용)
+export const setToken = (token) => {
+  if (token) {
+    Cookies.set("JWT_TOKEN", token, {
+      secure: true,
+      sameSite: "strict",
+      path: "/",
+      expires: 1, // 1일
+    });
+  }
+};
 
 export const removeToken = () => {
-  Cookies.remove('JWT_TOKEN');
-  removeAuthenticated(); // 토큰이 제거되면 인증 상태도 제거
+  Cookies.remove("JWT_TOKEN");
   removeUserType();
 };
 
 // userId 가져오는 함수
-export const getUserId = () => Cookies.get('userId');
+export const getUserId = () => Cookies.get("userId");
 
 // userType 관리
-export const setUserType = (type) => Cookies.set('userType', type);
-export const getUserType = () => Cookies.get('userType');
-export const removeUserType = () => Cookies.remove('userType');
+export const setUserType = (type) => Cookies.set("userType", type);
+export const getUserType = () => Cookies.get("userType");
+export const removeUserType = () => Cookies.remove("userType");
 
 // INSPECTOR 권한 확인
-export const isInspector = () => getUserType() === 'INSPECTOR';
+export const isInspector = () => getUserType() === "INSPECTOR";
 
 // JWT 토큰 디코딩 함수 추가
 export const decodeToken = () => {
@@ -34,20 +37,20 @@ export const decodeToken = () => {
   if (!token) return null;
 
   try {
-    const base64Payload = token.split('.')[1];
+    const base64Payload = token.split(".")[1];
 
     // 1. base64url → base64 변환
-    let payload = base64Payload.replace(/-/g, '+').replace(/_/g, '/');
+    let payload = base64Payload.replace(/-/g, "+").replace(/_/g, "/");
 
     // 2. 패딩 추가 (4의 배수 길이)
     const padLength = (4 - (payload.length % 4)) % 4;
-    payload += '='.repeat(padLength);
+    payload += "=".repeat(padLength);
 
     // 3. 디코딩
     const decoded = atob(payload);
     return JSON.parse(decoded);
   } catch (error) {
-    console.error('Token decode error:', error);
+    console.error("Token decode error:", error);
     return null;
   }
 };
