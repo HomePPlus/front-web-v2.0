@@ -3,13 +3,12 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/common/Header/Header';
 import MainPage from './pages/MainPage';
 import Auth from './pages/Auth/Auth';
-import Test from './pages/Test/Test';
 import Report from './pages/Report/Report';
 import ReportList from './pages/Report/ReportList';
 import ReportDetail from './pages/Report/ReportDetail';
 import CommunityBoard from './pages/Community/CommunityBoard';
 import PostDetail from './pages/Community/PostDetail';
-import NaverMap from './components/dashboard/map/NaverMap';
+import NaverMap from './components/map/NaverMap';
 import HealthCheck from './HealthCheck';
 import CreateCommunityPost from './pages/Community/CreateCommunityPost';
 import DefectStats from './components/dashboard/DefectStats';
@@ -18,7 +17,7 @@ import InspectionTable from './components/inspection/InspectionTable';
 import InspectionStats from './components/inspection/InspectionStats';
 import TodayInspection from './components/inspection/TodayInspection';
 import MiniCalendar from './components/common/Calendar/MiniCalendar';
-import Dashboard from './pages/Dashboard/Dashboard';
+import Dashboard2 from './pages/Dashboard/Dashboard';
 import { getUserInfo } from './utils/auth';
 
 function App() {

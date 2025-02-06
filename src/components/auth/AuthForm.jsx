@@ -123,7 +123,14 @@ function AuthForm({
           !isLogin ? "auth-is-txl" : ""
         }`}
       >
-        <form className="auth-form" onSubmit={handleSubmit}>
+        <form
+          className="auth-form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit(e);
+          }}
+          method="POST"
+        >
           <h2 className="auth-form-title">로그인</h2>
 
           <div className="auth-form-group">
