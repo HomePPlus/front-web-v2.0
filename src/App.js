@@ -17,7 +17,7 @@ import InspectionTable from './components/inspection/InspectionTable';
 import InspectionStats from './components/inspection/InspectionStats';
 import TodayInspection from './components/inspection/TodayInspection';
 import MiniCalendar from './components/common/Calendar/MiniCalendar';
-import Dashboard2 from './pages/Dashboard/Dashboard';
+import Dashboard from './pages/Dashboard/Dashboard';
 import { getUserInfo } from './utils/auth';
 
 function App() {
@@ -30,7 +30,6 @@ function App() {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/auth" element={<Auth />} />
-        <Route path="/test" element={<Test />} />
         <Route path="/report" element={<Report />} />
         <Route path="/report/list" element={<ReportList />} />
         <Route path="/report/:reportId" element={<ReportDetail />} />
