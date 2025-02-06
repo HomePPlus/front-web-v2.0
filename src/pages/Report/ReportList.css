@@ -51,7 +51,7 @@
   background: #f1eecd; /* 진한 코랄 핑크 */
   color: #6d6767;
   padding: 15px;
-  font-family: 'eLight';
+  font-family: "eLight";
   text-align: center;
   border-top: 1px solid #1a4d0d;
   border-bottom: 1px solid #1a4d0d;
@@ -62,7 +62,7 @@
   padding: 15px;
   border-bottom: 1px solid #126b21;
   background-color: #fffef2;
-  font-family: 'eMedium';
+  font-family: "eMedium";
   color: #5a5a5a;
   text-align: center;
   max-width: 200px; /* 최대 너비 설정 */
@@ -119,7 +119,7 @@
   border-radius: 4px;
   color: #ffffff;
   cursor: pointer;
-  font-family: 'eMedium';
+  font-family: "eMedium";
   margin-left: auto;
   margin-right: 80px;
   margin-top: 10px;
@@ -150,7 +150,7 @@
   padding: 5px 10px;
   border-radius: 3px;
   cursor: pointer;
-  font-family: 'eLight';
+  font-family: "eLight";
   transition: background 0.3s;
 }
 
