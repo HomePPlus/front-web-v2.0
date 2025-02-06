@@ -1,88 +1,111 @@
-/* 대시보드 전체 컨테이너 */
+/* Dashboard.css */
+.app-container {
+  display: flex;
+  width: 100%;
+  height: 120%;
+  background: linear-gradient(145deg, #e6e9ef, #dae0e7);
+  padding-top: 64px; /* 헤더 높이만큼 패딩 */
+}
+
 .dashboard-container {
-    padding: 15px;
-    background-color: #e0e5ec;
-    height: calc(100vh - 64px);
-    margin-top: 64px;
-    overflow: hidden;
+  flex: 1;
+  padding: 20px 40px;
+  background-color: transparent;
+  height: calc(100vh - 64px);
+  position: relative;
+  overflow: hidden;
+}
+/* 전체 대시보드 뷰 스타일링 */
+.total-dashboard-view {
+  display: flex;
+  gap: 30px;
+  height: 100%;
 }
 
-/* 메인 그리드 레이아웃 */
+.map-container {
+  flex: 1;
+  background: linear-gradient(145deg, #e8ecf2, #d8dde4) !important;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-radius: 15px;
+  box-shadow: 12px 12px 24px #a3b1c6, -12px -12px 24px #ffffff !important;
+  overflow: hidden;
+}
+
+.stats-container {
+  flex: 1;
+  background: linear-gradient(145deg, #e6e9ef, #dae0e7) !important;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-radius: 15px;
+  box-shadow: 8px 8px 16px #b8c4d9, -8px -8px 16px #ffffff;
+  overflow: hidden;
+}
+
+/* 내 구역 대시보드 임시 스타일링 */
+.my-area-dashboard {
+  height: 100%;
+  padding: 20px;
+  overflow: hidden; /* 전체 대시보드 컨테이너 overflow 제어 */
+}
+
 .dashboard-grid {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr;
-    gap: 12px;
-    max-width: 1800px; /* 최대 너비 축소 */
-    margin: 0 auto;
-    height: calc(100% - 20px); /* 여백 고려 */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 20px;
+  height: 100%;
 }
 
-/* 공통 대시보드 아이템 스타일 */
 .dashboard-item {
-    background: #e0e5ec;
-    border-radius: 15px; /* 약간 축소 */
-    padding: 12px;
-    box-shadow: 
-        6px 6px 12px #a3b1c6,
-        -6px -6px 12px #ffffff;
-    overflow: auto;
+  min-width: 0; /* flexbox overflow 방지 */
+  overflow: auto;
+  background: #e0e5ec;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 8px 8px 16px #a3b1c6, -8px -8px 16px #ffffff;
 }
 
-/* 왼쪽 섹션 스타일링 */
-.left-section {
-    display: flex;
+.my-area-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+  padding: 20px;
+}
+
+.inspection-list-row {
+  flex: 0 0 auto;
+  width: 100%;
+  margin-top: -10px;
+}
+
+.inspection-list {
+  width: 100%;
+  height: 430px;
+  max-width: 98%;
+}
+
+.dashboard-bottom-row {
+  display: flex;
+  gap: 30px;
+  max-height: 43%;
+  flex: 1;
+}
+
+.dashboard-bottom-row .dashboard-item {
+  flex: 1;
+  min-height: 300px;
+  width: 100%; /* 적절한 높이 제한 */
+}
+
+@media (max-width: 1200px) {
+  .dashboard-bottom-row {
     flex-direction: column;
-    gap: 12px;
-    height: 100%;
+  }
 }
 
-/* 결함 통계 영역 */
-.left-section .defect-stats {
-    height: 35%;
-    min-height: 250px;
-}
-
-/* 점검 테이블 영역 */
-.left-section .inspection-table {
-    height: 65%;
-    min-height: 300px;
-}
-
-/* 오른쪽 섹션 스타일링 */
-.right-section {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    height: 100%;
-}
-
-/* 점검 현황 영역 */
-.right-section .inspection-stats {
-    height: 20%;
-    min-height: 150px;
-}
-
-/* 오늘의 점검 영역 */
-.right-section .today-inspection {
-    height: 30%;
-    min-height: 200px;
-}
-
-/* 캘린더 영역 */
-.right-section .calendar {
-    height: 50%;
-    min-height: 250px;
-}
-
-/* 캘린더 내부 요소 조정을 위한 추가 스타일 */
-.calendar .calendar-wrapper {
-    padding: 8px;
-    height: 100%;
-}
-
-.calendar .react-calendar {
-    padding: 20px;
-    width: 300%;
-    height: 50%;
-    margin: 0 auto;
+/* 체크리스트 */
+.checklist-view-enabled {
+  overflow-y: auto; /* Enable vertical scrolling */
+  height: calc(100vh - 64px); /* Ensure it takes up the full height */
 }

@@ -1,8 +1,11 @@
+// NaverMap.jsx
 import React, { useEffect, useRef, useState } from 'react';
-import { getInspectionReports } from '../../api/apiClient';
+import { getInspectionReports } from '../../../api/apiClient';
+import '../dashboardCommon.css';
 import './NaverMap.css';
 
 const NaverMap = () => {
+  // 상태 관리
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
   const [markers, setMarkers] = useState([]);
@@ -44,14 +47,12 @@ const NaverMap = () => {
       const response = await getInspectionReports();
       const inspections = response.data.data;
 
-      // 기존 마커 제거
       markers.forEach((marker) => marker.setMap(null));
       const newMarkers = [];
 
       for (const inspection of inspections) {
         try {
           const position = await getCoordinatesFromAddress(inspection.reportInfo.detailAddress);
-
           const marker = new window.naver.maps.Marker({
             position,
             map: map,
@@ -93,6 +94,7 @@ const NaverMap = () => {
     }
   };
 
+  // 네이버 지도 초기화
   useEffect(() => {
     const loadNaverMap = () => {
       const script = document.createElement('script');
@@ -100,32 +102,20 @@ const NaverMap = () => {
       script.async = true;
 
       script.onerror = () => {
-        console.error('Failed to load Naver Maps script');
         setError('지도를 불러오는데 실패했습니다.');
         setLoading(false);
       };
 
       script.onload = () => {
-        console.log('Naver Maps script loaded');
         if (!window.naver || !window.naver.maps) {
-          console.error('Naver Maps not available');
           setError('네이버 지도 API를 초기화하는데 실패했습니다.');
           setLoading(false);
           return;
         }
 
-        if (!mapRef.current) {
-          console.error('Map container not found');
-          setError('지도 컨테이너를 찾을 수 없습니다.');
-          setLoading(false);
-          return;
-        }
-
         try {
-          // 부산시청 좌표
           const busanCityHall = new window.naver.maps.LatLng(35.1798159, 129.0750222);
-
-          const mapOptions = {
+          const mapInstance = new window.naver.maps.Map(mapRef.current, {
             center: busanCityHall,
             zoom: 14,
             mapTypeControl: true,
@@ -133,12 +123,8 @@ const NaverMap = () => {
             zoomControlOptions: {
               position: window.naver.maps.Position.TOP_RIGHT,
             },
-          };
+          });
 
-          const mapInstance = new window.naver.maps.Map(mapRef.current, mapOptions);
-          console.log('Map instance created');
-
-          // 부산시청 마커
           new window.naver.maps.Marker({
             position: busanCityHall,
             map: mapInstance,
@@ -148,7 +134,6 @@ const NaverMap = () => {
           setMap(mapInstance);
           setLoading(false);
         } catch (error) {
-          console.error('Error initializing map:', error);
           setError('지도를 초기화하는데 실패했습니다.');
           setLoading(false);
         }
@@ -165,6 +150,7 @@ const NaverMap = () => {
     loadNaverMap();
   }, []);
 
+  // 마커 생성 effect
   useEffect(() => {
     if (map) {
       createMarkers();
@@ -172,10 +158,17 @@ const NaverMap = () => {
   }, [map]);
 
   return (
-    <div className="map-wrapper">
-      {loading && <div className="loading">지도를 불러오는 중...</div>}
-      {error && <div className="error">{error}</div>}
-      <div ref={mapRef} style={{ width: '100%', height: '600px' }} />
+    <div className="dashboard-section">
+      <div className="content-section">
+        <div className="header-section">
+          <h2 className="section-title eMedium">부산시 신고 위치</h2>
+        </div>
+        <div className="content-wrapper">
+          {loading && <div className="loading">지도를 불러오는 중...</div>}
+          {error && <div className="error">{error}</div>}
+          <div ref={mapRef} className="naver-map" />
+        </div>
+      </div>
     </div>
   );
 };

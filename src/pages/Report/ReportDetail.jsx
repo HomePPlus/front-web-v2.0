@@ -142,8 +142,8 @@ const ReportDetail = () => {
             </div>
 
             {isEditing ? (
-              <div className="content-wrapper">
-                <div className="left-column">
+              <div className="report-content-wrapper">
+                <div className="report-left-column">
                   <h3>게시글 수정</h3>
                   <div className="report-content-edit">
                     <input
@@ -177,7 +177,7 @@ const ReportDetail = () => {
                     )}
                   </div>
                 </div>
-                <div className="right-column">
+                <div className="report-right-column">
                   <h3>분석 결과</h3>
                   <div className="detection-result">
                     {report.detectionResult ? (
@@ -193,8 +193,8 @@ const ReportDetail = () => {
                 </div>
               </div>
             ) : (
-              <div className="content-wrapper">
-                <div className="left-column">
+              <div className="report-content-wrapper">
+                <div className="report-left-column">
                   <h3>신고 내용</h3>
                   <div className="report-content">
                     <p>{report.reportDescription}</p>
@@ -216,7 +216,7 @@ const ReportDetail = () => {
                     )}
                   </div>
                 </div>
-                <div className="right-column">
+                <div className="report-right-column">
                   <h3>분석 결과</h3>
                   <div className="detection-result">
                     {report.detectionResult ? (

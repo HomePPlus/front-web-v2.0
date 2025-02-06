@@ -1,15 +1,16 @@
 .today-inspection-container {
   padding: 20px;
   margin: 20px;
-  background-color: #ffffff;
+  background-color: transparent;
+  align-items: center;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .today-inspection-container h2 {
-  color: #333;
+  color: #5f5f5f;
   margin-bottom: 20px;
-  font-family: "eMedium";
+  font-family: 'eMedium';
   text-align: center;
 }
 
@@ -17,7 +18,7 @@
   text-align: center;
   padding: 20px;
   color: #666;
-  font-family: "eMedium";
+  font-family: 'eMedium';
   background-color: #f8f9fa;
   border-radius: 8px;
 }
@@ -49,7 +50,7 @@
 }
 
 .inspection-type {
-  font-family: "eMedium";
+  font-family: 'eMedium';
   color: #495057;
   font-size: 1.1em;
 }
@@ -78,12 +79,12 @@
 }
 
 .inspection-detail {
-  font-family: "eLight";
+  font-family: 'eLight';
   color: #495057;
 }
 
 .inspection-detail strong {
-  font-family: "eMedium";
+  font-family: 'eMedium';
   margin-right: 8px;
   color: #212529;
 }
@@ -92,18 +93,17 @@
   margin-top: 10px;
   padding-top: 10px;
   border-top: 1px solid #eee;
-  font-family: "eLight";
+  font-family: 'eLight';
   color: #495057;
   line-height: 1.5;
 }
 
-/* 로딩 및 에러 상태 스타일 */
-.loading,
+/*에러 상태 스타일 */
 .error {
   text-align: center;
   padding: 20px;
   color: #666;
-  font-family: "eMedium";
+  font-family: 'eMedium';
 }
 
 .error {

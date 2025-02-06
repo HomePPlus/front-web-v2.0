@@ -288,7 +288,7 @@
   margin-right: 10px;
 }
 
-.content-wrapper {
+.report-content-wrapper {
   display: grid;
   grid-template-columns: 3fr 1fr; /* 3:1 비율로 변경 */
   gap: 20px;
@@ -299,22 +299,22 @@
   box-shadow: inset 2px 2px 4px #d5d2ba, inset -2px -2px 4px #ffffe4;
 }
 
-.left-column {
+.report-left-column {
   padding-right: 0px;
   border-right: 4px solid #e9e8d7;
 }
 
-.left-column h3 {
+.report-left-column h3 {
   font-family: 'eMedium'; /* 기존에 사용하던 폰트 */
   font-weight: 100;
   margin-left: 40%;
 }
 
-.right-column {
+.report-right-column {
   padding-left: 20px;
 }
 
-.right-column h3 {
+.report-right-column h3 {
   font-family: 'eMedium'; /* 기존에 사용하던 폰트 */
   font-weight: 400;
   margin-left: 25%;

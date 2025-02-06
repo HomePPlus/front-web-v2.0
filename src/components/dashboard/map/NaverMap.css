@@ -1,0 +1,56 @@
+/* NaverMap.css */
+
+/* 헤더 섹션 스타일링 */
+.header-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 30px;
+  margin-bottom: 10px;
+  margin-right: 40px;
+  border-radius: 15px;
+  background: #e0e5ec;
+  box-shadow: 8px 8px 16px #a3b1c6, -8px -8px 16px #ffffff;
+}
+
+/* 정보창 스타일링 */
+.info-window {
+  padding: 15px;
+  background: #e0e5ec;
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px #a3b1c6, -5px -5px 10px #ffffff;
+}
+
+.info-window h3 {
+  margin: 0 0 10px 0;
+  color: #104e1e;
+  font-family: 'eMedium';
+  font-size: 16px;
+}
+
+.info-window p {
+  margin: 8px 0;
+  color: #104e1e;
+  font-family: 'eLight';
+  font-size: 14px;
+}
+
+/* 로딩 및 에러 상태 스타일링 */
+.loading,
+.error {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background: #e0e5ec;
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px #a3b1c6, -5px -5px 10px #ffffff;
+  font-family: 'eMedium';
+  color: #104e1e;
+  z-index: 1000;
+}
+
+.error {
+  color: #dc3545;
+}

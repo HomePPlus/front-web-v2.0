@@ -5,15 +5,16 @@
     width: 100%;
   }
   */
-  .content {
-    position: relative;
-    top:100px;
-    left: 250px;
-    z-index: 1;
-    padding: 20px;
-  }
-  
-  /* h1 {
+.content {
+  position: relative;
+  top: 100px;
+  left: 250px;
+  z-index: 1;
+  opacity: 10;
+  padding: 20px;
+}
+
+/* h1 {
     color: black;
     text-align: center;
   }

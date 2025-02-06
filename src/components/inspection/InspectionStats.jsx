@@ -30,24 +30,24 @@ const InspectionStats = () => {
   if (!stats) return null;
 
   return (
-    <div className="stats-container">
+    <div className="status-container">
       <h2>점검 현황</h2>
-      <div className="stats-grid">
-        <div className="stat-card scheduled">
+      <div className="status-grid">
+        <div className="status-card scheduled">
           <h3>예정됨</h3>
-          <span className="stat-number">{stats['예정됨'] || 0}</span>
+          <span className="status-number">{stats['예정됨'] || 0}</span>
         </div>
-        <div className="stat-card in-progress">
+        <div className="status-card in-progress">
           <h3>진행중</h3>
-          <span className="stat-number">{stats['진행중'] || 0}</span>
+          <span className="status-number">{stats['진행중'] || 0}</span>
         </div>
-        <div className="stat-card completed">
+        <div className="status-card completed">
           <h3>완료됨</h3>
-          <span className="stat-number">{stats['완료됨'] || 0}</span>
+          <span className="status-number">{stats['완료됨'] || 0}</span>
         </div>
-        <div className="stat-card cancelled">
+        <div className="status-card cancelled">
           <h3>취소됨</h3>
-          <span className="stat-number">{stats['취소됨'] || 0}</span>
+          <span className="status-number">{stats['취소됨'] || 0}</span>
         </div>
       </div>
     </div>
