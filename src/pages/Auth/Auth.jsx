@@ -116,8 +116,7 @@ function Auth() {
   // 회원가입 핸들러
   const handleRegister = async (userType, userData) => {
     try {
-      const registerFn =
-        userType === "resident" ? registerResident : registerInspector;
+      const registerFn = userType === "resident" ? registerResident : registerInspector;
       const response = await registerFn(userData);
       if (response.data.status === 200) {
         alert(response.data.message);
