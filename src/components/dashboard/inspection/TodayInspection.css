@@ -1,0 +1,123 @@
+.today-inspection-container {
+  padding: 20px;
+  margin: 20px;
+  background-color: transparent;
+  align-items: center;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.today-inspection-container h2 {
+  color: #5f5f5f;
+  margin-bottom: 20px;
+  font-family: 'eMedium';
+  text-align: center;
+}
+
+.no-inspection-message {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-family: 'eMedium';
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.inspection-cards {
+  display: grid;
+  gap: 20px;
+}
+
+.inspection-card {
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.inspection-card:hover {
+  transform: translateY(-2px);
+}
+
+.inspection-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.inspection-type {
+  font-family: 'eMedium';
+  color: #495057;
+  font-size: 1.1em;
+}
+
+.inspection-status {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.85em;
+  font-weight: 500;
+}
+
+.inspection-status.예정됨 {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.inspection-status.진행중 {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+.inspection-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.inspection-detail {
+  font-family: 'eLight';
+  color: #495057;
+}
+
+.inspection-detail strong {
+  font-family: 'eMedium';
+  margin-right: 8px;
+  color: #212529;
+}
+
+.inspection-description {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+  font-family: 'eLight';
+  color: #495057;
+  line-height: 1.5;
+}
+
+/*에러 상태 스타일 */
+.error {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-family: 'eMedium';
+}
+
+.error {
+  color: #dc3545;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .today-inspection-container {
+    margin: 10px;
+    padding: 15px;
+  }
+
+  .inspection-card {
+    padding: 15px;
+  }
+}

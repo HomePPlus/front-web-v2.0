@@ -7,6 +7,7 @@
   padding-top: 64px; /* 헤더 높이만큼 패딩 */
 }
 
+
 .dashboard-container {
   flex: 1;
   padding: 20px 40px;
@@ -57,7 +58,7 @@
 }
 
 .dashboard-item {
-  min-width: 0; /* flexbox overflow 방지 */
+  
   overflow: auto;
   background: #e0e5ec;
   border-radius: 15px;

@@ -174,7 +174,7 @@ export const createDefect = (formData) =>
   });
 
 // * 오늘 예약된 점검 일정 API
-export const getTodayInspections = (date) =>
+export const getTodayInspections = (date = new Date().toISOString().split('T')[0]) =>
   apiClient.get(`/api/inspections/today?date=${date}`, {
     headers: {
       Authorization: `Bearer ${getToken()}`,
@@ -192,7 +192,8 @@ export const getDefectStats = (area) =>
   });
 
 // * 점검 관련 API
-export const getInspectionReports = () => apiClient.get('/api/inspections/report');
+export const getInspectionReports = () => 
+  apiClient.get('/api/inspections/report');
 
 // * 점검 통계 API
 export const getInspectorStats = () => apiClient.get('/api/inspections/statistics/inspector');
@@ -225,3 +226,11 @@ export const updateReport = (reportId, formData) =>
 
 // 신고 삭제
 export const deleteReport = (reportId) => apiClient.delete(`/api/reports/${reportId}`);
+
+// 점검자별 예약 가능한 신고 목록 조회
+export const getReservableReports = () => 
+  apiClient.get('/api/reports/reservable/inspector');
+
+// 점검 예약 생성
+export const createInspectionReports = (data) =>
+  apiClient.post('/api/inspections/report', data);

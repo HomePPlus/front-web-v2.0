@@ -1,0 +1,189 @@
+.userReport-table-container {
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.userReport-table-container h2 {
+  color: #5f5f5f;
+  margin-bottom: 20px;
+  font-family: "eLight";
+}
+
+.userReport-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #d4f0a8;
+  font-family: "eLight";
+}
+
+.userReport-table th,
+.userReport-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #f0d7d7;
+}
+
+.userReport-table th {
+  background-color: #f0d7d7;
+  font-weight: bold;
+  color: #495057;
+  font-family: "eMedium";
+}
+
+.userReport-table tr:hover {
+  background-color: #bad1e9;
+  position: relative;
+  z-index: 1;
+}
+
+.userReport-schedule-button {
+  padding: 6px 12px;
+  border-radius: 12px;
+  background-color: #e3f2fd;
+  color: #1976d2;
+  border: none;
+  cursor: pointer;
+  font-family: "eMedium";
+  font-size: 0.85em;
+  transition: background-color 0.3s;
+}
+
+.userReport-schedule-button:hover {
+  background-color: #bbdefb;
+}
+
+/* 기존 알림 관련 스타일 삭제 */
+.userReport-error {
+  display: none; /* 이 스타일을 삭제하거나 주석 처리 */
+}
+
+@media (max-width: 1024px) {
+  .userReport-table-container {
+    margin: 10px;
+    padding: 10px;
+    overflow-x: auto;
+  }
+
+  .userReport-table {
+    font-size: 14px;
+  }
+}
+
+.userReport-datepicker-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #f7daca;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: -5px -5px 10px #ffffff, 5px 5px 10px rgba(94, 104, 121, 0.2);
+  z-index: 99999;
+  isolation: isolate;
+  pointer-events: auto;
+}
+
+/* DatePicker 스타일링 */
+.custom-datepicker-input {
+  font-family: "eMedium";
+  font-size: 16px;
+  padding: 8px 10px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 10px;
+  background: #f7c7c7;
+  box-shadow: inset 2px 2px 5px rgba(94, 104, 121, 0.3), inset -2px -2px 5px #ffffff;
+  color: #495057;
+  outline: none;
+}
+
+.custom-datepicker-input:focus {
+  box-shadow: inset 3px 3px 6px rgba(94, 104, 121, 0.4), inset -3px -3px 6px #ffffff;
+}
+
+.userReport-datepicker-container {
+  position:fixed;
+}
+.react-datepicker-popper {
+  z-index: 100000 !important;
+  position: fixed !important;
+  transform: none !important;
+  inset: auto !important;
+  pointer-events: auto !important;
+}
+
+.userReport-datepicker-submit-button {
+  padding: 6px 12px;
+  border-radius: 12px;
+  background-color: #e3f2fd; /* 뉴모피즘 버튼 색상 */
+  color: #1976d2;
+  border: none;
+  cursor: pointer;
+  font-family: "eMedium"; /* 원하는 폰트 적용 */
+  font-size: 0.85em;
+  transition: background-color 0.3s;
+  box-shadow: -2px -2px 5px #ffffff, 2px 2px 5px rgba(94, 104, 121, 0.2); /* 뉴모피즘 버튼 그림자 */
+}
+
+.userReport-datepicker-submit-button:hover {
+  background-color: #bbdefb;
+  box-shadow: -2px -2px 5px #ffffff, 2px 2px 5px rgba(94, 104, 121, 0.3); /* 호버 시 그림자 강조 */
+}
+
+/* DatePicker 스타일링 */
+.react-datepicker {
+  font-family: "eMedium"; /* 원하는 폰트 적용 */
+}
+
+.react-datepicker__header {
+  background-color: #f0f0f0; /* 뉴모피즘 배경색 */
+  border-bottom: none;
+}
+
+.react-datepicker__day-name {
+  color: #495057; /* 뉴모피즘 텍스트 색상 */
+}
+
+.react-datepicker__day {
+  border-radius: 50%; /* 날짜 버튼 둥글게 */
+  background-color: #e3f2fd; /* 뉴모피즘 날짜 버튼 색상 */
+  color: #1976d2;
+}
+
+.react-datepicker__day:hover {
+  background-color: #bbdefb; /* 호버 시 색상 변경 */
+}
+
+.react-datepicker__day--selected {
+  background-color: #1976d2; /* 선택된 날짜 색상 */
+  color: #ffffff;
+}
+
+.userReport-datepicker-cancel-button {
+  padding: 6px 12px;
+  margin-left: 20px;
+  border-radius: 12px;
+  background-color: #e3fdef; /* 뉴모피즘 버튼 색상 */
+  color: #d22f19;
+  border: none;
+  cursor: pointer;
+  font-family: "eMedium"; /* 원하는 폰트 적용 */
+  font-size: 0.85em;
+  transition: background-color 0.3s;
+  box-shadow: -2px -2px 5px #ffffff, 2px 2px 5px rgba(94, 104, 121, 0.2); /* 뉴모피즘 버튼 그림자 */
+}
+
+.userReport-datepicker-cancel-button:hover {
+  background-color: #bbf3d5;
+  box-shadow: -2px -2px 5px #ffffff, 2px 2px 5px rgba(94, 104, 121, 0.3); /* 호버 시 그림자 강조 */
+}
+
+/* DatePicker 포털 스타일 */
+#datepicker-portal {
+  position: relative;
+  z-index: 100001;
+}

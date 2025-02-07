@@ -52,38 +52,45 @@ const NaverMap = () => {
 
       for (const inspection of inspections) {
         try {
-          const position = await getCoordinatesFromAddress(inspection.reportInfo.detailAddress);
-          const marker = new window.naver.maps.Marker({
-            position,
-            map: map,
-            title: inspection.reportInfo.description,
-          });
+          const reportInfo = inspection.report_info || {}; // report_info가 없을 경우 빈 객체로 초기화
+          const address = reportInfo.detail_address; // detail_address를 안전하게 가져옴
 
-          // 정보창 생성
-          const infoWindow = new window.naver.maps.InfoWindow({
-            content: `
-              <div class="info-window">
-                <h3>점검 정보</h3>
-                <p><strong>상태:</strong> ${inspection.status}</p>
-                <p><strong>유형:</strong> ${inspection.reportInfo.defectType}</p>
-                <p><strong>설명:</strong> ${inspection.reportInfo.description}</p>
-                <p><strong>주소:</strong> ${inspection.reportInfo.detailAddress}</p>
-              </div>
-            `,
-          });
+          if (address) { // address가 존재할 경우에만 마커 생성
+            const position = await getCoordinatesFromAddress(address);
+            const marker = new window.naver.maps.Marker({
+              position,
+              map: map,
+              title: reportInfo.description,
+            });
 
-          // 마커 클릭 이벤트
-          window.naver.maps.Event.addListener(marker, 'click', () => {
-            if (infoWindow.getMap()) {
-              infoWindow.close();
-            } else {
-              infoWindow.open(map, marker);
-            }
-          });
+            // 정보창 생성
+            const infoWindow = new window.naver.maps.InfoWindow({
+              content: `
+                <div class="info-window">
+                  <h3>점검 정보</h3>
+                  <p><strong>상태:</strong> ${inspection.status}</p>
+                  <p><strong>유형:</strong> ${reportInfo.defect_type}</p>
+                  <p><strong>설명:</strong> ${reportInfo.description}</p>
+                  <p><strong>주소:</strong> ${address}</p>
+                </div>
+              `,
+            });
 
-          newMarkers.push(marker);
+            // 마커 클릭 이벤트
+            window.naver.maps.Event.addListener(marker, 'click', () => {
+              if (infoWindow.getMap()) {
+                infoWindow.close();
+              } else {
+                infoWindow.open(map, marker);
+              }
+            });
+
+            newMarkers.push(marker);
+          } else {
+            console.warn(`Inspection ${inspection.inspection_id} does not have a valid detail_address.`);
+          }
         } catch (error) {
-          console.error(`주소 변환 실패: ${inspection.reportInfo.detailAddress}`, error);
+          console.error(`주소 변환 실패: ${inspection.report_info?.detail_address}`, error);
         }
       }
 

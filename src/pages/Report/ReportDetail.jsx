@@ -26,18 +26,20 @@ const ReportDetail = () => {
   };
 
   useEffect(() => {
-    const fetchReport = async () => {
+    const fetchReportDetail = async () => {
       try {
         const response = await getReportDetail(reportId);
-        setReport(response.data.data);
-        setLoading(false);
-      } catch (err) {
-        setError('신고 내용을 불러오는데 실패했습니다.');
+        setReport(response.data.data); // 응답 구조에 맞게 수정
+        setError(null);
+      } catch (error) {
+        setError('신고 세부 정보를 불러오는데 실패했습니다.');
+        console.error('Error fetching report detail:', error);
+      } finally {
         setLoading(false);
       }
     };
 
-    fetchReport();
+    fetchReportDetail();
   }, [reportId]);
 
   const handleDelete = async () => {

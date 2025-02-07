@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { apiClient } from '../../api/apiClient';
-import './TodayInspection.css';
+import React, { useState, useEffect } from "react";
+import { apiClient } from "../../../api/apiClient";
+import "./TodayInspection.css";
 
 const TodayInspection = () => {
   const [inspections, setInspections] = useState([]);
@@ -16,7 +16,7 @@ const TodayInspection = () => {
         response.data.data.forEach((inspection, index) => {
           console.log(`점검 ${index + 1}의 데이터:`, {
             report_info: inspection.report_info,
-            detail_address: inspection.report_info?.detail_address
+            detail_address: inspection.report_info?.detail_address,
           });
         });
         setInspections(response.data.data);
@@ -35,14 +35,14 @@ const TodayInspection = () => {
 
   const getStatusClassName = (status) => {
     switch (status) {
-      case '예정됨':
-        return 'status-scheduled';
-      case '진행중':
-        return 'status-in-progress';
-      case '완료됨':
-        return 'status-completed';
+      case "예정됨":
+        return "status-scheduled";
+      case "진행중":
+        return "status-in-progress";
+      case "완료됨":
+        return "status-completed";
       default:
-        return '';
+        return "";
     }
   };
 
@@ -75,13 +75,13 @@ const TodayInspection = () => {
                     <strong>예정일:</strong> {inspection.schedule_date}
                   </div>
                   <div className="inspection-detail">
-                    <strong>주소:</strong> {reportInfo.detail_address || '-'}
+                    <strong>주소:</strong> {reportInfo.detail_address || "-"}
                   </div>
                   <div className="inspection-detail">
-                    <strong>결함 유형:</strong> {reportInfo.defect_type || '-'}
+                    <strong>결함 유형:</strong> {reportInfo.defect_type || "-"}
                   </div>
                   <div className="inspection-description">
-                    <strong>설명:</strong> {reportInfo.description || '-'}
+                    <strong>설명:</strong> {reportInfo.description || "-"}
                   </div>
                 </div>
               </div>
