@@ -22,24 +22,22 @@ const ReportDetail = () => {
 
   // userId 비교 로직
   const isAuthor = (reportUserId) => {
-    return Number(reportUserId) === Number(userInfo?.userId);
+    return Number(reportUserId) === Number(loggedInUserId);
   };
 
   useEffect(() => {
-    const fetchReportDetail = async () => {
+    const fetchReport = async () => {
       try {
         const response = await getReportDetail(reportId);
-        setReport(response.data.data); // 응답 구조에 맞게 수정
-        setError(null);
-      } catch (error) {
-        setError('신고 세부 정보를 불러오는데 실패했습니다.');
-        console.error('Error fetching report detail:', error);
-      } finally {
+        setReport(response.data.data);
+        setLoading(false);
+      } catch (err) {
+        setError('신고 내용을 불러오는데 실패했습니다.');
         setLoading(false);
       }
     };
 
-    fetchReportDetail();
+    fetchReport();
   }, [reportId]);
 
   const handleDelete = async () => {
@@ -104,10 +102,11 @@ const ReportDetail = () => {
   // 수정 함수
   const handleEdit = () => {
     setEditedReport({
-      reportTitle: report.reportTitle,
-      reportDescription: report.reportDescription,
-      reportDetailAddress: report.reportDetailAddress,
-      defectType: report.defectType,
+      report_title: report.report_title,
+      report_description: report.report_description,
+      report_detail_address: report.report_detail_address,
+      defect_type: report.defect_type,
+      images: report.images,
     });
     setIsEditing(true);
   };
@@ -115,35 +114,56 @@ const ReportDetail = () => {
   const handleUpdate = async () => {
     try {
       const formData = new FormData();
-      formData.append('report', JSON.stringify(editedReport));
-      // 이미지가 있다면 추가
-      if (editedReport.images) {
-        editedReport.images.forEach((image) => {
-          formData.append('images', image);
-        });
-      }
+      // 수정 데이터 구성 (snake_case → camelCase)
+    const reportData = {
+      reportTitle: editedReport.report_title,
+      reportDescription: editedReport.report_description,
+      reportDetailAddress: editedReport.report_detail_address,
+      defectType: editedReport.defect_type
+    };
 
-      await updateReport(reportId, formData);
-      setIsEditing(false);
-      // 업데이트 후 데이터 다시 불러오기
-      const response = await getReportDetail(reportId);
-      setReport(response.data.data);
-    } catch (error) {
-      console.error('신고 수정 중 오류:', error);
+    formData.append('report', new Blob([JSON.stringify(reportData)], {
+      type: 'application/json'
+    }));
+
+    // 이미지 파일 추가 (실제 파일인지 확인)
+    if (editedReport.images) {
+      editedReport.images.forEach((image) => {
+        if (image instanceof File) {
+          formData.append('images', image);
+        }
+      });
     }
-  };
+
+    // API 호출
+    await updateReport(reportId, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    
+    // 상태 업데이트
+    setIsEditing(false);
+    const response = await getReportDetail(reportId);
+    setReport(response.data.data);
+  } catch (error) {
+    console.error('신고 수정 오류:', error.response?.data);
+    alert(`수정 실패: ${error.response?.data?.message}`);
+  }
+};
+
 
   return (
     <div className="report-wrapper">
       <div className="report-container">
         <div className="report-detail">
           <FormGroup>
-            <h1>{report.reportTitle}</h1>
+            <h1>{report.report_title}</h1>
             <div className="report-meta">
               <span>작성자: {maskEmail(loggedInEmail)}</span>
-              <span>주소: {report.reportDetailAddress}</span>
-              <span>작성일: {new Date(report.reportDate).toLocaleString()}</span>
-              <span>신고 결함 유형: {translateDefectType(report.defectType)}</span>
+              <span>주소: {report.report_detail_address}</span>
+              <span>작성일: {new Date(report.report_date).toLocaleString()}</span>
+              <span>신고 결함 유형: {translateDefectType(report.defect_type)}</span>
             </div>
 
             {isEditing ? (
@@ -153,17 +173,19 @@ const ReportDetail = () => {
                   <div className="report-content-edit">
                     <input
                       type="text"
-                      value={editedReport.reportTitle}
-                      onChange={(e) => setEditedReport({ ...editedReport, reportTitle: e.target.value })}
+                      value={editedReport.report_title}
+                      onChange={(e) => setEditedReport({ ...editedReport, report_title: e.target.value })}
                       className="edit-input"
                       placeholder="제목을 입력하세요"
                     />
+
                     <textarea
-                      value={editedReport.reportDescription}
-                      onChange={(e) => setEditedReport({ ...editedReport, reportDescription: e.target.value })}
+                      value={editedReport.report_description}
+                      onChange={(e) => setEditedReport({ ...editedReport, report_description: e.target.value })}
                       className="edit-textarea"
                       placeholder="내용을 입력하세요"
                     />
+
                   </div>
                   <div className="report-file">
                     <div className="file-info">
@@ -185,7 +207,7 @@ const ReportDetail = () => {
                 <div className="report-right-column">
                   <h3>분석 결과</h3>
                   <div className="detection-result">
-                    {report.detectionResult ? (
+                    {report.detection_result ? (
                       <p>
                         {Array.from(
                           new Set(report.detectionResult.split(',').map((type) => translateDefectType(type.trim())))
@@ -202,7 +224,7 @@ const ReportDetail = () => {
                 <div className="report-left-column">
                   <h3>신고 내용</h3>
                   <div className="report-content">
-                    <p>{report.reportDescription}</p>
+                    <p>{report.report_description}</p>
                   </div>
                   <div className="report-file">
                     <div className="file-info">
@@ -224,10 +246,10 @@ const ReportDetail = () => {
                 <div className="report-right-column">
                   <h3>분석 결과</h3>
                   <div className="detection-result">
-                    {report.detectionResult ? (
+                    {report.detection_result ? (
                       <p>
                         {Array.from(
-                          new Set(report.detectionResult.split(',').map((type) => translateDefectType(type.trim())))
+                          new Set(report.detection_result.split(',').map((type) => translateDefectType(type.trim())))
                         ).join(', ')}
                       </p>
                     ) : (

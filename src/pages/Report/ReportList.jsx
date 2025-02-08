@@ -22,10 +22,14 @@ const ReportList = () => {
   const loggedInEmail = userInfo?.email;
   const loggedInUserId = userInfo?.userId;
 
-  const handleViewModeToggle = (isAll) => {
-    setViewMode(isAll ? "all" : "mine");
-    setCurrentPage(1); // 토글 시 첫 페이지로 이동
-  };
+ // 뷰 모드 변경 핸들러
+ const handleViewModeToggle = (isAll) => {
+  const newMode = isAll ? "all" : "mine";
+  console.log('뷰 모드 변경:', newMode);
+  setViewMode(newMode);
+  setCurrentPage(1);
+};
+
 
   const handleReportClick = (reportId, isAuthor) => {
     if (!isAuthor) {
@@ -38,29 +42,62 @@ const ReportList = () => {
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const response = await getAllReports();
-        const formattedReports = response.data.data.map((report) => ({
-          id: report.id,
-          reportTitle: report.reportTitle,
-          userId: report.userId,
-          reportDate: report.reportDate,
-          defectType: report.defectType,
-        }));
-        setReports(formattedReports);
+        console.groupCollapsed('[API 요청 시작]');
+        console.log('요청 파라미터:', { 
+          viewMode, 
+          userId: loggedInUserId 
+        });
+
+        const response = await getAllReports(viewMode, loggedInUserId);
+        console.log('API 원본 응답:', response);
+
+        // 데이터 유효성 검사
+        if (!response.data?.data) {
+          throw new Error('잘못된 응답 구조');
+        }
+
+        // 데이터 변환 및 로깅
+        const processedData = response.data.data.map((report, index) => {
+          console.log(`신고 ${index + 1} 처리:`, {
+            raw: report,
+            formatted: {
+              id: report.report_id,
+              title: report.report_title,
+              date: new Date(report.report_date).toLocaleDateString(),
+              type: report.defect_type,
+              userId: report.user_id
+            }
+          });
+          return {
+            ...report,
+            report_date: new Date(report.report_date) // 날짜 객체 변환
+          };
+        });
+
+        console.log('처리된 데이터:', processedData);
+        setReports(processedData);
+        setError(null);
+      } catch (error) {
+        console.error('[에러 상세 정보]', {
+          message: error.message,
+          stack: error.stack,
+          response: error.response
+        });
+        setError('신고 목록 불러오기 실패: ' + error.message);
+      } finally {
         setLoading(false);
-      } catch (err) {
-        setError("데이터를 불러오는 중 오류가 발생했습니다.");
-        setLoading(false);
+        console.groupEnd();
       }
     };
 
-    if (userInfo) {
-      fetchReports();
-    }
-  }, [userInfo]);
+    fetchReports();
+  }, [viewMode, loggedInUserId]); // 뷰 모드 변경 시 재요청
+
+
 
   const isAuthor = (reportUserId) => {
     return Number(reportUserId) === Number(userInfo?.userId);
+
   };
 
   const formatDate = (dateString) => {
@@ -92,8 +129,9 @@ const ReportList = () => {
 
   const indexOfLastReport = currentPage * reportsPerPage;
   const indexOfFirstReport = indexOfLastReport - reportsPerPage;
-  const filteredReports = viewMode === "mine" ? reports.filter((report) => report.userId === loggedInUserId) : reports;
+  const filteredReports = viewMode === "mine" ? reports.filter((report) => report.user_id === loggedInUserId) : reports;
   const currentReports = filteredReports.slice(indexOfFirstReport, indexOfLastReport);
+
 
   if (loading) return <Loading />;
   if (error) return <div className="error">{error}</div>;
@@ -103,7 +141,10 @@ const ReportList = () => {
       <div className="reportlist-container">
         <div className="report-board">
           <h1>신고 내역</h1>
-          <SliderToggle onToggle={handleViewModeToggle} />
+      <SliderToggle 
+        onToggle={handleViewModeToggle}
+        initialMode={viewMode}
+      />
           <FormGroup>
             <table className="report-table">
               <thead>
@@ -117,26 +158,26 @@ const ReportList = () => {
               </thead>
               <tbody>
                 {currentReports.map((report) => {
-                  const isAuthor = Number(report.userId) === Number(loggedInUserId);
+        const isAuthor = Number(report?.user_id) === Number(loggedInUserId);
 
                   return (
-                    <tr key={report.id}>
-                      <td>{report.id}</td>
+                    <tr key={report.report_id}>
+                      <td>{report.report_id}</td>
                       <td>
                         <span
-                          onClick={() => handleReportClick(report.id, isAuthor)}
+                          onClick={() => handleReportClick(report.report_id, isAuthor)}
                           style={{
                             cursor: isAuthor ? "pointer" : "not-allowed",
                             textDecoration: "none",
                             color: "inherit",
                           }}
                         >
-                          {isAuthor ? report.reportTitle : "비밀글입니다"}
+                          {isAuthor ? report.report_title : "비밀글입니다"}
                         </span>
                       </td>
                       <td>{isAuthor ? maskEmail(loggedInEmail) : "-"}</td>
-                      <td>{isAuthor ? formatDate(report.reportDate) : "-"}</td>
-                      <td>{isAuthor ? report.defectType : "-"}</td>
+                      <td>{isAuthor ? formatDate(report.report_date) : "-"}</td>
+                      <td>{isAuthor ? report?.defect_type : "-"}</td>
                     </tr>
                   );
                 })}
