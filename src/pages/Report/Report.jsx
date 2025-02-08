@@ -77,11 +77,11 @@ const Report = () => {
 
     try {
       const response = await createReport(formData);
-      const detectionResult = response.data.data.detectionResult;
+      const detectionResult = response.data.data.detection_result;
+      console.log("AI 분석 결과:", detectionResult);  // 로그 추가
 
       if (detectionResult && detectionResult.trim() !== '') {
-        // 결함이 있는 경우
-        // 영어 결함 유형을 한글로 변환하는 함수
+        // 영어 결함 유형을 한글로 변환
         const translateDefectType = (englishType) => {
           const typeWithoutNumber = englishType.replace(/[0-9_]/g, '').trim();
           const defectTypes = {
@@ -114,32 +114,24 @@ const Report = () => {
           return matchedType ? matchedType[1] : englishType;
         };
 
-        // 쉼표로 구분된 결함 유형들을 배열로 분리하고 각각 번역
-        const translatedResults = Array.from(
-          new Set(
-            detectionResult.split(',').map((type) => {
-              // 숫자와 언더스코어 제거
-              const typeWithoutNumber = type.replace(/[0-9_]/g, '').trim();
-              return translateDefectType(typeWithoutNumber);
-            })
-          )
-        ).join(', '); // Set으로 중복 제거
+        const translatedType = translateDefectType(detectionResult);
+        console.log("변환된 결함 유형:", translatedType);  // 로그 추가
+
         setDetectionResult(
           `이미지 분석이 완료되었습니다!
 
-              ${translatedResults} 유형의 결함이 발견되었습니다.
-              
-              빠른 시일 내에 전문가가 방문하여 자세히 살펴보도록 하겠습니다!`
+          ${translatedType} 유형의 결함이 발견되었습니다.
+          
+          빠른 시일 내에 전문가가 방문하여 자세히 살펴보도록 하겠습니다!`
         );
       } else {
-        // 결함이 없는 경우
         setDetectionResult(
           `분석 결과 즉각적인 조치가 필요한 위험한 결함은 발견되지 않았습니다.
-      
-                  전문 점검자가 이미지를 상세히 검토한 후,
-                  필요한 경우 점검 안내를 드리도록 하겠습니다!
-      
-                  안전한 주거 환경을 위해 지속적으로 관리하겠습니다.`
+
+          전문 점검자가 이미지를 상세히 검토한 후,
+          필요한 경우 점검 안내를 드리도록 하겠습니다!
+
+          안전한 주거 환경을 위해 지속적으로 관리하겠습니다.`
         );
       }
       setIsModalOpen(true);

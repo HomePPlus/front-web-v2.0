@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./Dashboard.css";
-import InspectionStats from "../../components/dashboard/inspection/InspectionStats";
-import InspectionTable from "../../components/dashboard/inspection/InspectionTable";
+import ReportDashboard from "../../components/dashboard/ReportDashboard";
 import TodayInspection from "../../components/dashboard/inspection/TodayInspection";
 import DefectStats from "../../components/dashboard/DefectStats";
 import MiniCalendar from "../../components/common/Calendar/MiniCalendar";
@@ -10,7 +9,6 @@ import NaverMap from "../../components/dashboard/map/NaverMap";
 import ChecklistPage from "./ChecklistPage";
 import { getTodayInspections } from "../../api/apiClient";
 import InspectionTabs from "../../components/dashboard/inspection/InspectionTabs";
-import UserReportTable from "../../components/dashboard/userReportTable/UserReportTable"; // 신고 목록 컴포넌트
 
 const Dashboard = () => {
   const [activeView, setActiveView] = useState("전체");
@@ -18,13 +16,18 @@ const Dashboard = () => {
   const [inspections, setInspections] = useState([]);
   const [reports, setReports] = useState([]); // 신고 데이터를 저장
   const [alerts, setAlerts] = useState([]); // 알람 메시지 저장
+  const reportDashboardRef = useRef(); // useRef를 컴포넌트 최상위 레벨에서 선언
 
   // 점검 데이터와 신고 데이터를 구분
   const userReports = reports.filter((report) => report.type === "신고");
   const inspectionReports = inspections.filter((inspection) => inspection.type === "점검");
 
   const handleAlert = (message) => {
+    console.log("알림 메시지 호출됨:", message); // 알림 로그 추가
     setAlerts((prevAlerts) => [...prevAlerts, message]);
+    setTimeout(() => {
+      setAlerts((prevAlerts) => prevAlerts.slice(1));
+    }, 3000);
   };
 
   const handleDateClick = async (date) => {
@@ -53,6 +56,16 @@ const Dashboard = () => {
     setIsModalOpen(false);
   };
 
+  const handleUpdateStats = async () => {
+    console.log("통계 업데이트 함수 호출됨"); // 통계 업데이트 시작 로그
+    if (reportDashboardRef.current) {
+      await reportDashboardRef.current.fetchStats();
+      console.log("통계 업데이트 완료됨"); // 통계 업데이트 완료 로그
+    } else {
+      console.error("reportDashboardRef가 없습니다");
+    }
+  };
+
   return (
     <div className="app-container">
       <Sidebar onViewChange={(view) => setActiveView(view)} activeView={activeView} />
@@ -74,12 +87,17 @@ const Dashboard = () => {
           <div className="my-area-dashboard">
             <div className="inspection-list-row">
               <div className="dashboard-item inspection-list">
-                <InspectionTabs onAlert={handleAlert} userReports={userReports} inspectionReports={inspectionReports} />
+                <InspectionTabs
+                  onAlert={handleAlert}
+                  userReports={userReports}
+                  inspectionReports={inspectionReports}
+                  onUpdateStats={handleUpdateStats}
+                />
               </div>
             </div>
             <div className="dashboard-bottom-row">
               <div className="dashboard-item">
-                <InspectionStats />
+                <ReportDashboard ref={reportDashboardRef} />
               </div>
               <div className="dashboard-item">
                 <MiniCalendar onDateClick={handleDateClick} />
@@ -89,12 +107,16 @@ const Dashboard = () => {
               </div>
               {alerts.length > 0 && (
                 <div className="alert-container">
-                  <h2>알람 메시지</h2>
-                  <ul>
-                    {alerts.map((alert, index) => (
-                      <li key={index}>{alert}</li>
-                    ))}
-                  </ul>
+                  {alerts.map((alert, index) => (
+                    <div
+                      key={index}
+                      className={`alert-message ${
+                        alert.includes("실패") || alert.includes("없습니다") ? "alert-error" : "alert-success"
+                      }`}
+                    >
+                      {alert}
+                    </div>
+                  ))}
                 </div>
               )}
             </div>

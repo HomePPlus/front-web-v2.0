@@ -13,10 +13,6 @@ import HealthCheck from "./HealthCheck";
 import CreateCommunityPost from "./pages/Community/CreateCommunityPost";
 import DefectStats from "./components/dashboard/DefectStats";
 import ProtectedInspectorRoute from "./components/auth/ProtectedInspectorRoute";
-import InspectionTable from "./components/inspection/InspectionTable";
-import InspectionStats from "./components/inspection/InspectionStats";
-import TodayInspection from "./components/inspection/TodayInspection";
-import MiniCalendar from "./components/common/Calendar/MiniCalendar";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import { getUserInfo } from "./utils/auth";
 

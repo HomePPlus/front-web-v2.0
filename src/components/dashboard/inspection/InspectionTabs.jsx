@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import InspectionTable from "./InspectionTable";
+import InspectionTable from "../../inspection/InspectionTable";
 import UserReportTable from "../userReportTable/UserReportTable";
 import "./InspectionTabs.css";
 
-const InspectionTabs = ({ userReports, inspectionReports, onAlert }) => {
+const InspectionTabs = ({ onAlert, onUpdateStats }) => {
   const [activeTab, setActiveTab] = useState("reports"); // 기본 탭 설정
 
   const handleTabChange = (tabId) => {
@@ -43,8 +43,8 @@ const InspectionTabs = ({ userReports, inspectionReports, onAlert }) => {
 
       {/* 탭 콘텐츠 */}
       <div className="tab-content">
-        {activeTab === "reports" && <UserReportTable reports={userReports} onAlert={onAlert} />}
-        {activeTab === "inspections" && <InspectionTable inspections={inspectionReports} onAlert={onAlert} />}
+        {activeTab === "reports" && <UserReportTable onAlert={onAlert} onUpdateStats={onUpdateStats} />}
+        {activeTab === "inspections" && <InspectionTable onAlert={onAlert} onUpdateStats={onUpdateStats} />}
       </div>
     </div>
   );

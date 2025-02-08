@@ -4,7 +4,7 @@ import { getReservableReports, createInspectionReports } from "../../../api/apiC
 import DatePicker from "react-datepicker"; // DatePicker 라이브러리 설치 필요
 import "react-datepicker/dist/react-datepicker.css"; // DatePicker 스타일링
 
-const UserReportTable = ({ onAlert }) => {
+const UserReportTable = ({ onUpdateStats, onAlert }) => {
   const [reports, setReports] = useState([]); // 신고 목록
   const [loading, setLoading] = useState(true); // 로딩 상태
   const [error, setError] = useState(null); // 에러 메시지
@@ -42,7 +42,7 @@ const UserReportTable = ({ onAlert }) => {
 
   const handleReserve = async () => {
     if (!selectedReportId) {
-      onAlert("신고를 선택해주세요.");
+      alert("신고를 선택해주세요.");
       return;
     }
 
@@ -53,17 +53,14 @@ const UserReportTable = ({ onAlert }) => {
 
     try {
       const response = await createInspectionReports(requestData);
-      onAlert(response.data.message || "예약이 성공적으로 등록되었습니다.");
+      alert(response.data.message || "예약이 성공적으로 등록되었습니다.");
       fetchReports();
       setShowDatePicker(false);
       setSelectedReportId(null);
+      onUpdateStats(); // API를 통해 최신 통계 가져오기
     } catch (error) {
-      let errorMessage = "예약 등록에 실패했습니다.";
-      if (error.response && error.response.data && error.response.data.message) {
-        errorMessage = error.response.data.message;
-      }
-      onAlert(errorMessage);
-      console.error("예약 등록 실패:", error);
+      console.error("API Error:", error);
+      onAlert("예약 등록에 실패했습니다.");
     }
   };
 

@@ -196,7 +196,15 @@ export const getInspectionReports = () =>
   apiClient.get('/api/inspections/report');
 
 // * 점검 통계 API
-export const getInspectorStats = () => apiClient.get('/api/inspections/statistics/inspector');
+export const getInspectionStats = async () => {
+  try {
+    const response = await apiClient.get("/api/inspections/statistics/inspector");
+    return response.data.data;
+  } catch (error) {
+    console.error("통계 데이터 조회 실패:", error);
+    throw error;
+  }
+};
 
 // * 점검 상태 변경 API
 export const updateInspectionStatus = (inspectionId, status) =>
