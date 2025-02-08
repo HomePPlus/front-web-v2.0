@@ -1,174 +1,81 @@
 import { React, useState } from 'react';
 import '../ChecklistForm.css';
 import RadioGroup from '../RadioGroup';
-const Delaminationstep = ({ formData, handleInputChange }) => (
+const DelaminationStep = ({ formData, handleInputChange }) => (
   <section className="checklist-section">
-    <h2 className="checklist-section-title">4. 박리</h2>
+    <div className="checklist-header">
+      <h2 className="checklist-section-title">2. 균열 항목 체크리스트</h2>
+      <h3 className="checklist-subtitle">[4] 박리</h3>
+    </div>
     <div className="checklist-grid">
       <div className="checklist-input-group">
         <RadioGroup
           title="손상 범위"
-          fieldName="damage-range" // 영어 클래스 식별자
-          name="delaminationRange"
+          name="delamination_range"
           options={['소규모', '중규모', '대규모']}
           value={formData.delamination.delaminationRange}
           onChange={(value) => handleInputChange('delamination', 'delaminationRange', value)}
         />
       </div>
       <div className="checklist-input-group">
-        <label>박리 원인:</label>
-        <input
-          type="text"
-          className="checklist-input"
+        <RadioGroup
+          title="박리의 원인"
+          name="delamination_cause"
+          options={[
+            '시공 불량',
+            '재료적 문제',
+            '환경적 요인',
+            '구조적 요인'
+          ]}
           value={formData.delamination.delaminationCause}
-          onChange={(e) => handleInputChange('delamination', 'delaminationCause', e.target.value)}
+          onChange={(value) => handleInputChange('delamination', 'delaminationCause', value)}
         />
       </div>
       <div className="checklist-input-group">
-        <label>안정성 영향:</label>
-        <input
-          type="text"
-          className="checklist-input"
+        <RadioGroup
+          title="구조적 안전성에 미치는 영향"
+          name="delamination_stability_impact"
+          options={['안전성에 영향 없음', '안전성에 영향 있음']}
           value={formData.delamination.stabilityImpact}
-          onChange={(e) => handleInputChange('delamination', 'stabilityImpact', e.target.value)}
+          onChange={(value) => handleInputChange('delamination', 'stabilityImpact', value)}
         />
       </div>
       <div className="checklist-input-group">
-        <label>응급처치 필요 여부:</label>
-        <div className="checklist-radio-group">
-          {['필요', '불필요'].map((type) => (
-            <label key={type}>
-              <input
-                type="radio"
-                name="delamination_emergency"
-                value={type}
-                checked={formData.delamination.emergency === type}
-                onChange={(e) => handleInputChange('delamination', 'emergency', e.target.value)}
+        <RadioGroup
+          title="응급처치 필요 여부"
+          name="delamination_emergency"
+          options={['필요', '불필요']}
+          value={formData.delamination.emergency}
+          onChange={(value) => handleInputChange('delamination', 'emergency', value)}
+        />
+        {formData.delamination.emergency === '필요' && (
+          <div className="emergency-action-input">
+            <label>응급 조치 사항:
+              <input 
+                type="text"
+                name="delamination_emergency_action"
+                value={formData.delamination.emergencyAction}
+                onChange={(e) => handleInputChange('delamination', 'emergencyAction', e.target.value)}
               />
-              {type}
             </label>
-          ))}
-        </div>
+          </div>
+        )}
       </div>
       <div className="checklist-input-group">
-        <label>수리 계획:</label>
-        <div className="checklist-radio-group">
-          {['재도장', '보강 작업'].map((type) => (
-            <label key={type}>
-              <input
-                type="radio"
-                name="delamination_repair_plan"
-                value={type}
-                checked={formData.delamination.repairPlan === type}
-                onChange={(e) => handleInputChange('delamination', 'repairPlan', e.target.value)}
-              />
-              {type}
-            </label>
-          ))}
-          <label>
-            <input
-              type="radio"
-              name="delamination_repair_plan"
-              value="기타"
-              checked={formData.delamination.repairPlan === '기타'}
-              onChange={(e) => handleInputChange('delamination', 'repairPlan', e.target.value)}
-            />
-            기타 (구체적으로 작성):
-            <input
-              type="text"
-              className="checklist-input"
-              value={formData.delamination.repairPlanDetail || ''}
-              onChange={(e) => handleInputChange('delamination', 'repairPlanDetail', e.target.value)}
-            />
-          </label>
-        </div>
+        <RadioGroup
+          title="수리 계획"
+          name="delamination_repair_plan"
+          options={[
+            '단면 복구',
+            '표면 보수',
+            '도장 보수',
+            '구조 보강'
+          ]}
+          value={formData.delamination.repairPlan}
+          onChange={(value) => handleInputChange('delamination', 'repairPlan', value)}
+        />
       </div>
     </div>
   </section>
 );
-export default Delaminationstep;
-/*
-        <section className="checklist-section">
-          <h2 className="checklist-section-title">4. 박리</h2>
-          <div className="checklist-grid">
-            <div className="checklist-input-group">
-              <RadioGroup
-                title="손상 범위"
-                fieldName="damage-range" // 영어 클래스 식별자
-                name="delaminationRange"
-                options={['소규모', '중규모', '대규모']}
-                value={formData.delamination.delaminationRange}
-                onChange={(value) => handleInputChange('delamination', 'delaminationRange', value)}
-              />
-            </div>
-            <div className="checklist-input-group">
-              <label>박리 원인:</label>
-              <input
-                type="text"
-                className="checklist-input"
-                value={formData.delamination.delaminationCause}
-                onChange={(e) => handleInputChange('delamination', 'delaminationCause', e.target.value)}
-              />
-            </div>
-            <div className="checklist-input-group">
-              <label>안정성 영향:</label>
-              <input
-                type="text"
-                className="checklist-input"
-                value={formData.delamination.stabilityImpact}
-                onChange={(e) => handleInputChange('delamination', 'stabilityImpact', e.target.value)}
-              />
-            </div>
-            <div className="checklist-input-group">
-              <label>응급처치 필요 여부:</label>
-              <div className="checklist-radio-group">
-                {['필요', '불필요'].map((type) => (
-                  <label key={type}>
-                    <input
-                      type="radio"
-                      name="delamination_emergency"
-                      value={type}
-                      checked={formData.delamination.emergency === type}
-                      onChange={(e) => handleInputChange('delamination', 'emergency', e.target.value)}
-                    />
-                    {type}
-                  </label>
-                ))}
-              </div>
-            </div>
-            <div className="checklist-input-group">
-              <label>수리 계획:</label>
-              <div className="checklist-radio-group">
-                {['재도장', '보강 작업'].map((type) => (
-                  <label key={type}>
-                    <input
-                      type="radio"
-                      name="delamination_repair_plan"
-                      value={type}
-                      checked={formData.delamination.repairPlan === type}
-                      onChange={(e) => handleInputChange('delamination', 'repairPlan', e.target.value)}
-                    />
-                    {type}
-                  </label>
-                ))}
-                <label>
-                  <input
-                    type="radio"
-                    name="delamination_repair_plan"
-                    value="기타"
-                    checked={formData.delamination.repairPlan === '기타'}
-                    onChange={(e) => handleInputChange('delamination', 'repairPlan', e.target.value)}
-                  />
-                  기타 (구체적으로 작성):
-                  <input
-                    type="text"
-                    className="checklist-input"
-                    value={formData.delamination.repairPlanDetail || ''}
-                    onChange={(e) => handleInputChange('delamination', 'repairPlanDetail', e.target.value)}
-                  />
-                </label>
-              </div>
-            </div>
-          </div>
-        </section>
-        */
+export default DelaminationStep;

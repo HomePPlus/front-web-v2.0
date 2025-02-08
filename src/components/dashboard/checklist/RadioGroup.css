@@ -42,3 +42,109 @@ input[type='radio'] {
 .checklist-input-group--damage-range input[type='radio'] {
   transform: scale(1.1);
 }
+
+.radio-group {
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.radio-group-title {
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  color: #5B21B6;
+}
+
+.radio-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.radio-option {
+  flex: 0 1 auto;
+  min-width: fit-content;
+  margin-bottom: 0.5rem;
+}
+
+.radio-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.radio-option label {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  background: #F5F3FF;
+  border: 1px solid #DDD6FE;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.radio-option input[type="radio"]:checked + label {
+  background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+  color: white;
+  border-color: #6D28D9;
+  box-shadow: 0 2px 4px rgba(139, 92, 246, 0.2);
+}
+
+.radio-option label:hover {
+  background: #EDE9FE;
+  border-color: #8B5CF6;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .radio-options {
+    flex-direction: row;
+  }
+  
+  .radio-option {
+    flex: 1 1 calc(50% - 0.8rem);
+  }
+}
+
+/* 라디오 버튼 컨테이너 */
+.radio-group-container {
+  width: 100%;
+  padding: 0.8rem;
+  background: #FFFFFF;
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
+}
+
+/* 균열 폭/깊이 입력 필드 스타일링 */
+.crack-measurements {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.crack-measurement-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.crack-measurement-item label {
+  min-width: 100px;
+  white-space: nowrap;
+}
+
+.crack-measurement-item input {
+  width: 100px;
+  padding: 0.5rem;
+  border: 1px solid #DDD6FE;
+  border-radius: 6px;
+}
+
+.crack-measurement-item span {
+  color: #6B7280;
+  font-size: 0.9rem;
+}

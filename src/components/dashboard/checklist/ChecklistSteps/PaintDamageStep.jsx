@@ -3,83 +3,78 @@ import '../ChecklistForm.css';
 import RadioGroup from '../RadioGroup';
 const PaintDamageStep = ({ formData, handleInputChange }) => (
   <section className="checklist-section">
-    <h2 className="checklist-section-title">6. 도장 손상</h2>
+    <div className="checklist-header">
+      <h2 className="checklist-section-title">2. 균열 항목 체크리스트</h2>
+      <h3 className="checklist-subtitle">[6] 도장 손상</h3>
+    </div>
     <div className="checklist-grid">
-      <RadioGroup
-        title="손상 범위"
-        fieldName="damage-range" // 영어 클래스 식별자
-        name="paintDamageRange"
-        options={['소규모', '중규모', '대규모']}
-        value={formData.paintDamage.damageRange}
-        onChange={(value) => handleInputChange('paintDamage', 'damageRange', value)}
-      />
       <div className="checklist-input-group">
-        <label>손상 상태:</label>
-        <input
-          type="text"
-          className="checklist-input"
-          value={formData.paintDamage.damageCondition}
-          onChange={(e) => handleInputChange('paintDamage', 'damageCondition', e.target.value)}
+        <RadioGroup
+          title="손상 범위"
+          name="paint_damage_range"
+          options={['소규모', '중규모', '대규모']}
+          value={formData.paintDamage.damageRange}
+          onChange={(value) => handleInputChange('paintDamage', 'damageRange', value)}
         />
       </div>
       <div className="checklist-input-group">
-        <label>손상 원인:</label>
-        <input
-          type="text"
-          className="checklist-input"
+        <RadioGroup
+          title="손상의 원인"
+          name="paint_damage_cause"
+          options={[
+            '재료적 원인',
+            '시공 불량',
+            '환경적 원인',
+            '구조적 요인'
+          ]}
           value={formData.paintDamage.damageCause}
-          onChange={(e) => handleInputChange('paintDamage', 'damageCause', e.target.value)}
+          onChange={(value) => handleInputChange('paintDamage', 'damageCause', value)}
         />
       </div>
       <div className="checklist-input-group">
-        <label>응급처치 필요 여부:</label>
-        <div className="checklist-radio-group">
-          {['필요', '불필요'].map((type) => (
-            <label key={type}>
-              <input
-                type="radio"
-                name="paintDamage_emergency"
-                value={type}
-                checked={formData.paintDamage.emergency === type}
-                onChange={(e) => handleInputChange('paintDamage', 'emergency', e.target.value)}
-              />
-              {type}
-            </label>
-          ))}
-        </div>
+        <RadioGroup
+          title="손상의 상태"
+          name="paint_damage_condition"
+          options={['표면 손상', '깊은 손상']}
+          value={formData.paintDamage.damageCondition}
+          onChange={(value) => handleInputChange('paintDamage', 'damageCondition', value)}
+        />
       </div>
       <div className="checklist-input-group">
-        <label>수리 계획:</label>
-        <div className="checklist-radio-group">
-          {['재도장'].map((type) => (
-            <label key={type}>
-              <input
-                type="radio"
-                name="paintDamage_repair_plan"
-                value={type}
-                checked={formData.paintDamage.repairPlan === type}
-                onChange={(e) => handleInputChange('paintDamage', 'repairPlan', e.target.value)}
+        <RadioGroup
+          title="응급처치 필요 여부"
+          name="paint_damage_emergency"
+          options={['필요', '불필요']}
+          value={formData.paintDamage.emergency}
+          onChange={(value) => handleInputChange('paintDamage', 'emergency', value)}
+        />
+        {formData.paintDamage.emergency === '필요' && (
+          <div className="emergency-action-input">
+            <label>응급 조치 사항:
+              <input 
+                type="text"
+                name="paint_damage_emergency_action"
+                value={formData.paintDamage.emergencyAction}
+                onChange={(e) => handleInputChange('paintDamage', 'emergencyAction', e.target.value)}
               />
-              {type}
             </label>
-          ))}
-          <label>
-            <input
-              type="radio"
-              name="paintDamage_repair_plan"
-              value="기타"
-              checked={formData.paintDamage.repairPlan === '기타'}
-              onChange={(e) => handleInputChange('paintDamage', 'repairPlan', e.target.value)}
-            />
-            기타 (구체적으로 작성):
-            <input
-              type="text"
-              className="checklist-input"
-              value={formData.paintDamage.repairPlanDetail || ''}
-              onChange={(e) => handleInputChange('paintDamage', 'repairPlanDetail', e.target.value)}
-            />
-          </label>
-        </div>
+          </div>
+        )}
+      </div>
+      <div className="checklist-input-group">
+        <RadioGroup
+          title="수리 계획"
+          name="paint_damage_repair_plan"
+          options={[
+            '균열 수리',
+            '박리 및 들뜸 수리',
+            '기포 및 블리스터 수리',
+            '분말화 수리',
+            '변색 및 오염 수리'
+          ]}
+          value={formData.paintDamage.repairPlan}
+          onChange={(value) => handleInputChange('paintDamage', 'repairPlan', value)}
+        />
       </div>
     </div>
   </section>

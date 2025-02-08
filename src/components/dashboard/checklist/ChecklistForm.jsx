@@ -17,7 +17,7 @@ const initialFormData = {
     inspectorName: '',
     inspectorContact: '',
     address: '',
-    crackTypes: [],
+    defectTypes: [],
   },
   concreteCrack: {
     type: '',
@@ -31,6 +31,7 @@ const initialFormData = {
     emergency: '',
     repairPlan: '',
     repairPlanDetail: '',
+    emergencyAction: '',
   },
   leakEflo: {
     leakageRange: '',
@@ -39,6 +40,7 @@ const initialFormData = {
     leakImpact: '',
     emergency: '',
     repairPlan: '',
+    emergencyAction: '',
   },
   steelDamage: {
     damageRange: '',
@@ -47,6 +49,7 @@ const initialFormData = {
     stabilityImpact: '',
     emergency: '',
     repairPlan: '',
+    emergencyAction: '',
   },
   delamination: {
     delaminationRange: '',
@@ -54,6 +57,7 @@ const initialFormData = {
     stabilityImpact: '',
     emergency: '',
     repairPlan: '',
+    emergencyAction: '',
   },
   rebarExposure: {
     exposureRange: '',
@@ -62,6 +66,7 @@ const initialFormData = {
     stabilityImpact: '',
     emergency: '',
     repairPlan: '',
+    emergencyAction: '',
   },
   paintDamage: {
     damageRange: '',
@@ -69,6 +74,7 @@ const initialFormData = {
     damageCause: '',
     emergency: '',
     repairPlan: '',
+    emergencyAction: '',
   },
   overallAssessment: {
     overallResult: '',
@@ -98,9 +104,9 @@ function ChecklistForm() {
       ...prev,
       basicInfo: {
         ...prev.basicInfo,
-        crackTypes: prev.basicInfo.crackTypes.includes(type)
-          ? prev.basicInfo.crackTypes.filter((t) => t !== type)
-          : [...prev.basicInfo.crackTypes, type],
+        defectTypes: prev.basicInfo.defectTypes.includes(type)
+          ? prev.basicInfo.defectTypes.filter((t) => t !== type)
+          : [...prev.basicInfo.defectTypes, type],
       },
     }));
   };
