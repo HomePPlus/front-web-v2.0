@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { getInspectionReports, updateInspectionStatus } from "../../api/apiClient";
+import { getInspectionReports, updateInspectionStatus } from "../../../api/apiClient";
 import "./InspectionTable.css";
-import Loading from "../common/Loading/Loading";
+import Loading from "../../common/Loading/Loading";
 
-const InspectionTable = ({ onUpdateStats, onAlert }) => {
+const InspectionTable = ({ onUpdateStats, onAlert, statusFilter, setStatusFilter }) => {
   const [inspections, setInspections] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -78,6 +78,11 @@ const InspectionTable = ({ onUpdateStats, onAlert }) => {
     }
   };
 
+  const getFilteredInspections = () => {
+    if (statusFilter === '전체') return inspections;
+    return inspections.filter(inspection => inspection.status === statusFilter);
+  };
+
   if (loading) return <Loading />;
   if (error) return <div className="error">{error}</div>;
 
@@ -98,7 +103,7 @@ const InspectionTable = ({ onUpdateStats, onAlert }) => {
           </tr>
         </thead>
         <tbody>
-          {inspections.map((inspection) => {
+          {getFilteredInspections().map((inspection) => {
             const reportInfo = inspection.report_info || {};
             return (
               <tr key={inspection.inspection_id} className={`status-${inspection.status}`}>

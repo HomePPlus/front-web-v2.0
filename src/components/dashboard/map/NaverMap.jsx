@@ -167,8 +167,8 @@ const NaverMap = () => {
   return (
     <div className="dashboard-section">
       <div className="content-section">
-        <div className="header-section">
-          <h2 className="section-title eMedium">부산시 신고 위치</h2>
+        <div className="header-section map-title">
+          <h2 className="section-title eMedium map-title">부산시 신고 위치</h2>
         </div>
         <div className="content-wrapper">
           {loading && <div className="loading">지도를 불러오는 중...</div>}

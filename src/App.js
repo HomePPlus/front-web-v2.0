@@ -11,7 +11,7 @@ import CommunityBoard from "./pages/Community/CommunityBoard";
 import PostDetail from "./pages/Community/PostDetail";
 import HealthCheck from "./HealthCheck";
 import CreateCommunityPost from "./pages/Community/CreateCommunityPost";
-import DefectStats from "./components/dashboard/DefectStats";
+import DefectStats from "./components/dashboard/inspection/DefectStats";
 import ProtectedInspectorRoute from "./components/auth/ProtectedInspectorRoute";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import { getUserInfo } from "./utils/auth";

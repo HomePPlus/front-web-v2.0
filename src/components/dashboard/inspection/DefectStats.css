@@ -1,3 +1,11 @@
+.detection-stats {
+  padding: 20px;
+  background: transparent;
+  border-radius: 15px;
+  box-shadow: 8px 8px 16px #b8c4d9, -8px -8px 16px #ffffff;
+  height: 44.2%;
+}
+
 /* 셀렉터 컨테이너 스타일링 */
 .area-selector {
   min-width: 150px;
@@ -71,4 +79,34 @@
 .ant-select-focused .ant-select-selector {
   border: none !important;
   box-shadow: inset 3px 3px 6px #a3b1c6, inset -3px -3px 6px #ffffff !important;
+}
+
+.chart-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+  padding: 0;
+}
+
+/* 차트 컨테이너 크기 조정 */
+.chart-container .recharts-responsive-container {
+  min-height: 200px !important;
+  margin-left: -20px;
+}
+.recharts-legend-wrapper {
+  right: 0 !important;
+  left: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  padding-right: 10px !important;
+}
+
+
+
+.recharts-legend-item {
+  margin: 5px 0 !important;
+  display: flex !important;
+  align-items: center !important;
 }

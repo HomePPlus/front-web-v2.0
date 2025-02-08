@@ -130,3 +130,31 @@
   outline: none;
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
 }
+
+.table-controls {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.status-filter {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: linear-gradient(145deg, #e6e9ef, #ffffff);
+  font-family: "eLight";
+  cursor: pointer;
+  box-shadow: 3px 3px 6px #b8c9e6, -3px -3px 6px #ffffff;
+  transition: all 0.3s ease;
+}
+
+.status-filter:hover {
+  background: linear-gradient(145deg, #f0f3f6, #ffffff);
+  box-shadow: 4px 4px 8px #b8c9e6, -4px -4px 8px #ffffff;
+}
+
+.status-filter option {
+  background: #ffffff;
+  color: #333;
+  padding: 8px;
+}

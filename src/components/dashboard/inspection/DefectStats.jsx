@@ -1,70 +1,85 @@
 // DefectStats.jsx
-import React, { useState, useEffect } from "react";
-import { Select } from "antd";
-import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from "recharts";
-import { getDefectStats } from "../../../api/apiClient";
-// import "../dashboardCommon.css";
-import "./DefectStats.css";
+import React, { useState, useEffect } from 'react';
+import { Select } from 'antd';
+import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recharts';
+import { getDefectStats } from '../../../api/apiClient';
+import '../dashboardCommon.css';
+import './DefectStats.css';
 
 const { Option } = Select;
 
 // 파이 차트 색상 설정
 const COLORS = [
-  "#80b1e6", // 진한 파스텔 블루
-  "#ffa366", // 진한 파스텔 오렌지
-  "#66cc7a", // 진한 파스텔 그린
-  "#ff8080", // 진한 파스텔 레드
-  "#b399ff", // 진한 파스텔 퍼플
-  "#d4a276", // 진한 파스텔 브라운
-  "#ff99cc", // 진한 파스텔 핑크
+  '#80b1e6', // 진한 파스텔 블루
+  '#ffa366', // 진한 파스텔 오렌지
+  '#66cc7a', // 진한 파스텔 그린
+  '#ff8080', // 진한 파스텔 레드
+  '#b399ff', // 진한 파스텔 퍼플
+  '#d4a276', // 진한 파스텔 브라운
+  '#ff99cc', // 진한 파스텔 핑크
 ];
 
 // 커스텀 레이블 렌더링 함수
-const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, name }) => {
+const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, name, value }) => {
   const RADIAN = Math.PI / 180;
-  const radius = outerRadius * 1.2;
+  const radius = outerRadius * 1.1; // 레이블 위치 조정
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
   const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
-  if (percent < 0.03) return null;
+  if (percent < 0.03 || value === 0) return null;
+
+  // 화살표 시작점 계산
+  const startRadius = outerRadius + 2; // 화살표 시작점
+  const startX = cx + startRadius * Math.cos(-midAngle * RADIAN);
+  const startY = cy + startRadius * Math.sin(-midAngle * RADIAN);
 
   return (
-    <text
-      x={x}
-      y={y}
-      fill="#104e1e"
-      textAnchor={x > cx ? "start" : "end"}
-      dominantBaseline="central"
-      fontSize="20px"
-      className="eLight"
-    >
-      {`${name} (${(percent * 100).toFixed(1)}%)`}
-    </text>
+    <g>
+      {/* 화살표 선 */}
+      <path
+        d={`M${startX},${startY} L${x},${y}`}
+        stroke="#104e1e"
+        fill="none"
+        strokeWidth={0} // 선 두께를 0으로 설정
+      />
+      {/* 레이블 텍스트 */}
+      <text
+        x={x}
+        y={y}
+        fill="#104e1e"
+        textAnchor={x > cx ? 'start' : 'end'}
+        dominantBaseline="central"
+        fontSize="15px"
+        className="eLight"
+      >
+        {`${name} (${(percent * 100).toFixed(1)}%)`}
+      </text>
+    </g>
   );
 };
 
 const AREA_LIST = [
-  "부산시",
-  "동래구",
-  "해운대구",
-  "수영구",
-  "사하구",
-  "부산진구",
-  "남구",
-  "북구",
-  "강서구",
-  "연제구",
-  "사상구",
-  "금정구",
-  "동구",
-  "서구",
-  "영도구",
-  "중구",
-  "기장군",
+  '부산시',
+  '동래구',
+  '해운대구',
+  '수영구',
+  '사하구',
+  '부산진구',
+  '남구',
+  '북구',
+  '강서구',
+  '연제구',
+  '사상구',
+  '금정구',
+  '동구',
+  '서구',
+  '영도구',
+  '중구',
+  '기장군',
 ];
 
 const DefectStats = () => {
-  const [selectedArea, setSelectedArea] = useState("부산시");
+  const [selectedArea, setSelectedArea] = useState('부산시');
   const [stats, setStats] = useState(null);
   const [error, setError] = useState(null);
 
@@ -73,14 +88,12 @@ const DefectStats = () => {
       try {
         const response = await getDefectStats(selectedArea);
         if (response.data.status === 200) {
-          setStats({
-            defectCounts: response.data.data.defect_counts,
-          });
+          setStats(response.data.data);
           setError(null);
         }
       } catch (error) {
-        setError("데이터를 불러오는데 실패했습니다.");
-        console.error("Error fetching stats:", error);
+        setError('데이터를 불러오는데 실패했습니다.');
+        console.error('Error fetching stats:', error);
       }
     };
 
@@ -104,10 +117,10 @@ const DefectStats = () => {
   }
 
   return (
-    <div className="dashboard-section">
+    <div className="dashboard-section detection-stats">
       <div className="content-section">
         <div className="header-section">
-          <h2 className="section-title eMedium">{selectedArea} 결함 통계</h2>
+          <h2 className="section-title eMedium">신고된 {selectedArea} 결함 통계</h2>
           <div className="area-selector">
             <Select value={selectedArea} onChange={handleAreaChange}>
               {AREA_LIST.map((area) => (
@@ -119,36 +132,41 @@ const DefectStats = () => {
           </div>
         </div>
         {stats && (
-          <div className="content-wrapper">
             <ResponsiveContainer width="100%" height={500}>
               <PieChart>
                 <Pie
                   data={formatDataForPieChart(stats.defectCounts)}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={{
-                    stroke: "#104e1e",
-                    strokeWidth: 1,
-                    display: (props) => props.percent >= 0.03,
-                  }}
+                  cx="36%"
+                  cy="30%"
+                  labelLine={false}
                   label={renderCustomizedLabel}
-                  outerRadius={130}
-                  innerRadius={60}
-                  paddingAngle={3}
+                  outerRadius={110}
+                  innerRadius={45}
                   fill="#8884d8"
                   dataKey="value"
-                  strokeWidth={2}
-                  stroke="#e0e5ec"
+                  startAngle={90}
+                  endAngle={450}
                 >
                   {formatDataForPieChart(stats.defectCounts).map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
                 <Tooltip />
-                <Legend verticalAlign="bottom" height={36} />
+                <Legend
+                  layout="vertical"
+                  align="right"
+                  verticalAlign="top"
+                  iconType="circle"
+                  wrapperStyle={{
+                  paddingLeft: "50px",
+                  fontSize: "1.0em",
+                  fontFamily: "eMedium",
+                  transform: "translateX(-40px)" // 레이블 위치 보정
+                  }}
+                />
               </PieChart>
             </ResponsiveContainer>
-          </div>
+         
         )}
       </div>
     </div>

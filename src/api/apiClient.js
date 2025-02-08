@@ -242,3 +242,15 @@ export const getReservableReports = () =>
 // 점검 예약 생성
 export const createInspectionReports = (data) =>
   apiClient.post('/api/inspections/report', data);
+
+export const getDetectionStats = async (area) => {
+  try {
+    const response = await apiClient.get(`/api/dashboard/detection/stats`, {
+      params: { area },
+    });
+    return response;
+  } catch (error) {
+    console.error('Error fetching detection stats:', error);
+    throw error;
+  }
+};

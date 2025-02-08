@@ -78,42 +78,36 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #f7daca;
+  background: #e0e5ec;
   padding: 20px;
-  border-radius: 20px;
-  box-shadow: -5px -5px 10px #ffffff, 5px 5px 10px rgba(94, 104, 121, 0.2);
-  z-index: 99999;
-  isolation: isolate;
-  pointer-events: auto;
+  border-radius: 15px;
+  box-shadow: 8px 8px 16px #b8c4d9, -8px -8px 16px #ffffff;
+  z-index: 9999;
+  width: auto;
+  height: auto;
 }
 
-/* DatePicker 스타일링 */
-.custom-datepicker-input {
-  font-family: "eMedium";
-  font-size: 16px;
-  padding: 8px 10px;
-  margin-right: 10px;
-  border: none;
-  border-radius: 10px;
-  background: #f7c7c7;
-  box-shadow: inset 2px 2px 5px rgba(94, 104, 121, 0.3), inset -2px -2px 5px #ffffff;
-  color: #495057;
-  outline: none;
+.datepicker-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
 }
 
-.custom-datepicker-input:focus {
-  box-shadow: inset 3px 3px 6px rgba(94, 104, 121, 0.4), inset -3px -3px 6px #ffffff;
+.datepicker-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
 }
 
-.userReport-datepicker-container {
-  position:fixed;
+.react-datepicker-wrapper {
+  display: inline-block;
+  width: auto;
 }
+
 .react-datepicker-popper {
-  z-index: 100000 !important;
-  position: fixed !important;
+  position: static !important;
   transform: none !important;
-  inset: auto !important;
-  pointer-events: auto !important;
 }
 
 .userReport-datepicker-submit-button {
@@ -136,7 +130,13 @@
 
 /* DatePicker 스타일링 */
 .react-datepicker {
-  font-family: "eMedium"; /* 원하는 폰트 적용 */
+  position: static !important;
+  transform: none !important;
+  font-family: "eMedium";
+  background: #e0e5ec !important;
+  border: none !important;
+  box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.1), 
+              inset -3px -3px 6px rgba(255, 255, 255, 0.5);
 }
 
 .react-datepicker__header {
@@ -182,8 +182,54 @@
   box-shadow: -2px -2px 5px #ffffff, 2px 2px 5px rgba(94, 104, 121, 0.3); /* 호버 시 그림자 강조 */
 }
 
-/* DatePicker 포털 스타일 */
-#datepicker-portal {
+/* DatePicker 입력 필드 */
+.custom-datepicker-input {
   position: relative;
-  z-index: 100001;
+  z-index: 1;
+  width: 200px;
+  font-family: "eMedium";
+  font-size: 16px;
+  padding: 8px 10px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 10px;
+  background: #f7c7c7;
+  box-shadow: inset 2px 2px 5px rgba(94, 104, 121, 0.3), inset -2px -2px 5px #ffffff;
+  color: #495057;
+  outline: none;
+  cursor: pointer;
 }
+
+.custom-datepicker-input:focus {
+  box-shadow: inset 3px 3px 6px rgba(94, 104, 121, 0.4), inset -3px -3px 6px #ffffff;
+}
+
+/* DatePicker 포털 */
+#datepicker-portal {
+  position: fixed;
+  z-index: 10000;
+}
+
+/* 모달 오버레이 추가 */
+.datepicker-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  max-height: 10px;
+  z-index: 9998;
+}
+
+/* 알림 메시지 스타일 수정 */
+/* .alert-message {
+  position: fixed;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #e0e5ec;
+  padding: 15px 30px;
+  border-radius: 10px;
+  box-shadow: 4px 4px 8px #b8c4d9, -4px -4px 8px #ffffff;
+  z-index: 10000;
+  font-family: "eMedium";
+  color: #104e1e;
+} */

@@ -133,32 +133,37 @@ const UserReportTable = ({ onUpdateStats, onAlert }) => {
         </tbody>
       </table>
       {showDatePicker && (
-        <div className="userReport-datepicker-container">
-          <DatePicker
-            selected={scheduleDate}
-            onChange={handleDateChange}
-            minDate={new Date(new Date().setDate(new Date().getDate() + 1))} // 내일부터 선택 가능
-            dateFormat="yyyy-MM-dd"
-            className="custom-datepicker-input"
-            popperProps={{
-              strategy: "fixed",
-              positionFixed: true,
-            }}
-            portalId="datepicker-portal"
-          />
-          <button className="userReport-datepicker-submit-button" onClick={handleReserve}>
-            예약 등록
-          </button>
-          <button 
-            className="userReport-datepicker-cancel-button" 
-            onClick={() => {
-              setShowDatePicker(false);
-              setSelectedReportId(null);
-            }}
-          >
-            취소
-          </button>
-        </div>
+        <>
+          <div className="datepicker-overlay" onClick={() => setShowDatePicker(false)} />
+          <div className="userReport-datepicker-container">
+            <div className="datepicker-wrapper">
+              <DatePicker
+                selected={scheduleDate}
+                onChange={handleDateChange}
+                dateFormat="yyyy-MM-dd"
+                minDate={new Date()}
+                inline
+              />
+              <div className="datepicker-buttons">
+                <button 
+                  className="userReport-datepicker-submit-button" 
+                  onClick={handleReserve}
+                >
+                  예약하기
+                </button>
+                <button 
+                  className="userReport-datepicker-cancel-button" 
+                  onClick={() => {
+                    setShowDatePicker(false);
+                    setSelectedReportId(null);
+                  }}
+                >
+                  취소
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );

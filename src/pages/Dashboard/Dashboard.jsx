@@ -2,13 +2,14 @@ import React, { useState, useEffect, useRef } from "react";
 import "./Dashboard.css";
 import ReportDashboard from "../../components/dashboard/ReportDashboard";
 import TodayInspection from "../../components/dashboard/inspection/TodayInspection";
-import DefectStats from "../../components/dashboard/DefectStats";
+import DefectStats from "../../components/dashboard/inspection/DefectStats";
 import MiniCalendar from "../../components/common/Calendar/MiniCalendar";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import NaverMap from "../../components/dashboard/map/NaverMap";
 import ChecklistPage from "./ChecklistPage";
 import { getTodayInspections } from "../../api/apiClient";
 import InspectionTabs from "../../components/dashboard/inspection/InspectionTabs";
+import DetectionStats from "../../components/dashboard/detection/DetectionStats";
 
 const Dashboard = () => {
   const [activeView, setActiveView] = useState("전체");
@@ -17,6 +18,8 @@ const Dashboard = () => {
   const [reports, setReports] = useState([]); // 신고 데이터를 저장
   const [alerts, setAlerts] = useState([]); // 알람 메시지 저장
   const reportDashboardRef = useRef(); // useRef를 컴포넌트 최상위 레벨에서 선언
+  const [currentPage, setCurrentPage] = useState(0);
+  const ITEMS_PER_PAGE = 2;
 
   // 점검 데이터와 신고 데이터를 구분
   const userReports = reports.filter((report) => report.type === "신고");
@@ -46,6 +49,7 @@ const Dashboard = () => {
         setInspections([]); // 데이터가 없을 경우 빈 배열로 초기화
       }
       setIsModalOpen(true);
+      setCurrentPage(0); // 모달 열 때 첫 페이지로 초기화
     } catch (error) {
       console.error("점검 일정 조회 실패:", error);
     }
@@ -66,6 +70,25 @@ const Dashboard = () => {
     }
   };
 
+  // 페이지네이션 관련 계산
+  const totalPages = Math.ceil((inspections?.length || 0) / ITEMS_PER_PAGE);
+  const currentInspections = inspections?.slice(
+    currentPage * ITEMS_PER_PAGE,
+    (currentPage + 1) * ITEMS_PER_PAGE
+  );
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages - 1) {
+      setCurrentPage(prev => prev + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(prev => prev - 1);
+    }
+  };
+
   return (
     <div className="app-container">
       <Sidebar onViewChange={(view) => setActiveView(view)} activeView={activeView} />
@@ -81,6 +104,7 @@ const Dashboard = () => {
             </div>
             <div className="stats-container">
               <DefectStats />
+              <DetectionStats />
             </div>
           </div>
         ) : (
@@ -128,23 +152,48 @@ const Dashboard = () => {
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
               <h2>점검 상세 정보</h2>
               {inspections.length > 0 ? (
-                inspections.map((inspection, index) => (
-                  <div key={index} className="inspection-item">
-                    <h3>점검 {index + 1}</h3>
-                    <p>날짜: {inspection.schedule_date}</p> {/* schedule_date로 수정 */}
-                    <p>상태: {inspection.status}</p>
-                    {inspection.report_info && (
-                      <>
-                        <p>위치: {inspection.report_info.detail_address}</p> {/* detail_address로 수정 */}
-                        <p>신고 내용: {inspection.report_info.description}</p>
-                      </>
-                    )}
+                <>
+                  <div className="inspection-items-container">
+                    {currentInspections.map((inspection, index) => (
+                      <div key={index} className="inspection-item">
+                        <h3>점검 {currentPage * ITEMS_PER_PAGE + index + 1}</h3>
+                        <p>날짜: {inspection.schedule_date}</p>
+                        <p>상태: {inspection.status}</p>
+                        {inspection.report_info && (
+                          <>
+                            <p>위치: {inspection.report_info.detail_address}</p>
+                            <p>신고 내용: {inspection.report_info.description}</p>
+                          </>
+                        )}
+                      </div>
+                    ))}
                   </div>
-                ))
+                  {totalPages > 1 && (
+                    <div className="modal-pagination">
+                      <button 
+                        onClick={handlePrevPage}
+                        disabled={currentPage === 0}
+                        className="pagination-button"
+                      >
+                        이전
+                      </button>
+                      <span className="page-info">
+                        {currentPage + 1} / {totalPages}
+                      </span>
+                      <button 
+                        onClick={handleNextPage}
+                        disabled={currentPage === totalPages - 1}
+                        className="pagination-button"
+                      >
+                        다음
+                      </button>
+                    </div>
+                  )}
+                </>
               ) : (
-                <p>오늘 예약이 없습니다.</p>
+                <p>해당 날짜에 예약된 점검이 없습니다.</p>
               )}
-              <button onClick={handleCloseModal}>닫기</button>
+              <button onClick={handleCloseModal} className="modal-close-button">닫기</button>
             </div>
           </div>
         )}
