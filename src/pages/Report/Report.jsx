@@ -19,6 +19,8 @@ const Report = () => {
   const [selectedFile, setSelectedFile] = useState(null); // 첨부 파일
   const [detectionResult, setDetectionResult] = useState(''); // 모델 결과 저장
   const [isModalOpen, setIsModalOpen] = useState(false); // 결과 모달
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadingProgress, setLoadingProgress] = useState(0);
 
   const handleModalClose = () => {
     setIsModalOpen(false);
@@ -61,6 +63,9 @@ const Report = () => {
       return;
     }
 
+    setIsLoading(true);
+    setLoadingProgress(0);
+
     const formData = new FormData();
     formData.append(
       'report',
@@ -76,13 +81,29 @@ const Report = () => {
     }
 
     try {
+      // 프로그레스 바 애니메이션
+      const progressInterval = setInterval(() => {
+        setLoadingProgress(prev => {
+          if (prev >= 95) {
+            clearInterval(progressInterval);
+            return 95;
+          }
+          return prev + 5;
+        });
+      }, 300);
+
       const response = await createReport(formData);
+      clearInterval(progressInterval);
+      setLoadingProgress(100);
+      
       const detectionResult = response.data.data.detection_result;
       console.log("AI 분석 결과:", detectionResult);  // 로그 추가
 
       if (detectionResult && detectionResult.trim() !== '') {
-        // 영어 결함 유형을 한글로 변환
+        // translateDefectType 함수 수정
         const translateDefectType = (englishType) => {
+          if (!englishType) return '';
+          
           const typeWithoutNumber = englishType.replace(/[0-9_]/g, '').trim();
           const defectTypes = {
             CRACK: '균열',
@@ -107,20 +128,24 @@ const Report = () => {
             unknown: '모름',
           };
 
-          // 대소문자 구분 없이 매칭
           const normalizedType = typeWithoutNumber.toLowerCase();
-          const matchedType = Object.entries(defectTypes).find(([key]) => key.toLowerCase() === normalizedType);
+          const matchedType = Object.entries(defectTypes).find(([key]) => 
+            key.toLowerCase() === normalizedType
+          );
 
           return matchedType ? matchedType[1] : englishType;
         };
 
-        const translatedType = translateDefectType(detectionResult);
-        console.log("변환된 결함 유형:", translatedType);  // 로그 추가
+        // 콤마로 구분된 결함 유형들을 각각 번역
+        const translatedTypes = detectionResult.split(',')
+          .map(type => translateDefectType(type.trim()))
+          .filter(type => type) // 빈 문자열 제거
+          .join(', ');
 
         setDetectionResult(
           `이미지 분석이 완료되었습니다!
 
-          ${translatedType} 유형의 결함이 발견되었습니다.
+          ${translatedTypes} 유형의 결함이 발견되었습니다.
           
           빠른 시일 내에 전문가가 방문하여 자세히 살펴보도록 하겠습니다!`
         );
@@ -138,6 +163,8 @@ const Report = () => {
     } catch (error) {
       console.error('신고 제출 중 오류:', error);
       alert('신고 제출 중 오류가 발생했습니다.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -154,8 +181,57 @@ const Report = () => {
     );
   };
 
+  // 로딩 컴포넌트 추가
+  const LoadingScreen = () => {
+    const [tip, setTip] = useState("🔍 이미지를 자세히 살펴보는 중입니다..."); // 초기값 설정
+    
+    const tips = [
+      "🏗️ AI가 건물의 결함을 분석하고 있습니다...",
+      "🔍 이미지를 자세히 살펴보는 중입니다...",
+      "📊 결함의 심각도를 평가하고 있습니다...",
+      "🤖 꼼꼼히 보느라 시간이 걸리네요...! 조금만 기다려주세요!"
+    ];
+
+    useEffect(() => {
+      let currentIndex = 0;
+      const tipInterval = setInterval(() => {
+        currentIndex = (currentIndex + 1) % tips.length;
+        setTip(tips[currentIndex]);
+      }, 2000);
+
+      return () => clearInterval(tipInterval);
+    }, []);
+
+    return (
+      <div className="loading-overlay">
+        <div className="loading-content">
+          <div className="loading-animation">
+            <div className="building-row">
+              <span className="building">🏢</span>
+              <span className="building delay-1">🏚️</span>
+              <span className="building delay-2">🏤</span>
+              <span className="building delay-3">🏘️</span>
+              <span className="building delay-4">🏬</span>
+            </div>
+          </div>
+          <div className="loading-tip">{tip}</div>
+          <div className="progress-bar">
+            <div 
+              className="progress-fill"
+              style={{ width: `${loadingProgress}%` }}
+            ></div>
+          </div>
+          <div className="progress-text">
+            {loadingProgress}%
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="report-wrapper">
+      {isLoading && <LoadingScreen />}
       <div className="report-container">
         <div
           style={{

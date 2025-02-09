@@ -133,9 +133,7 @@
   padding: 0.5rem;
   font-size: 0.9rem;
   max-height: 60px; /* 설명 높이 제한 */
-  overflow: hidden; /* 넘치는 내용 숨김 */
-  text-overflow: ellipsis; /* 줄임표 처리 */
-  white-space: nowrap; /* 한 줄로 표시 */
+  overflow-y: auto;
   background: rgba(255, 255, 255, 0.4);
   border-radius: 10px;
 }
