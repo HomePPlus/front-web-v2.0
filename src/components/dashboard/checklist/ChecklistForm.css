@@ -83,6 +83,7 @@
 .radio-group {
   background: #F5F3FF;
   padding: 1rem;
+  width: 87% !important;
   border-radius: 10px;
   border: 1px solid #DDD6FE;
 }
@@ -264,33 +265,42 @@
 /* 기본 정보 섹션 레이아웃 */
 .basic-info-grid {
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
+  grid-template-columns: 2fr 1fr; /* 왼쪽 영역과 오른쪽 영역의 비율 조정 */
   gap: 2rem;
-  align-items: start;
+  position: relative; /* 상대 위치 설정 */
 }
 
 .basic-info-left {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  width: 100%;
+  max-width: 600px; /* 왼쪽 영역 최대 너비 설정 */
 }
 
+/* 결함 유형 선택 영역 스타일링 */
 .basic-info-right {
-  background: #f8fafd;
+  background: #567aaf;
   padding: 1.5rem;
   border-radius: 12px;
   border: 1px solid #e5eaf2;
+  position: absolute; /* 절대 위치 설정 */
+  right: 40%; /* 오른쪽 정렬 */
+  top: 0; /* 상단 정렬 */
+  width: 200px; /* 너비 고정 */
+  height: auto; /* 높이 자동 조절 */
 }
 
-/* 결함 유형 선택 스타일링 */
+/* 결함 유형 선택 내부 스타일링 */
 .defect-selection {
-  height: 100%;
+  height: auto;
 }
 
 .defect-selection-title {
-  font-family: 'eBold', sans-serif;
-  color: #2c3e50;
+  font-family: 'eBold';
+  color: #ffffff; /* 텍스트 색상을 흰색으로 변경 */
   margin-bottom: 1rem;
+  font-size: 1rem;
 }
 
 .defect-options {
@@ -306,10 +316,7 @@
   padding: 0.5rem;
   border-radius: 6px;
   transition: all 0.2s ease;
-}
-
-.checkbox-option:hover {
-  background: #ffffff;
+  color: #ffffff; /* 체크박스 옵션 텍스트 색상을 흰색으로 변경 */
 }
 
 /* 반응형 디자인 수정 */
@@ -319,6 +326,8 @@
   }
   
   .basic-info-right {
+    position: relative;
+    width: 100%;
     margin-top: 1rem;
   }
 }
@@ -366,27 +375,160 @@
 }
 
 .basic-info-input label {
-  min-width: 100px;
+  min-width: 120px !important; /* 라벨 길이 */
   white-space: nowrap;
+  margin-left: 30px;
 }
 
 .basic-info-input input {
-  flex: 1;
-  max-width: 300px;
+  width: 250px !important; /* 입력란 길이 */
+  max-width: none !important; /* max-width 제한 해제 */
+  flex: none !important; /* flex 속성 제거 */
 }
 
-/* 기본 정보 섹션 스타일 수정 */
+/* 기본 정보 섹션 스타일 */
 .basic-info-section {
-  border-bottom: 2px solid #DDD6FE;
+  border-bottom: 2px solid #DDD6FE !important; /* !important로 우선순위 높임 */
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
 }
 
 .basic-info-section .checklist-input-group {
-  margin-bottom: 0.5rem !important; /* 기본정보 input-group의 마진 줄임 */
-  margin-top: 0.5rem !important;
+  margin-bottom: 0.75rem !important; /* 위아래 마진 줄임 */
+  margin-top: 0.75rem !important;
+  width: 80% !important;
 }
 
 .basic-info-section .checklist-header {
   margin-bottom: 1rem;
+}
+
+/* DatePicker 스타일링 */
+.date-picker-input {
+  width: 100%;
+  max-width: 300px;
+  font-family: 'eLight';
+  padding: 0.8rem 1rem;
+  border: 1px solid #DDD6FE;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.date-picker-input:focus {
+  border-color: #8B5CF6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+  outline: none;
+}
+
+/* 달력 컨테이너 스타일링 */
+.react-datepicker {
+  font-family: 'eMedium';
+  border: 1px solid #DDD6FE;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.1);
+}
+
+.react-datepicker__header {
+  background: #F5F3FF;
+  border-bottom: 1px solid #DDD6FE;
+}
+
+.react-datepicker__day--selected {
+  background-color: #8B5CF6 !important;
+  color: white !important;
+}
+
+.react-datepicker__day:hover {
+  background-color: #EDE9FE !important;
+}
+
+/* 레이아웃 */
+.checklist-layout {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 2rem;
+  height: calc(100vh - 150px);
+}
+
+/* 점검 목록 섹션 */
+.inspection-list-section {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+
+.inspection-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.inspection-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 1rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.inspection-item:hover {
+  background: #f1f5f9;
+}
+
+.inspection-item.selected {
+  background: #ede9fe;
+  border-color: #c4b5fd;
+}
+
+.inspection-info {
+  flex: 1;
+}
+
+.inspection-title {
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+.inspection-details {
+  font-size: 0.9rem;
+  color: #64748b;
+  display: flex;
+  gap: 1rem;
+}
+
+.inspection-status select {
+  padding: 0.4rem;
+  border-radius: 6px;
+  border: 1px solid #ddd6fe;
+  background: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+/* 체크리스트 폼 섹션 */
+.checklist-form-section {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+
+.no-inspection-selected {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #64748b;
+  font-size: 1.1rem;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
 }

@@ -2,11 +2,13 @@ import { React, useState } from 'react';
 import '../ChecklistForm.css';
 import RadioGroup from '../RadioGroup';
 const BasicInfoStep = ({ formData, handleInputChange, handleCheckboxChange }) => (
-  <section className="checklist-section">
-    <h2 className="checklist-section-title">1. 기본 정보</h2>
+  <section className="checklist-section basic-info-section">
+    <div className="checklist-header">
+      <h2 className="checklist-section-title">1. 기본 정보</h2>
+    </div>
     <div className="basic-info-grid">
       <div className="basic-info-left">
-        <div className="checklist-input-group">
+        <div className="checklist-input-group basic-info-input">
           <label>점검 번호:</label>
           <input 
             type="text" 
@@ -16,7 +18,7 @@ const BasicInfoStep = ({ formData, handleInputChange, handleCheckboxChange }) =>
             required 
           />
         </div>
-        <div className="checklist-input-group">
+        <div className="checklist-input-group basic-info-input">
           <label>점검 일자:</label>
           <input 
             type="date" 
@@ -26,7 +28,7 @@ const BasicInfoStep = ({ formData, handleInputChange, handleCheckboxChange }) =>
             required 
           />
         </div>
-        <div className="checklist-input-group">
+        <div className="checklist-input-group basic-info-input">
           <label>점검자 이름:</label>
           <input 
             type="text" 
@@ -36,7 +38,7 @@ const BasicInfoStep = ({ formData, handleInputChange, handleCheckboxChange }) =>
             required 
           />
         </div>
-        <div className="checklist-input-group">
+        <div className="checklist-input-group basic-info-input">
           <label>점검자 연락처:</label>
           <input 
             type="text" 
@@ -46,7 +48,7 @@ const BasicInfoStep = ({ formData, handleInputChange, handleCheckboxChange }) =>
             required 
           />
         </div>
-        <div className="checklist-input-group">
+        <div className="checklist-input-group basic-info-input">
           <label>주소:</label>
           <input 
             type="text" 
