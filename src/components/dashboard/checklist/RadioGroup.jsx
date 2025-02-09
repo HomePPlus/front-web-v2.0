@@ -7,7 +7,10 @@ const RadioGroup = ({ title, name, options, value, onChange }) => {
       <div className="radio-group-title">{title}</div>
       <div className="radio-options">
         {options.map((option) => (
-          <div key={option} className="radio-option">
+          <div 
+            key={option} 
+            className={`radio-option ${value === option ? 'selected' : ''}`}
+          >
             <input
               type="radio"
               id={`${name}-${option}`}

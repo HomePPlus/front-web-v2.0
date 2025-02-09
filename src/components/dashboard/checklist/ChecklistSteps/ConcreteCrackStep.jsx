@@ -1,11 +1,16 @@
 import { React, useState } from 'react';
 import '../ChecklistForm.css';
 import RadioGroup from '../RadioGroup';
-const ConcreteCrackStep = ({ formData, handleInputChange }) => (
-  <section className="checklist-section">
+const ConcreteCrackStep = ({ formData, handleInputChange, inspectionId }) => (
+  <section className="checklist-section" data-step="crack">
     <div className="checklist-header">
-      <h2 className="checklist-section-title">2. 균열 항목 체크리스트</h2>
-      <h3 className="checklist-subtitle">[1] 콘크리트 균열</h3>
+      <div className="checklist-header-content">
+        <h2 className="checklist-section-title">2. 균열 항목 체크리스트</h2>
+        <h3 className="checklist-subtitle">[1] 콘크리트 균열</h3>
+      </div>
+      <div className="inspection-id-display">
+        점검 ID: {inspectionId}
+      </div>
     </div>
     <div className="checklist-grid">
       <div className="checklist-input-group">

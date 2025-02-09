@@ -5,11 +5,12 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/esm/locale';
 
-const OverallAssessmentStep = ({ formData, handleInputChange }) => {
+const OverallAssessmentStep = ({ formData, handleInputChange, inspectionId }) => {
   // 날짜 선택 핸들러
   const handleDateChange = (date) => {
     const formattedDate = date ? date.toISOString().split('T')[0] : '';
     handleInputChange('overallAssessment', 'nextInspectionDate', formattedDate);
+
   };
 
   // 문자열 날짜를 Date 객체로 변환
@@ -20,7 +21,12 @@ const OverallAssessmentStep = ({ formData, handleInputChange }) => {
   return (
     <section className="checklist-section">
       <div className="checklist-header">
-        <h2 className="checklist-section-title">3. 종합 평가</h2>
+        <div className="checklist-header-content">
+          <h2 className="checklist-section-title">3. 종합 평가</h2>
+        </div>
+        <div className="inspection-id-display">
+          점검 ID: {inspectionId}
+        </div>
       </div>
       <div className="checklist-grid">
         <div className="checklist-input-group">

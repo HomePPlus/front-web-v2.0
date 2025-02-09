@@ -1,10 +1,19 @@
 import { React, useState } from 'react';
 import '../ChecklistForm.css';
 import RadioGroup from '../RadioGroup';
-const BasicInfoStep = ({ formData, handleInputChange, handleCheckboxChange }) => (
-  <section className="checklist-section basic-info-section">
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
+import ReactDOM from 'react-dom';
+
+const BasicInfoStep = ({ formData, handleInputChange, handleCheckboxChange, inspectionId }) => (
+  <section className="checklist-section" data-step="basic">
     <div className="checklist-header">
-      <h2 className="checklist-section-title">1. 기본 정보</h2>
+      <div className="checklist-header-content">
+        <h2 className="checklist-section-title">1. 기본 정보</h2>
+      </div>
+      <div className="inspection-id-display">
+        점검 ID: {inspectionId}
+      </div>
     </div>
     <div className="basic-info-grid">
       <div className="basic-info-left">
@@ -58,6 +67,32 @@ const BasicInfoStep = ({ formData, handleInputChange, handleCheckboxChange }) =>
             required 
           />
         </div>
+        <div className="checklist-datepicker-container">
+          <label>다음 점검 일정:</label>
+          <DatePicker
+            selected={formData.basicInfo.nextInspectionDate}
+            onChange={(date) => handleInputChange('basicInfo', 'nextInspectionDate', date)}
+            dateFormat="yyyy-MM-dd"
+            className="checklist-datepicker-input"
+            popperClassName="checklist-datepicker-popper"
+            calendarClassName="checklist-datepicker"
+            popperPlacement="bottom-start"
+            popperModifiers={[
+              {
+                name: "offset",
+                options: {
+                  offset: [0, 8],
+                },
+              },
+              {
+                name: "preventOverflow",
+                options: {
+                  boundary: 'viewport',
+                },
+              }
+            ]}
+          />
+        </div>
       </div>
       
       <div className="basic-info-right">
@@ -65,23 +100,27 @@ const BasicInfoStep = ({ formData, handleInputChange, handleCheckboxChange }) =>
           <h3 className="defect-selection-title">결함:</h3>
           <div className="defect-options">
             {[
-              '콘크리트 균열',
-              '누수/백태',
-              '강재 손상',
-              '박리',
-              '철근 노출',
-              '도장 손상'
-            ].map((type) => (
-              <label key={type} className="checkbox-option">
+              { label: '균열', type: 'crack' },
+              { label: '누수/백태', type: 'leak' },
+              { label: '강재 부식', type: 'steel' },
+              { label: '박리', type: 'delamination' },
+              { label: '철근 노출', type: 'rebar' },
+              { label: '도장 손상', type: 'paint' }
+            ].map(({ label, type }) => (
+              <div key={type} className="checkbox-option" data-type={type}>
                 <input
                   type="checkbox"
-                  name="defect_type[]"
-                  value={type}
-                  checked={formData.basicInfo.defectTypes.includes(type)}
-                  onChange={(e) => handleCheckboxChange('basicInfo', 'defectTypes', type, e.target.checked)}
+                  id={`defect-${type}`}
+                  checked={formData.basicInfo.defectTypes.includes(label)}
+                  onChange={(e) => {
+                    const updatedDefects = e.target.checked
+                      ? [...formData.basicInfo.defectTypes, label]
+                      : formData.basicInfo.defectTypes.filter(t => t !== label);
+                    handleInputChange('basicInfo', 'defectTypes', updatedDefects);
+                  }}
                 />
-                {type}
-              </label>
+                <label htmlFor={`defect-${type}`}>{label}</label>
+              </div>
             ))}
           </div>
         </div>

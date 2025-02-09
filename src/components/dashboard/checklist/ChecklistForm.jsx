@@ -174,38 +174,45 @@ function ChecklistForm() {
 
   return (
     <div className="checklist-container">
-      <h1 className="checklist-title">결함 체크리스트</h1>
+      <h1 className="checklist-title">점검 체크리스트</h1>
       
       <div className="checklist-layout">
-        {/* 왼쪽: 점검 목록 */}
         <div className="inspection-list-section">
-          <h2>점검 목록</h2>
+          <h2 className="inspection-list-title">점검 목록</h2>
           <div className="inspection-list">
-            {inspections.map((inspection) => (
-              <div
-                key={inspection.id}
-                className={`inspection-item ${selectedInspection?.id === inspection.id ? 'selected' : ''}`}
-                onClick={() => setSelectedInspection(inspection)}
-              >
-                <div className="inspection-info">
-                  <div className="inspection-title">점검 ID: {inspection.id}</div>
-                  <div className="inspection-details">
-                    <span>예정일: {inspection.scheduled_date}</span>
-                    <span>위치: {inspection.location}</span>
+            {inspections.map((inspection) => {
+              const reportInfo = inspection.report_info || {};
+              return (
+                <div
+                  key={inspection.inspection_id}
+                  className={`inspection-item ${selectedInspection?.inspection_id === inspection.inspection_id ? 'selected' : ''}`}
+                  onClick={() => setSelectedInspection(inspection)}
+                >
+                  <div className="inspection-info">
+                    <div className="inspection-title">
+                      <span>점검 ID: {inspection.inspection_id}</span>
+                    </div>
+                    <div className="inspection-details">
+                      <span>예정일: {inspection.schedule_date}</span>
+                      <span>주소: {reportInfo.detail_address || "-"}</span>
+                      <span>신고된 결함: {reportInfo.defect_type || "-"}</span>
+                      <span>AI 분석 결과: {inspection.detection_label || "분석 결과 없음"}</span>
+                    </div>
+                  </div>
+                  <div className="inspection-status">
+                    <select
+                      className={`status-select ${inspection.status}`}
+                      value={inspection.status}
+                      onChange={(e) => handleStatusChange(inspection.inspection_id, e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <option value="예정됨">예정됨</option>
+                      <option value="진행중">진행중</option>
+                    </select>
                   </div>
                 </div>
-                <div className="inspection-status">
-                  <select
-                    value={inspection.status}
-                    onChange={(e) => handleStatusChange(inspection.id, e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <option value="예정됨">예정됨</option>
-                    <option value="진행중">진행중</option>
-                  </select>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
@@ -230,15 +237,58 @@ function ChecklistForm() {
                   handleInputChange={handleInputChange}
                   handleCheckboxChange={handleCheckboxChange}
                   inspection={selectedInspection}
+                  inspectionId={selectedInspection?.inspection_id}
                 />
               )}
-              {currentStep === 1 && <ConcreteCrackStep formData={formData} handleInputChange={handleInputChange} />}
-              {currentStep === 2 && <LeakEfloStep formData={formData} handleInputChange={handleInputChange} />}
-              {currentStep === 3 && <SteelDamageStep formData={formData} handleInputChange={handleInputChange} />}
-              {currentStep === 4 && <DelaminationStep formData={formData} handleInputChange={handleInputChange} />}
-              {currentStep === 5 && <RebarExposureStep formData={formData} handleInputChange={handleInputChange} />}
-              {currentStep === 6 && <PaintDamageStep formData={formData} handleInputChange={handleInputChange} />}
-              {currentStep === 7 && <OverallAssessmentStep formData={formData} handleInputChange={handleInputChange} />}
+              {currentStep === 1 && (
+                <ConcreteCrackStep 
+                  formData={formData} 
+                  handleInputChange={handleInputChange}
+                  inspectionId={selectedInspection?.inspection_id} 
+                />
+              )}
+              {currentStep === 2 && (
+                <LeakEfloStep 
+                  formData={formData} 
+                  handleInputChange={handleInputChange}
+                  inspectionId={selectedInspection?.inspection_id}
+                />
+              )}
+              {currentStep === 3 && (
+                <SteelDamageStep 
+                  formData={formData} 
+                  handleInputChange={handleInputChange}
+                  inspectionId={selectedInspection?.inspection_id}
+                />
+              )}
+              {currentStep === 4 && (
+                <DelaminationStep 
+                  formData={formData} 
+                  handleInputChange={handleInputChange}
+                  inspectionId={selectedInspection?.inspection_id}
+                />
+              )}
+              {currentStep === 5 && (
+                <RebarExposureStep 
+                  formData={formData} 
+                  handleInputChange={handleInputChange}
+                  inspectionId={selectedInspection?.inspection_id}
+                />
+              )}
+              {currentStep === 6 && (
+                <PaintDamageStep 
+                  formData={formData} 
+                  handleInputChange={handleInputChange}
+                  inspectionId={selectedInspection?.inspection_id}
+                />
+              )}
+              {currentStep === 7 && (
+                <OverallAssessmentStep 
+                  formData={formData} 
+                  handleInputChange={handleInputChange}
+                  inspectionId={selectedInspection?.inspection_id}
+                />
+              )}
 
               <div className="form-navigation">
                 <button type="button" onClick={handlePrev} disabled={currentStep === 0}>

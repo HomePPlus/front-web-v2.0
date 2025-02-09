@@ -2,11 +2,16 @@ import { React, useState } from 'react';
 import '../ChecklistForm.css';
 import RadioGroup from '../RadioGroup';
 
-const LeakEfloStep = ({ formData, handleInputChange }) => (
-  <section className="checklist-section">
+const LeakEfloStep = ({ formData, handleInputChange, inspectionId }) => (
+  <section className="checklist-section" data-step="leak">
     <div className="checklist-header">
-      <h2 className="checklist-section-title">2. 균열 항목 체크리스트</h2>
-      <h3 className="checklist-subtitle">[2] 누수/백태</h3>
+      <div className="checklist-header-content">
+        <h2 className="checklist-section-title">2. 균열 항목 체크리스트</h2>
+        <h3 className="checklist-subtitle">[2] 누수/백태</h3>
+      </div>
+      <div className="inspection-id-display">
+        점검 ID: {inspectionId}
+      </div>
     </div>
     <div className="checklist-grid">
       <div className="checklist-input-group">
