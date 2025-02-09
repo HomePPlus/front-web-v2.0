@@ -1,18 +1,221 @@
 /* ChecklistForm.css */
 .checklist-container {
-  width: 98%; /* 전체 너비 줄임 */
-  margin: 0.5rem auto; /* 중앙 정렬 및 마진 줄임 */
-  padding: 1rem; /* 패딩 줄임 */
-  background: linear-gradient(145deg, #EEF2FF 0%, #E0E7FF 100%); /* 인디고 계열 그라데이션 */
-  border-radius: 15px;
-  box-shadow: 0 8px 30px rgba(79, 70, 229, 0.08);
-  max-height: 95vh; /* 높이 조정 */
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
 }
+
+/* 점검 목록 섹션 */
+.inspection-list-section {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.inspection-list-title {
+  font-family: 'eBold';
+  color: #1e293b;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+/* 점검 목록 그리드 레이아웃 */
+.inspection-list-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1.2rem;
+  padding: 0.5rem;
+}
+
+/* 점검 아이템 카드 스타일 */
+.inspection-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+}
+
+.inspection-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+  border-color: #cbd5e1;
+}
+
+/* 점검 정보 레이아웃 */
+.inspection-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* 점검 ID와 상태 헤더 */
+.inspection-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.inspection-title span {
+  font-family: 'eBold';
+  color: #1e293b;
+  font-size: 1.1rem;
+}
+
+/* 점검 상세 정보 그리드 */
+.inspection-details {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.8rem;
+}
+
+.inspection-details span {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+/* 상태 선택 드롭다운 스타일 */
+.inspection-status-form {
+  position: absolute;
+  top: 0.9rem;
+  right: 1.5rem;
+}
+
+.status-select {
+  padding: 1.4rem 1rem;
+  border-radius: 20px;
+  border: 1px solid #E9D5FF;
+  font-family: 'eMedium';
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* 상태별 스타일 */
+.status-select.예정됨 {
+  background-color: #dbeafe;
+  color: #2563eb;
+  border-color: #bfdbfe;
+}
+
+.status-select.진행중 {
+  background-color: #dcfce7;
+  color: #16a34a;
+  border-color: #bbf7d0;
+}
+
+/* 선택된 아이템 스타일 */
+.inspection-item.selected {
+  background: #fff;
+  border: 2px solid #3b82f6;
+  box-shadow: 0 8px 16px rgba(59, 130, 246, 0.1);
+}
+
+/* 체크리스트 폼 섹션 */
+.checklist-form-section {
+  position: relative;
+}
+
+.checklist-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* 돌아가기 버튼 스타일 */
+.return-to-list-btn {
+  position: absolute;
+  top: -4rem;
+  right: 1rem;
+  padding: 0.6rem 1.2rem;
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-family: 'eMedium';
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.return-to-list-btn:hover {
+  background: #e2e8f0;
+  color: #1e293b;
+  transform: translateY(-1px);
+}
+
+.return-to-list-btn:active {
+  transform: translateY(0);
+}
+
+/* 점검 목록 레이아웃 */
+.checklist-layout {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+/* 점검 목록 섹션 */
+.inspection-list-form {
+  flex: 1;
+  max-width: 100%;
+  transition: all 0.3s ease;
+}
+
+/* 체크리스트 폼 섹션이 표시될 때 점검 목록 숨기기 */
+.checklist-layout.form-active .inspection-list-form {
+  display: none;
+}
+
+/* 체크리스트 폼 섹션 */
+.checklist-form-section {
+  flex: 2;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* DatePicker 스타일 수정 */
+.checklist-datepicker-container {
+  position: relative;
+  width: 100%;
+}
+
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+.react-datepicker-popper {
+  position: absolute !important;
+  left: 0 !important;
+  top: 100% !important;
+  margin-top: 8px !important;
+  z-index: 9999 !important;
+}
+
 .checklist-title {
   font-family: 'eBold';
   margin-top: 1%;
 }
-
 
 .checklist-section {
   background: transparent;
@@ -280,341 +483,90 @@
 /* 기본 정보 섹션 레이아웃 */
 .basic-info-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr; /* 왼쪽 영역과 오른쪽 영역의 비율 조정 */
+  grid-template-columns: 2fr 1fr;  /* 왼쪽 입력 필드가 더 넓게 */
   gap: 2rem;
-  position: relative; /* 상대 위치 설정 */
+  align-items: start;
 }
 
+/* 왼쪽 입력 필드 영역 */
 .basic-info-left {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);  /* 2열 그리드로 변경 */
   gap: 1rem;
-  width: 100%;
-  max-width: 600px; /* 왼쪽 영역 최대 너비 설정 */
+  padding: 1.5rem;
+  background: #f8fafc;
+  border-radius: 12px;
 }
 
-/* 결함 유형 선택 영역 스타일링 */
+/* 기본정보 입력 필드 스타일 */
+.basic-info-input {
+  margin-bottom: 0;  /* 기존 마진 제거 */
+  background: transparent;
+  border: none;
+  width: 80%;
+  padding: 0;
+}
+
+.basic-info-input label {
+  display: block;
+  color: #64748b;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.basic-info-input input {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: white;
+  font-size: 0.95rem;
+}
+
+/* 오른쪽 결함 선택 영역 */
 .basic-info-right {
-  background: #e5eaf2;
+  background: #f8fafc;
   padding: 1.5rem;
   border-radius: 12px;
-  border: 1px solid #e5eaf2;
-  position: absolute; /* 절대 위치 설정 */
-  right: 20%; /* 오른쪽 정렬 */
-  top: 0; /* 상단 정렬 */
-  width: 250px; /* 너비 고정 */
-  height: auto; /* 높이 자동 조절 */
-}
-
-/* 결함 유형 선택 내부 스타일링 */
-.defect-selection {
-  height: auto;
+  height: fit-content;
 }
 
 .defect-selection-title {
-  font-family: 'eBold';
-  color: #857777; /* 텍스트 색상을 흰색으로 변경 */
+  color: #64748b;
+  font-size: 0.9rem;
   margin-bottom: 1rem;
-  margin-top: 0rem;
-  font-size: 1.5rem;
 }
 
 .defect-options {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 0.8rem;
-  margin-top: 1rem;
 }
 
+/* 체크박스 옵션 스타일 */
 .checkbox-option {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  cursor: pointer;
-}
-
-.checkbox-option input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
-}
-
-/* 체크박스 라벨 색상 */
-.checkbox-option[data-type="crack"] label {
-  color: var(--color-crack);
-}
-
-.checkbox-option[data-type="leak"] label {
-  color: var(--color-leak);
-}
-
-.checkbox-option[data-type="steel"] label {
-  color: var(--color-steel);
-}
-
-.checkbox-option[data-type="delamination"] label {
-  color: var(--color-delamination);
-}
-
-.checkbox-option[data-type="rebar"] label {
-  color: var(--color-rebar);
-}
-
-.checkbox-option[data-type="paint"] label {
-  color: var(--color-paint);
-}
-
-/* 반응형 디자인 수정 */
-@media (max-width: 1024px) {
-  .basic-info-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .basic-info-right {
-    position: relative;
-    width: 100%;
-    margin-top: 1rem;
-  }
-}
-
-/* 균열 폭 입력 필드 스타일링 */
-.crack-width-input {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-}
-
-.crack-width-input label {
-  min-width: auto;
-  margin-bottom: 0;
-  white-space: nowrap;
-}
-
-.crack-width-input input {
-  width: 100px;
   padding: 0.5rem;
-  border: 1px solid #DDD6FE;
+  background: white;
   border-radius: 6px;
-  font-size: 0.9rem;
+  border: 1px solid #e2e8f0;
 }
 
-.crack-width-input span {
-  color: #6B7280;
-  font-size: 0.9rem;
+/* 다음 점검 일정 입력 필드 */
+.checklist-datepicker-container {
+  grid-column: span 2;  /* 2열 모두 차지 */
+  margin-top: 1rem;
 }
 
-/* 균열 측정 입력 그룹 특별 스타일 */
-.crack-measurements-group {
-  grid-column: span 1; /* 한 칸 차지 */
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-/* 기본 정보 레이아웃 */
-.basic-info-input {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.basic-info-input label {
-  min-width: 120px !important; /* 라벨 길이 */
-  white-space: nowrap;
-  margin-left: 30px;
-}
-
-.basic-info-input input {
-  width: 250px !important; /* 입력란 길이 */
-  max-width: none !important; /* max-width 제한 해제 */
-  flex: none !important; /* flex 속성 제거 */
-}
-
-/* 기본 정보 섹션 스타일 */
-.basic-info-section {
-  border-bottom: 2px solid #DDD6FE !important; /* !important로 우선순위 높임 */
-  margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
-}
-
-.basic-info-section .checklist-input-group {
-  margin-bottom: 0.75rem !important; /* 위아래 마진 줄임 */
-  margin-top: 0.75rem !important;
-  width: 80% !important;
-}
-
-.basic-info-section .checklist-header {
-  margin-bottom: 1rem;
-}
-
-/* 다음 점검 일정 입력 그룹 스타일 */
-.checklist-input-group .basic-info-input {
-  position: relative;
-  margin-bottom: 80px; /* 달력이 표시될 공간 확보 */
-}
-
-/* DatePicker 컨테이너 스타일 */
-.react-datepicker-wrapper,
-.react-datepicker__input-container {
-  display: block;
+.checklist-datepicker-input {
   width: 100%;
-}
-
-/* DatePicker 팝업 위치 조정 */
-.react-datepicker-popper {
-  transform: translate3d(0, 0, 0) !important;
-  top: 100% !important;
-  left: 0 !important;
-  margin-top: 8px;
-}
-
-/* DatePicker 입력 필드 스타일 */
-.date-picker-input {
-  width: 100%;
-  max-width: 300px;
-  padding: 0.8rem 1rem;
-  border: 1px solid var(--color-final-eval);
-  border-radius: 8px;
-  font-family: 'eMedium';
-  background: #FFFFFF;
-}
-
-.date-picker-input:focus {
-  outline: none;
-  border-color: var(--color-final-eval);
-  box-shadow: 0 0 0 3px rgba(241, 245, 249, 0.3);
-}
-
-/* 달력 컨테이너 스타일링 */
-.react-datepicker {
-  font-family: 'eMedium';
-  border: 1px solid #DDD6FE;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.1);
-}
-
-.react-datepicker__header {
-  background: #F5F3FF;
-  border-bottom: 1px solid #DDD6FE;
-}
-
-.react-datepicker__day--selected {
-  background-color: #8B5CF6 !important;
-  color: white !important;
-}
-
-.react-datepicker__day:hover {
-  background-color: #EDE9FE !important;
-}
-
-/* 레이아웃 */
-.checklist-layout {
-  display: grid;
-  grid-template-columns: 350px 1fr;
-  gap: 2rem;
-  min-height: 100%; /* 최소 높이 설정 */
-}
-
-/* 점검 목록 섹션 */
-.inspection-list-section {
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
-  height: calc(100vh - 250px); /* 왼쪽 섹션 높이 조정 */
-}
-
-.inspection-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-}
-
-.inspection-item {
-  background: #f8fafc;
+  padding: 0.7rem 1rem;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
-  padding: 1rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  position: relative; /* 상태 선택 박스 위치 조정을 위해 추가 */
-}
-
-.inspection-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.inspection-title {
-  font-weight: 600;
-  color: #1e293b;
-}
-
-.inspection-details {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  font-size: 0.9rem;
-  color: #64748b;
-}
-
-.inspection-details span {
-  display: block;
-  line-height: 1.4;
-}
-
-.inspection-item.selected {
-  background: #e0e7ff;
-  border-color: #818cf8;
-}
-
-.inspection-status {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-}
-
-.inspection-status .status-select {
-  padding: 0.4rem;
-  border-radius: 6px;
-  border: 1px solid #ddd6fe;
   background: white;
-  font-size: 0.9rem;
-  cursor: pointer;
-}
-
-/* 체크리스트 폼 섹션 */
-.checklist-form-section {
-  background: #ffffff;
-  margin-top: 20px;
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
-  height: calc(100vh - 320px); /* 오른쪽 섹션 높이 조정 */
-  margin-bottom: 1rem;
-}
-
-.no-inspection-selected {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  color: #64748b;
-  font-size: 1.1rem;
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 1.5rem;
-}
-
-.inspection-list-title {
-  font-family: 'eBold';
-  color: #567aaf;
-  margin-top: -2%;
-  margin-bottom: 2%;
+  font-size: 0.95rem;
 }
 
 /* 상태별 색상 스타일 */
@@ -663,23 +615,9 @@
 
 /* 각 스텝별 스타일 */
 .checklist-section[data-step="basic"] {
-  border-color: var(--color-basic) !important;
-  .radio-group { border-color: var(--color-basic) !important; }
-  .radio-option:hover { border-color: var(--colo r-basic) !important; }
-  .radio-option.selected {
-    background: var(--color-basic) !important;
-    border-color: var(--color-basic) !important;
-  }
-
-  .form-navigation button {
-    background: var(--color-basic) !important;
-    border-color: var(--color-basic) !important;
-  }
-
-  .radio-group-title { color: var(--color-basic) !important; }
-  input[type='radio'] { accent-color: var(--color-basic) !important; }
-  .checklist-section-title { color: var(--color-basic) !important; }
-
+  background: #FFFFFF;
+  border: 1px solid #e2e8f0;
+  padding: 2rem;
 }
 
 .checklist-section[data-step="crack"] {
@@ -844,4 +782,18 @@
 .form-navigation button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* 읽기 전용 입력 필드 스타일 */
+.readonly-input {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+.readonly-input:focus {
+  outline: none;
+  border-color: #e2e8f0;
+  box-shadow: none;
 }

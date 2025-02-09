@@ -37,11 +37,6 @@ apiClient.interceptors.response.use(
 // 요청 인터셉터 추가
 apiClient.interceptors.request.use(
   (config) => {
-    // API 요청 URL에 /api 접두사가 없으면 추가
-    if (!config.url.startsWith('/api')) {
-      config.url = `/api${config.url}`;
-    }
-
     const token = getToken();
     console.log('token:', token);
     if (token) {
@@ -253,4 +248,20 @@ export const getDetectionStats = async (area) => {
     console.error('Error fetching detection stats:', error);
     throw error;
   }
+};
+
+// 체크리스트 제출
+export const submitChecklist = async (checklistData) => {
+  return await apiClient.post('/submit_checklist', checklistData, {
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  });
+};
+
+// 체크리스트 PDF 다운로드
+export const downloadChecklist = async (inspectionId) => {
+  return await apiClient.get(`/download/${inspectionId}`, {
+    responseType: 'blob'
+  });
 };

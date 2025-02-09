@@ -23,8 +23,8 @@ const BasicInfoStep = ({ formData, handleInputChange, handleCheckboxChange, insp
             type="text" 
             name="inspection_id" 
             value={formData.basicInfo.inspectionId} 
-            onChange={(e) => handleInputChange('basicInfo', 'inspectionId', e.target.value)} 
-            required 
+            readOnly 
+            className="readonly-input"
           />
         </div>
         <div className="checklist-input-group basic-info-input">
@@ -63,36 +63,11 @@ const BasicInfoStep = ({ formData, handleInputChange, handleCheckboxChange, insp
             type="text" 
             name="address" 
             value={formData.basicInfo.address} 
-            onChange={(e) => handleInputChange('basicInfo', 'address', e.target.value)} 
-            required 
+            readOnly 
+            className="readonly-input"
           />
         </div>
-        <div className="checklist-datepicker-container">
-          <label>다음 점검 일정:</label>
-          <DatePicker
-            selected={formData.basicInfo.nextInspectionDate}
-            onChange={(date) => handleInputChange('basicInfo', 'nextInspectionDate', date)}
-            dateFormat="yyyy-MM-dd"
-            className="checklist-datepicker-input"
-            popperClassName="checklist-datepicker-popper"
-            calendarClassName="checklist-datepicker"
-            popperPlacement="bottom-start"
-            popperModifiers={[
-              {
-                name: "offset",
-                options: {
-                  offset: [0, 8],
-                },
-              },
-              {
-                name: "preventOverflow",
-                options: {
-                  boundary: 'viewport',
-                },
-              }
-            ]}
-          />
-        </div>
+      
       </div>
       
       <div className="basic-info-right">

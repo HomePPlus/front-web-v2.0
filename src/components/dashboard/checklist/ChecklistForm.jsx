@@ -9,8 +9,9 @@ import DelaminationStep from './ChecklistSteps/DelaminationStep';
 import RebarExposureStep from './ChecklistSteps/RebarExposureStep';
 import PaintDamageStep from './ChecklistSteps/PaintDamageStep';
 import OverallAssessmentStep from './ChecklistSteps/OverallAssessmentStep';
-import { getInspectionReports, updateInspectionStatus } from "../../../api/apiClient";
+import { getInspectionReports, updateInspectionStatus, submitChecklist } from "../../../api/apiClient";
 import Loading from "../../common/Loading/Loading";
+import { useNavigate } from 'react-router-dom';
 
 const initialFormData = {
   basicInfo: {
@@ -87,25 +88,47 @@ const initialFormData = {
 
 const steps = ['기본 정보', '콘크리트 균열', '누수/백태', '강재 손상', '박리', '철근 노출', '도장 손상', '종합 평가'];
 
-function ChecklistForm() {
+const ChecklistForm = ({ onError, onSuccess }) => {
   const [formData, setFormData] = useState(initialFormData);
   const [currentStep, setCurrentStep] = useState(0);
   const [inspections, setInspections] = useState([]);
   const [selectedInspection, setSelectedInspection] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  // 결함 유형 변환 함수
+  const translateDefectType = (type) => {
+    const defectTypeMap = {
+      'Crack': '균열',
+      'Leak/Efflorescence': '누수/백태',
+      'Steel Corrosion': '강재 부식',
+      'Spalling': '박리',
+      'Rebar Exposure': '철근 노출',
+      'PaintDamage': '도장 손상',
+      'crack': '균열',
+      'leak': '누수/백태',
+      'steel': '강재 부식',
+      'spalling': '박리',
+      'rebar': '철근 노출',
+      'paint': '도장 손상',
+      'normal': '정상',
+    };
+    return defectTypeMap[type] || type;
+  };
 
   const fetchInspections = async () => {
     try {
       const response = await getInspectionReports();
-      // 예정됨, 진행중인 점검만 필터링
       const filteredData = response.data.data.filter(
         item => item.status === '예정됨' || item.status === '진행중'
       );
       setInspections(filteredData);
       setError(null);
     } catch (error) {
-      setError("점검 목록을 불러오는데 실패했습니다.");
+      const errorMessage = "점검 목록을 불러오는데 실패했습니다.";
+      setError(errorMessage);
+      onError?.(errorMessage);
       console.error("Error fetching inspections:", error);
     } finally {
       setLoading(false);
@@ -116,16 +139,38 @@ function ChecklistForm() {
     fetchInspections();
   }, []);
 
+  // 선택된 점검이 변경될 때 기본 정보 자동 설정
+  useEffect(() => {
+    if (selectedInspection) {
+      const reportInfo = selectedInspection.report_info || {};
+      
+      setFormData(prev => ({
+        ...prev,
+        basicInfo: {
+          ...prev.basicInfo,
+          inspectionId: selectedInspection.inspection_id,
+          inspectionDate: new Date().toISOString().split('T')[0], // 오늘 날짜
+          address: reportInfo.detail_address || '',
+        }
+      }));
+    }
+  }, [selectedInspection]);
+
   const handleStatusChange = async (inspectionId, newStatus) => {
     try {
       const response = await updateInspectionStatus(inspectionId, newStatus);
       
       if (response.data.status === 200 || response.status === 200) {
         await fetchInspections();
+        onSuccess?.("상태가 성공적으로 변경되었습니다.");
       } else {
+        const errorMessage = "상태 변경에 실패했습니다.";
+        onError?.(errorMessage);
         console.error("상태 변경 실패:", response.data.message);
       }
     } catch (error) {
+      const errorMessage = "상태 변경 중 오류가 발생했습니다.";
+      onError?.(errorMessage);
       console.error("상태 변경 실패. 에러 상세:", error);
     }
   };
@@ -152,9 +197,94 @@ function ChecklistForm() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    try {
+      // 백엔드 DTO 구조에 맞게 데이터 변환
+      const requestData = {
+        inspection_id: selectedInspection.inspection_id,
+        inspection_date: formData.basicInfo.inspectionDate,
+        inspector_name: formData.basicInfo.inspectorName,
+        inspector_contact: formData.basicInfo.inspectorContact,
+        address: formData.basicInfo.address,
+        defect_types: formData.basicInfo.defectTypes,
+        
+        // 콘크리트 균열
+        concrete_crack_type: formData.concreteCrack.type,
+        concrete_crack_length_cm: formData.concreteCrack.length,
+        concrete_crack_width_mm: formData.concreteCrack.width,
+        concrete_crack_depth_mm: formData.concreteCrack.depth,
+        concrete_crack_leakage: formData.concreteCrack.leakage,
+        concrete_crack_movement: formData.concreteCrack.movement,
+        concrete_crack_change: formData.concreteCrack.change,
+        concrete_crack_condition: formData.concreteCrack.condition,
+        concrete_crack_emergency: formData.concreteCrack.emergency,
+        concrete_crack_emergency_action: formData.concreteCrack.emergencyAction,
+        concrete_crack_repair_plan: formData.concreteCrack.repairPlan,
+
+        // 누수/백태
+        leak_eflo_leakage_range: formData.leakEflo.leakageRange,
+        leak_eflo_leakage_cause: formData.leakEflo.leakageCause,
+        leak_eflo_eflorescence: formData.leakEflo.eflorescence,
+        leak_eflo_impact: formData.leakEflo.leakImpact,
+        leak_eflo_emergency: formData.leakEflo.emergency,
+        leak_eflo_emergency_action: formData.leakEflo.emergencyAction,
+        leak_eflo_repair_plan: formData.leakEflo.repairPlan,
+
+        // 강재 손상
+        steel_damage_range: formData.steelDamage.damageRange,
+        steel_damage_severity: formData.steelDamage.damageSeverity,
+        steel_damage_cause: formData.steelDamage.damageCause,
+        steel_damage_stability_impact: formData.steelDamage.stabilityImpact,
+        steel_damage_emergency: formData.steelDamage.emergency,
+        steel_damage_emergency_action: formData.steelDamage.emergencyAction,
+        steel_damage_repair_plan: formData.steelDamage.repairPlan,
+
+        // 박리
+        delamination_range: formData.delamination.delaminationRange,
+        delamination_cause: formData.delamination.delaminationCause,
+        delamination_stability_impact: formData.delamination.stabilityImpact,
+        delamination_emergency: formData.delamination.emergency,
+        delamination_emergency_action: formData.delamination.emergencyAction,
+        delamination_repair_plan: formData.delamination.repairPlan,
+
+        // 철근 노출
+        rebar_exposure_range: formData.rebarExposure.exposureRange,
+        rebar_exposure_condition: formData.rebarExposure.exposureCondition,
+        rebar_exposure_cause: formData.rebarExposure.exposureCause,
+        rebar_exposure_stability_impact: formData.rebarExposure.stabilityImpact,
+        rebar_exposure_emergency: formData.rebarExposure.emergency,
+        rebar_exposure_emergency_action: formData.rebarExposure.emergencyAction,
+        rebar_exposure_repair_plan: formData.rebarExposure.repairPlan,
+
+        // 도장 손상
+        paint_damage_range: formData.paintDamage.damageRange,
+        paint_damage_cause: formData.paintDamage.damageCause,
+        paint_damage_condition: formData.paintDamage.damageCondition,
+        paint_damage_emergency: formData.paintDamage.emergency,
+        paint_damage_emergency_action: formData.paintDamage.emergencyAction,
+        paint_damage_repair_plan: formData.paintDamage.repairPlan,
+
+        // 종합 평가
+        overall_result: formData.overallAssessment.overallResult,
+        monitoring_required: formData.overallAssessment.monitoringRequired,
+        next_inspection_date: formData.overallAssessment.nextInspectionDate,
+      };
+
+      const response = await submitChecklist(requestData);
+
+      if (response.data.status === 'COMPLETED') {
+        navigate('/checklist/complete', {
+          state: {
+            inspectionId: response.data.inspection_id,
+            message: response.data.message
+          }
+        });
+      }
+    } catch (error) {
+      console.error('체크리스트 제출 실패:', error);
+      onError?.('체크리스트 제출에 실패했습니다.');
+    }
   };
 
   const handleNext = () => {
@@ -176,10 +306,9 @@ function ChecklistForm() {
     <div className="checklist-container">
       <h1 className="checklist-title">점검 체크리스트</h1>
       
-      <div className="checklist-layout">
-        <div className="inspection-list-section">
-          <h2 className="inspection-list-title">점검 목록</h2>
-          <div className="inspection-list">
+      <div className={`checklist-layout ${selectedInspection ? 'form-active' : ''}`}>
+        {!selectedInspection ? (
+          <div className="inspection-list-form">
             {inspections.map((inspection) => {
               const reportInfo = inspection.report_info || {};
               return (
@@ -195,11 +324,11 @@ function ChecklistForm() {
                     <div className="inspection-details">
                       <span>예정일: {inspection.schedule_date}</span>
                       <span>주소: {reportInfo.detail_address || "-"}</span>
-                      <span>신고된 결함: {reportInfo.defect_type || "-"}</span>
-                      <span>AI 분석 결과: {inspection.detection_label || "분석 결과 없음"}</span>
+                      <span>신고된 결함: {translateDefectType(reportInfo.defect_type) || "-"}</span>
+                      <span>AI 분석 결과: {translateDefectType(inspection.detection_label) || "분석 결과 없음"}</span>
                     </div>
                   </div>
-                  <div className="inspection-status">
+                  <div className="inspection-status-form">
                     <select
                       className={`status-select ${inspection.status}`}
                       value={inspection.status}
@@ -214,11 +343,16 @@ function ChecklistForm() {
               );
             })}
           </div>
-        </div>
-
-        {/* 오른쪽: 체크리스트 폼 */}
-        {selectedInspection ? (
+        ) : (
           <div className="checklist-form-section">
+            <div className="checklist-form-header">
+              <button 
+                className="return-to-list-btn"
+                onClick={() => setSelectedInspection(null)}
+              >
+                ← 점검 목록으로 돌아가기
+              </button>
+            </div>
             <div className="step-indicator">
               {steps.map((step, index) => (
                 <div
@@ -304,10 +438,6 @@ function ChecklistForm() {
                 )}
               </div>
             </form>
-          </div>
-        ) : (
-          <div className="no-inspection-selected">
-            왼쪽에서 점검 항목을 선택해주세요.
           </div>
         )}
       </div>
