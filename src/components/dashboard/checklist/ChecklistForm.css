@@ -622,8 +622,10 @@
 
 .checklist-section[data-step="crack"] {
   border-color: var(--color-crack);
+  
   .radio-group { border-color: var(--color-crack); }
   .radio-option:hover { border-color: var(--color-crack); }
+
   .radio-option.selected {
     background: var(--color-crack);
     border-color: var(--color-crack);
@@ -635,7 +637,7 @@
   .radio-group-title { color: var(--color-crack); }
   input[type='radio'] { accent-color: var(--color-crack); }
   input[type='text'] { border-color: var(--color-crack); }
-  .checklist-section-title { color: var(--color-crack); }
+  .checklist-subtitle { color: var(--color-crack); }
 }
 
 .checklist-section[data-step="leak"] {
@@ -653,7 +655,7 @@
   .radio-group-title { color: var(--color-leak); }
   input[type='radio'] { accent-color: var(--color-leak); }
   input[type='text'] { border-color: var(--color-leak); }
-  .checklist-section-title { color: var(--color-leak); }
+  .checklist-subtitle { color: var(--color-leak); }
 }
 
 .checklist-section[data-step="steel"] {
@@ -671,7 +673,7 @@
   .radio-group-title { color: var(--color-steel); }
   input[type='radio'] { accent-color: var(--color-steel); }
   input[type='text'] { border-color: var(--color-steel); }
-  .checklist-section-title { color: var(--color-steel); }
+  .checklist-subtitle { color: var(--color-steel); }
 }
 
 .checklist-section[data-step="delamination"] {
@@ -689,7 +691,7 @@
   .radio-group-title { color: var(--color-delamination); }
   input[type='radio'] { accent-color: var(--color-delamination); }
   input[type='text'] { border-color: var(--color-delamination); }
-  .checklist-section-title { color: var(--color-delamination); }
+  .checklist-subtitle { color: var(--color-delamination); }
 }
 
 .checklist-section[data-step="rebar"] {
@@ -707,7 +709,7 @@
   .radio-group-title { color: var(--color-rebar); }
   input[type='radio'] { accent-color: var(--color-rebar); }
   input[type='text'] { border-color: var(--color-rebar); }
-  .checklist-section-title { color: var(--color-rebar); }
+  .checklist-subtitle { color: var(--color-rebar); }
 }
 
 .checklist-section[data-step="paint"] {
@@ -725,8 +727,9 @@
   .radio-group-title { color: var(--color-paint); }
   input[type='radio'] { accent-color: var(--color-paint); }
   input[type='text'] { border-color: var(--color-paint); }
-  .checklist-section-title { color: var(--color-paint); }
+  .checklist-subtitle { color: var(--color-paint); }
 }
+
 
 /* 체크박스 스타일 수정 */
 .checkbox-option input[type="checkbox"] {
@@ -796,4 +799,29 @@
   outline: none;
   border-color: #e2e8f0;
   box-shadow: none;
+}
+
+.checklist-submit-section {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.submit-button {
+  padding: 1rem 2rem;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.submit-button:hover {
+  background-color: #2563eb;
+}
+
+.submit-button:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
 }

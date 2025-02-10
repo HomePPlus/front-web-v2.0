@@ -16,7 +16,7 @@ const SteelDamageStep = ({ formData, handleInputChange, inspectionId }) => (
     <div className="checklist-grid">
       <div className="checklist-input-group">
         <RadioGroup
-          title="부식 범위"
+          title="손상상 범위"
           name="steel_damage_range"
           options={['소규모', '중규모', '대규모']}
           value={formData.steelDamage.damageRange}
@@ -25,27 +25,38 @@ const SteelDamageStep = ({ formData, handleInputChange, inspectionId }) => (
       </div>
       <div className="checklist-input-group">
         <RadioGroup
-          title="부식의 원인"
-          name="steel_damage_cause"
-          options={[
-            '시공 불량',
-            '재료적 문제',
-            '환경적 요인',
-            '구조적 요인'
-          ]}
-          value={formData.steelDamage.cause}
-          onChange={(value) => handleInputChange('steelDamage', 'cause', value)}
-        />
-      </div>
-      <div className="checklist-input-group">
-        <RadioGroup
-          title="구조적 안전성"
-          name="steel_damage_safety"
-          options={['안전', '주의 필요', '위험']}
-          value={formData.steelDamage.safety}
-          onChange={(value) => handleInputChange('steelDamage', 'safety', value)}
-        />
-      </div>
+                    title="손상 정도"
+                    name="steel_damage_severity"
+                    options={['부식', '찌그러짐', '파손']}
+                    value={formData.steelDamage.damageSeverity}
+                    onChange={(value) => handleInputChange('steelDamage', 'damageSeverity', value)}
+                  />
+                </div>
+                <div className="checklist-input-group">
+                  <RadioGroup
+                    title="손상의 원인"
+                    name="steel_damage_cause"
+                    options={[
+                      '시공 및 제작 결함',
+                      '피로 및 반복 하중',
+                      '열적 영향 및 온도 변화',
+                      '구조적 문제',
+                      '충격 및 외부 요인'
+                    ]}
+                    value={formData.steelDamage.damageCause}
+                    onChange={(value) => handleInputChange('steelDamage', 'damageCause', value)}
+                  />
+                </div>
+                <div className="checklist-input-group">
+                  <RadioGroup
+                    title="구조적 안전성에 미치는 영향"
+                    name="steel_damage_stability_impact"
+                    options={['안전성에 영향 없음', '안전성에 영향 있음']}
+                    value={formData.steelDamage.stabilityImpact}
+                    onChange={(value) => handleInputChange('steelDamage', 'stabilityImpact', value)}
+                  
+      />
+                    </div>
       <div className="checklist-input-group">
         <RadioGroup
           title="응급처치 필요 여부"

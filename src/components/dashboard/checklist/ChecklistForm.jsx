@@ -199,8 +199,8 @@ const ChecklistForm = ({ onError, onSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     try {
-      // 백엔드 DTO 구조에 맞게 데이터 변환
       const requestData = {
         inspection_id: selectedInspection.inspection_id,
         inspection_date: formData.basicInfo.inspectionDate,
@@ -272,19 +272,54 @@ const ChecklistForm = ({ onError, onSuccess }) => {
       };
 
       const response = await submitChecklist(requestData);
+      
+      // 체크리스트 데이터 분석
+      const checklistSummary = {
+        buildingName: formData.basicInfo.address,
+        inspectorName: formData.basicInfo.inspectorName,
+        inspectionDate: formData.basicInfo.inspectionDate,
+      };
 
-      if (response.data.status === 'COMPLETED') {
-        navigate('/checklist/complete', {
-          state: {
-            inspectionId: response.data.inspection_id,
-            message: response.data.message
-          }
-        });
-      }
+      // 상태 업데이트 후 페이지 이동
+      // await handleStatusChange(selectedInspection.inspection_id, '완료');
+      
+      navigate('/checklist/complete', {
+        state: {
+          inspectionId: response.data.inspection_id,
+          checklistData: checklistSummary,
+          message: "체크리스트가 성공적으로 제출되었습니다."
+        }
+      });
     } catch (error) {
       console.error('체크리스트 제출 실패:', error);
-      onError?.('체크리스트 제출에 실패했습니다.');
+      alert('체크리스트 제출에 실패했습니다.');
     }
+  };
+
+  // 주요 발견사항 추출
+  const extractFindings = (formData) => {
+    const findings = [];
+    
+    if (formData.concreteCrack.type) {
+      findings.push(`콘크리트 균열: ${formData.concreteCrack.type} (${formData.concreteCrack.condition})`);
+    }
+    if (formData.leakEflo.leakageRange) {
+      findings.push(`누수/백태: ${formData.leakEflo.leakageRange} (${formData.leakEflo.leakageCause})`);
+    }
+    if (formData.steelDamage.damageRange) {
+      findings.push(`강재 손상: ${formData.steelDamage.damageRange} (${formData.steelDamage.damageSeverity})`);
+    }
+    if (formData.delamination.delaminationRange) {
+      findings.push(`박리: ${formData.delamination.delaminationRange} (${formData.delamination.delaminationCause})`);
+    }
+    if (formData.rebarExposure.exposureRange) {
+      findings.push(`철근 노출: ${formData.rebarExposure.exposureRange} (${formData.rebarExposure.exposureCondition})`);
+    }
+    if (formData.paintDamage.damageRange) {
+      findings.push(`도장 손상: ${formData.paintDamage.damageRange} (${formData.paintDamage.damageCondition})`);
+    }
+
+    return findings;
   };
 
   const handleNext = () => {
@@ -417,9 +452,10 @@ const ChecklistForm = ({ onError, onSuccess }) => {
                 />
               )}
               {currentStep === 7 && (
-                <OverallAssessmentStep 
-                  formData={formData} 
+                <OverallAssessmentStep
+                  formData={formData}
                   handleInputChange={handleInputChange}
+                  handleSubmit={handleSubmit}
                   inspectionId={selectedInspection?.inspection_id}
                 />
               )}

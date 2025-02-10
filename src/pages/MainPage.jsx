@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Carousel } from '../components/common/Carousel/Carousel';
-import { createDefect } from '../api/apiClient';
+import { detectDefect } from '../api/apiClient';
 import MainAnimation from '../components/main/MainAnimation';
-// import MovingMascot from "../components/common/Mascot/MovingMascot";
+import MainDefect from '../components/main/MainDefect';
+
 import './MainPage.css';
 
 const MainPage = () => {
@@ -16,26 +17,27 @@ const MainPage = () => {
 
   const defectImages = [
     {
-      url: require('../assets/images/model/CoatingDamage.jpg'),
+      url: require('../assets/images/model/paintdamage.jpg'),
       title: '도장 손상',
     },
     {
-      url: require('../assets/images/model/ConcreteCracks.jpg'),
+      url: require('../assets/images/model/concreate_crack.jpg'),
       title: '콘크리트 균열',
     },
     {
-      url: require('../assets/images/model/Efflorescence_WaterLeakage.jpg'),
+      url: require('../assets/images/model/efforescence.jpg'),
       title: '백태 및 누수',
     },
     {
-      url: require('../assets/images/model/ExposedReinforcement.jpg'),
+      url: require('../assets/images/model/exposure.jpg'),
       title: '철근 노출',
     },
-    { url: require('../assets/images/model/Spalling.jpg'), title: '박리' },
+    { url: require('../assets/images/model/spalling.jpg'), title: '박리' },
     {
-      url: require('../assets/images/model/SteelDamage.jpg'),
+      url: require('../assets/images/model/steeldefect.jpg'),
       title: '강재 손상',
     },
+
   ];
 
   // 애니메이션 완료 핸들러
@@ -63,8 +65,9 @@ const MainPage = () => {
       const formData = new FormData();
       formData.append('file', file);
 
-      const apiResponse = await createDefect(formData);
+      const apiResponse = await detectDefect(file);
       const resultData = apiResponse.data.data;
+
 
       setResults((prev) => ({
         ...prev,
@@ -106,19 +109,7 @@ const MainPage = () => {
           안전한 주거 공간의 시작, AI 결함 진단을 체험해보세요!
         </div>
         <div className={`carousel-container ${showCarouselText ? 'show' : ''}`}>
-          <Carousel>
-            {defectImages.map((image, index) => (
-              <Card
-                key={index}
-                index={index}
-                imageUrl={image.url}
-                title={image.title}
-                result={results[index]}
-                isLoading={loadingStates[index]}
-                onTest={() => handleImageTest(image, index)}
-              />
-            ))}
-          </Carousel>
+          <MainDefect />
         </div>
       </div>
       <div className="fixed-scroll-image">

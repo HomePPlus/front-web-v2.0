@@ -161,12 +161,15 @@ export const createRegularSchedule = (data) => apiClient.post('/api/schedules/re
 export const getRegularScheduleDetail = (scheduleId) => apiClient.get(`/api/schedules/regular/${scheduleId}`);
 
 // * 결함 검출 관련 API
-export const createDefect = (formData) =>
-  apiClient.post('/api/model/detect', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
+// export const createDefect = (fileName) =>
+//   apiClient.post('/api/model/detect', null, {
+//     params: {
+//       file: fileName
+//     },
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//   });
 
 // * 오늘 예약된 점검 일정 API
 export const getTodayInspections = (date = new Date().toISOString().split('T')[0]) =>
@@ -265,3 +268,9 @@ export const downloadChecklist = async (inspectionId) => {
     responseType: 'blob'
   });
 };
+
+// 결함 검출 API
+export const detectDefect = (fileName) =>
+  apiClient.post('/api/model/detect/json', {
+    file1: fileName  // request body에 포함
+  });
