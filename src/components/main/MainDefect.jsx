@@ -18,9 +18,9 @@ const sampleImages = [
   },
   { 
     id: 3, 
-    fileName: 'spalling.jpg', 
+    fileName: 'Spalling.jpg', 
     title: '박리 샘플 1',
-    url: require('../../assets/images/model/spalling.jpg')
+    url: require('../../assets/images/model/Spalling.jpg')
   },
   { 
     id: 4, 

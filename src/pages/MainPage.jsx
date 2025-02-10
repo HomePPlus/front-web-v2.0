@@ -14,32 +14,6 @@ const MainPage = () => {
   const [showPostAnimationText, setShowPostAnimationText] = useState(false);
   const [results, setResults] = useState({}); // 이미지별 결과 저장
   const [loadingStates, setLoadingStates] = useState({}); // 로딩 상태 관리
-
-  const defectImages = [
-    {
-      url: require('../assets/images/model/paintdamage.jpg'),
-      title: '도장 손상',
-    },
-    {
-      url: require('../assets/images/model/concreate_crack.jpg'),
-      title: '콘크리트 균열',
-    },
-    {
-      url: require('../assets/images/model/efforescence.jpg'),
-      title: '백태 및 누수',
-    },
-    {
-      url: require('../assets/images/model/exposure.jpg'),
-      title: '철근 노출',
-    },
-    { url: require('../assets/images/model/spalling.jpg'), title: '박리' },
-    {
-      url: require('../assets/images/model/steeldefect.jpg'),
-      title: '강재 손상',
-    },
-
-  ];
-
   // 애니메이션 완료 핸들러
   const handleAnimationComplete = () => {
     if (!animationDone) {
