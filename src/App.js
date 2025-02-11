@@ -16,6 +16,8 @@ import ProtectedInspectorRoute from "./components/auth/ProtectedInspectorRoute";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import { getUserInfo } from "./utils/auth";
 import ChecklistComplete from "./components/dashboard/checklist/ChecklistComplete";
+import ErrorPage from "./pages/ErrorPage";
+
 function App() {
   const userInfo = getUserInfo();
   console.log("User Info:", userInfo);
@@ -35,6 +37,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/create-post" element={<CreateCommunityPost />} />
         <Route path="/checklist/complete" element={<ChecklistComplete />} />
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
     </Router>
   );
