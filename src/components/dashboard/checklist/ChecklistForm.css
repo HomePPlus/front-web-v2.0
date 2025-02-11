@@ -30,7 +30,7 @@
 }
 
 /* 점검 아이템 카드 스타일 */
-.inspection-item {
+.checklist-inspection-item {
   background: #f8fafc;
   border: 1px solid #e2e8f0;
   border-radius: 10px;
@@ -43,7 +43,7 @@
   position: relative;
 }
 
-.inspection-item:hover {
+.checklist-inspection-item:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
   border-color: #cbd5e1;
@@ -170,6 +170,8 @@
 .checklist-layout {
   display: flex;
   gap: 2rem;
+  width: 1650px;
+  margin-left: -220px;
   margin-top: 1.5rem;
 }
 
@@ -184,6 +186,7 @@
 .checklist-layout.form-active .inspection-list-form {
   display: none;
 }
+
 
 /* 체크리스트 폼 섹션 */
 .checklist-form-section {
@@ -215,6 +218,7 @@
 .checklist-title {
   font-family: 'eBold';
   margin-top: 1%;
+  margin-left: -200px;
 }
 
 .checklist-section {
@@ -824,4 +828,78 @@
 .submit-button:disabled {
   background-color: #94a3b8;
   cursor: not-allowed;
+}
+
+/* 종합 평가 섹션 특별 스타일 */
+.overall-assessment-section {
+  margin-right: 20px; /* 오른쪽 여백 추가 */
+  width: calc(100% - 20px); /* 전체 너비에서 여백만큼 빼기 */
+}
+
+.overall-assessment-section .radio-group {
+  width: 100% !important; /* 기존 87% 대신 100%로 변경 */
+  margin-right: 0;
+  padding-right: 20px;
+}
+
+.overall-assessment-section .radio-group label {
+  white-space: normal; /* 텍스트 줄바꿈 허용 */
+  line-height: 1.4;
+  padding-right: 15px;
+}
+
+/* 구조적 문제 텍스트가 있는 라디오 버튼 특별 처리 */
+.overall-assessment-section .radio-group label[for*="structural"] {
+  padding-right: 35px !important; /* 더 많은 오른쪽 패딩 */
+  margin-right: 10px !important;
+}
+
+/* 전체 결과 섹션 마진 조정 */
+.overall_result {
+  margin-left: -200px;
+  margin-right: 20px; /* 오른쪽 여백 추가 */
+}
+
+/* 모달 스타일 추가 */
+.checklist-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  
+  font-family: 'eMedium';
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.checklist-modal-content {
+  background: white;
+  padding: 2rem;
+  font-family: 'eMedium';
+  border-radius: 8px;
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+}
+
+.checklist-modal-actions {
+  display: flex;
+  gap: 1rem;
+  
+  font-family: 'eMedium';
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.checklist-modal-actions button {
+  padding: 0.8rem 1.5rem;
+  border-radius: 4px;
+  border: none;
+  
+  font-family: 'eMedium';
+  cursor: pointer;
 }

@@ -166,10 +166,11 @@ const Report = () => {
         };
 
         // 콤마로 구분된 결함 유형들을 각각 번역
-        const translatedTypes = detectionResult.split(',')
-          .map(type => translateDefectType(type.trim()))
-          .filter(type => type) // 빈 문자열 제거
-          .join(', ');
+        const translatedTypes = [...new Set(
+          detectionResult.split(',')
+            .map(type => translateDefectType(type.trim()))
+            .filter(type => type) // 빈 문자열 제거
+        )].join(', ');
 
         setDetectionResult(
           `이미지 분석이 완료되었습니다!
@@ -272,103 +273,88 @@ const Report = () => {
         >
           <h1>신고할 내용을 양식에 맞게 작성해주세요.</h1>
           <FormGroup>
-            {/* 작성자 */}
-            <div className="form-row">
-              <label className="form-label">작성자</label>
-              <Input className="name-input" value={getUserInfo()?.email || ''} disabled />
-            </div>
+                  {/* 작성자 */}
+                  <div className="form-row">
+                    <label className="form-label">작성자</label>
+                    <Input className="name-input" value={getUserInfo()?.email || ''} disabled />
+                  </div>
 
-            {/* 주소 입력 */}
-            <div className="form-row">
-              <div className="address-group">
-                <label className="form-label">주소</label>
-                <Input className="address-input" placeholder="주소를 검색해주세요" value={address} disabled />
-                <Button className="address-search" onClick={handleAddressSearch}>
-                  주소 검색
-                </Button>
-                <Input
-                  className="detailAddress-input"
-                  placeholder="상세주소를 입력해주세요"
-                  value={detailAddress}
-                  onChange={(e) => setDetailAddress(e.target.value)}
-                />
-              </div>
-            </div>
+                  {/* 주소 입력 */}
+                  <div className="form-row">
+                    <div className="address-group">
+                      <label className="form-label">주소</label>
+                      <Input className="address-input" placeholder="주소를 검색해주세요" value={address} disabled />
+                      <Button className="address-search" onClick={handleAddressSearch}>
+                        주소 검색
+                      </Button>
+                      <Input
+                        className="detailAddress-input"
+                        placeholder="상세주소를 입력해주세요"
+                        value={detailAddress}
+                        onChange={(e) => setDetailAddress(e.target.value)}
+                      />
+                    </div>
+                  </div>
 
-            {/* 제목 입력 */}
-            <div className="form-row">
-              <label className="form-label">제목</label>
-              <Input
-                className="title-input"
-                placeholder="신고 제목을 입력해주세요"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </div>
-
-            {/* 신고 내용 */}
-            <div className="form-row-text">
-              <label className="form-content-label">내용</label>
-              <textarea
-                className="report-input"
-                placeholder="신고 내용을 자세히 입력해주세요"
-                value={report}
-                onChange={(e) => setReport(e.target.value)}
-              />
-            </div>
-
-            {/* 결함 유형 선택 */}
-            <div className="defect-selection-wrapper">
-              <div className="defect-dropdown">
-                <DropDown
-                  options={defectOptions}
-                  placeholder="결함 유형 선택"
-                  onSelect={handleDropdownSelect}
-                />
-              </div>
-              
-              {hoveredDefect && (
-                <div className={`defect-info-popup ${hoveredDefect ? 'visible' : ''}`}>
-                  <h4 style={{ 
-                    color: defectColors[Object.keys(defectTypes).find(key => defectTypes[key] === hoveredDefect)] 
-                  }}>
-                    {hoveredDefect.label}
-                  </h4>
-                  <p>{hoveredDefect.description}</p>
-                  {hoveredDefect.exampleImage && (
-                    <img 
-                      src={hoveredDefect.exampleImage} 
-                      alt={`${hoveredDefect.label} 예시`} 
+                  {/* 제목 입력 */}
+                  <div className="form-row">
+                    <label className="form-label">제목</label>
+                    <Input
+                      className="title-input"
+                      placeholder="신고 제목을 입력해주세요"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
                     />
-                  )}
-                </div>
-              )}
-            </div>
+                  </div>
 
-            {/* 선택된 결함 정보 표시 */}
-            {selectedDefect && (
-              <div className="defect-info">
-                <h4>{selectedDefect.label}</h4>
-                <p>{selectedDefect.description}</p>
-                {selectedDefect.exampleImage && (
-                  <img 
-                    src={selectedDefect.exampleImage} 
-                    alt={`${selectedDefect.label} 예시`} 
-                    style={{ 
-                      width: '100%', 
-                      maxHeight: '200px', 
-                      objectFit: 'cover',
-                      borderRadius: '8px',
-                      marginTop: '10px'
-                    }} 
-                  />
-                )}
-              </div>
-            )}
+                  {/* 신고 내용 */}
+                  <div className="form-row-text">
+                    <label className="form-content-label">내용</label>
+                    <textarea
+                      className="report-input"
+                      placeholder="신고 내용을 자세히 입력해주세요"
+                      value={report}
+                      onChange={(e) => setReport(e.target.value)}
+                    />
 
-            {/* 파일 업로드 */}
-            <FileUpload className="report-upload" onFileSelect={(file) => setSelectedFile(file)} />
-          </FormGroup>
+                  {/* 결함 유형 선택 */}
+                  <div className="defect-selection-wrapper">
+                    <div className="defect-dropdown">
+                      <DropDown
+                        options={defectOptions}
+                        placeholder="결함 유형 선택"
+                        onSelect={(value) => {
+                          handleDropdownSelect(value);
+                          setHoveredDefect(null);  // 선택 시 hoveredDefect를 null로 설정
+                        }}
+                      />
+                      {hoveredDefect && (  // selectedOption 조건 제거
+                        <div className={`defect-info-popup ${hoveredDefect ? 'visible' : ''}`}>
+                          <h4 style={{ 
+                            color: defectColors[Object.keys(defectTypes).find(key => defectTypes[key] === hoveredDefect)] 
+                          }}>
+                            {hoveredDefect.label}
+                          </h4>
+                          <p>{hoveredDefect.description}</p>
+                          {hoveredDefect.exampleImage && (
+                            <img 
+                              src={hoveredDefect.exampleImage} 
+                              alt={`${hoveredDefect.label} 예시`} 
+                            />
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  </div>
+
+                  {/* 파일 선택 */}
+                  <div className="form-row sel_image">
+                    <FileUpload className="report-upload" onFileSelect={(file) => setSelectedFile(file)} />
+                  </div>
+
+        </FormGroup>
 
           {/* 버튼 */}
           <Button className="report-button" onClick={handleSubmit}>

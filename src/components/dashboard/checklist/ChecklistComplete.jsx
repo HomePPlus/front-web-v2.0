@@ -32,6 +32,8 @@ const safetyTips = [  {
 const ChecklistComplete = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
+  const [downloadReady, setDownloadReady] = useState(false);
   const { inspectionId, checklistData, message } = location.state || {};
   const [currentTip, setCurrentTip] = useState(0);
 
@@ -40,22 +42,48 @@ const ChecklistComplete = () => {
       setCurrentTip(prev => (prev + 1) % safetyTips.length);
     }, 3000);
 
+    // 데이터 확인 후 다운로드 준비 상태 설정
+    if (inspectionId && checklistData) {
+      setDownloadReady(true);
+    }
+    setIsLoading(false);
+
     return () => clearInterval(tipInterval);
   }, []);
 
   const handleDownload = async () => {
+    if (!inspectionId) {
+      alert('다운로드할 보고서 정보가 없습니다.');
+      return;
+    }
+
     try {
-      await downloadChecklist(inspectionId);
+      setIsLoading(true);
+      const response = await downloadChecklist(inspectionId);
+      
+      // Blob 생성 및 다운로드
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `checklist_${inspectionId}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error('보고서 다운로드 실패:', error);
+      alert('보고서 다운로드에 실패했습니다.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="checklist-complete-container">
       <div className="complete-content">
-        <h1>체크리스트 제출 완료</h1>
-        <p>{message}</p>
+        <h1>체크리스트 작성 완료</h1>
+        <p>{message || "체크리스트가 성공적으로 제출되었습니다."}</p>
 
         {/* 안전 팁 슬라이드쇼 */}
         <div className="safety-tips">
@@ -78,15 +106,19 @@ const ChecklistComplete = () => {
           <div className="preview-content">
             <div className="preview-section">
               <h3>기본 정보</h3>
-              <p>점검일: {new Date().toLocaleDateString()}</p>
-              <p>점검 ID: {inspectionId}</p>
+              <p>점검일: {checklistData?.inspectionDate || '정보 없음'}</p>
+              <p>점검 ID: {inspectionId || '정보 없음'}</p>
               <p>노후주택 주소: {checklistData?.buildingName || '정보 없음'}</p>
-              </div>
+            </div>
           </div>
         </div>
 
         <div className="complete-actions">
-          <button onClick={handleDownload} className="download-btn">
+          <button 
+            onClick={handleDownload} 
+            className="download-btn"
+            disabled={!downloadReady}
+          >
             보고서 다운로드
           </button>
           <button onClick={() => navigate('/dashboard')} className="return-btn">

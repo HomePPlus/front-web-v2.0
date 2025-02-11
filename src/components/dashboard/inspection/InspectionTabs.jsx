@@ -42,7 +42,7 @@ const InspectionTabs = ({ onAlert, onUpdateStats }) => {
             점검 목록
           </label>
 
-          <input
+          {/* <input
             type="radio"
             id="regular-tab"
             name="inspection-tabs"
@@ -53,7 +53,7 @@ const InspectionTabs = ({ onAlert, onUpdateStats }) => {
           />
           <label htmlFor="regular-tab" className={`tab-label ${activeTab === "regular" ? "active" : ""}`}>
             정기 점검
-          </label>
+          </label> */}
         </div>
         
         {/* 점검 목록 탭이 활성화될 때만 필터 표시 */}

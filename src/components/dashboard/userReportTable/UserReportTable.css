@@ -34,6 +34,41 @@
   font-family: "eMedium";
 }
 
+/* 각 칼럼 너비 조정 */
+
+.userReport-table th:nth-child(1), /* 신고일 */
+.userReport-table td:nth-child(1) {
+  width: 6%;
+}
+
+.userReport-table th:nth-child(2), /* 신고내용 */
+.userReport-table td:nth-child(2) {
+  width: 10%;
+}
+
+.userReport-table th:nth-child(3), /* 주소 */
+.userReport-table td:nth-child(3) {
+  width: 20%;
+}
+
+.userReport-table th:nth-child(4), /* 신고결함유형 */
+.userReport-table td:nth-child(4) {
+  width: 22%;
+}
+
+.userReport-table th:nth-child(5), /* AI분석결함*/
+.userReport-table td:nth-child(5) {
+  width: 12%;
+}
+
+.userReport-table th:nth-child(6), /*위험 점수 */
+.userReport-table td:nth-child(6) {
+  width: 12%;
+}
+.userReport-table th:nth-child(7), /*위험 점수 */
+.userReport-table td:nth-child(7) {
+  width: 10%;
+}
 .userReport-table tr:hover {
   background-color: #bad1e9;
   position: relative;
@@ -41,7 +76,7 @@
 }
 
 .userReport-schedule-button {
-  padding: 6px 12px;
+  padding: 6px 6px;
   border-radius: 12px;
   background-color: #e3f2fd;
   color: #1976d2;
@@ -233,3 +268,20 @@
   font-family: "eMedium";
   color: #104e1e;
 } */
+
+/* 신고 내용과 주소 칼럼 말줄임표 처리 */
+.userReport-table td:nth-child(3), /* 신고 내용 */
+.userReport-table td:nth-child(4) { /* 주소 */
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* AI 분석 결함 유형 말줄임표 처리 */
+.userReport-table td:nth-child(6) {
+  max-width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

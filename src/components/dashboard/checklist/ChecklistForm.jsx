@@ -96,6 +96,8 @@ const ChecklistForm = ({ onError, onSuccess }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const [showCompleteModal, setShowCompleteModal] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   // 결함 유형 변환 함수
   const translateDefectType = (type) => {
@@ -151,6 +153,7 @@ const ChecklistForm = ({ onError, onSuccess }) => {
           inspectionId: selectedInspection.inspection_id,
           inspectionDate: new Date().toISOString().split('T')[0], // 오늘 날짜
           address: reportInfo.detail_address || '',
+          detectionResult: reportInfo.detection_result || '',
         }
       }));
     }
@@ -201,6 +204,13 @@ const ChecklistForm = ({ onError, onSuccess }) => {
     e.preventDefault();
     
     try {
+      if (!selectedInspection) {
+        alert("점검할 신고를 선택해주세요.");
+        return;
+      }
+
+      setLoading(true);
+
       const requestData = {
         inspection_id: selectedInspection.inspection_id,
         inspection_date: formData.basicInfo.inspectionDate,
@@ -271,28 +281,38 @@ const ChecklistForm = ({ onError, onSuccess }) => {
         next_inspection_date: formData.overallAssessment.nextInspectionDate,
       };
 
-      const response = await submitChecklist(requestData);
-      
-      // 체크리스트 데이터 분석
-      const checklistSummary = {
-        buildingName: formData.basicInfo.address,
-        inspectorName: formData.basicInfo.inspectorName,
-        inspectionDate: formData.basicInfo.inspectionDate,
-      };
+      console.log('제출 시도:', requestData); // 디버깅용 로그
 
-      // 상태 업데이트 후 페이지 이동
-      // await handleStatusChange(selectedInspection.inspection_id, '완료');
+      const response = await submitChecklist(requestData);
+      console.log('서버 응답:', response); // 디버깅용 로그
       
-      navigate('/checklist/complete', {
-        state: {
-          inspectionId: response.data.inspection_id,
-          checklistData: checklistSummary,
-          message: "체크리스트가 성공적으로 제출되었습니다."
-        }
-      });
+      if (response.status === 200 || response.data.status === 200) {
+        await handleStatusChange(selectedInspection.inspection_id, '완료');
+        
+        // 완료된 체크리스트 정보 저장
+        const completedChecklist = {
+          inspection_id: selectedInspection.inspection_id,
+          address: formData.basicInfo.address,
+          inspection_date: formData.basicInfo.inspectionDate,
+          inspector_name: formData.basicInfo.inspectorName,
+          defect_types: formData.basicInfo.defectTypes,
+        };
+        
+        // localStorage에 저장
+        const savedChecklists = JSON.parse(localStorage.getItem('completedChecklists') || '[]');
+        savedChecklists.push(completedChecklist);
+        localStorage.setItem('completedChecklists', JSON.stringify(savedChecklists));
+
+        setSubmitSuccess(true);
+        setShowCompleteModal(true);
+      } else {
+        throw new Error('서버 응답이 올바르지 않습니다.');
+      }
     } catch (error) {
       console.error('체크리스트 제출 실패:', error);
       alert('체크리스트 제출에 실패했습니다.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -338,146 +358,177 @@ const ChecklistForm = ({ onError, onSuccess }) => {
   if (error) return <div className="error">{error}</div>;
 
   return (
-    <div className="checklist-container">
-      <h1 className="checklist-title">점검 체크리스트</h1>
-      
-      <div className={`checklist-layout ${selectedInspection ? 'form-active' : ''}`}>
-        {!selectedInspection ? (
-          <div className="inspection-list-form">
-            {inspections.map((inspection) => {
-              const reportInfo = inspection.report_info || {};
-              return (
-                <div
-                  key={inspection.inspection_id}
-                  className={`inspection-item ${selectedInspection?.inspection_id === inspection.inspection_id ? 'selected' : ''}`}
-                  onClick={() => setSelectedInspection(inspection)}
+    <>
+      <div className="checklist-container">
+        <h1 className="checklist-title">점검 체크리스트</h1>
+        
+        <div className={`checklist-layout ${selectedInspection ? 'form-active' : ''}`}>
+          {!selectedInspection ? (
+            <div className="inspection-list-form">
+              {inspections.map((inspection) => {
+                const reportInfo = inspection.report_info || {};
+                return (
+                  <div
+                    key={inspection.inspection_id}
+                    className={`checklist-inspection-item ${selectedInspection?.inspection_id === inspection.inspection_id ? 'selected' : ''}`}
+                    onClick={() => setSelectedInspection(inspection)}
+                  >
+                    <div className="inspection-info">
+                      <div className="inspection-title">
+                        <span>점검 ID: {inspection.inspection_id}</span>
+                      </div>
+                      <div className="inspection-details">
+                        <span>예정일: {inspection.schedule_date}</span>
+                        <span>주소: {reportInfo.detail_address || "-"}</span>
+                        <span>신고된 결함: {translateDefectType(reportInfo.defect_type) || "-"}</span>
+                        <span>AI 분석 결과: {translateDefectType(reportInfo.defect_type) || "-"}</span>
+                      </div>
+                    </div>
+                    <div className="inspection-status-form">
+                      <select
+                        className={`status-select ${inspection.status}`}
+                        value={inspection.status}
+                        onChange={(e) => handleStatusChange(inspection.inspection_id, e.target.value)}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <option value="예정됨">예정됨</option>
+                        <option value="진행중">진행중</option>
+                      </select>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="checklist-form-section">
+              <div className="checklist-form-header">
+                <button 
+                  className="return-to-list-btn"
+                  onClick={() => setSelectedInspection(null)}
                 >
-                  <div className="inspection-info">
-                    <div className="inspection-title">
-                      <span>점검 ID: {inspection.inspection_id}</span>
-                    </div>
-                    <div className="inspection-details">
-                      <span>예정일: {inspection.schedule_date}</span>
-                      <span>주소: {reportInfo.detail_address || "-"}</span>
-                      <span>신고된 결함: {translateDefectType(reportInfo.defect_type) || "-"}</span>
-                      <span>AI 분석 결과: {translateDefectType(inspection.detection_label) || "분석 결과 없음"}</span>
-                    </div>
+                  ← 점검 목록으로 돌아가기
+                </button>
+              </div>
+              <div className="step-indicator">
+                {steps.map((step, index) => (
+                  <div
+                    key={step}
+                    className={`step ${index === currentStep ? 'active' : ''}`}
+                    onClick={() => setCurrentStep(index)}
+                  >
+                    {step}
                   </div>
-                  <div className="inspection-status-form">
-                    <select
-                      className={`status-select ${inspection.status}`}
-                      value={inspection.status}
-                      onChange={(e) => handleStatusChange(inspection.inspection_id, e.target.value)}
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <option value="예정됨">예정됨</option>
-                      <option value="진행중">진행중</option>
-                    </select>
-                  </div>
+                ))}
+              </div>
+              <form className="checklist-form" onSubmit={handleSubmit}>
+                {currentStep === 0 && (
+                  <BasicInfoStep
+                    formData={formData}
+                    handleInputChange={handleInputChange}
+                    handleCheckboxChange={handleCheckboxChange}
+                    inspection={selectedInspection}
+                    inspectionId={selectedInspection?.inspection_id}
+                  />
+                )}
+                {currentStep === 1 && (
+                  <ConcreteCrackStep 
+                    formData={formData} 
+                    handleInputChange={handleInputChange}
+                    inspectionId={selectedInspection?.inspection_id} 
+                  />
+                )}
+                {currentStep === 2 && (
+                  <LeakEfloStep 
+                    formData={formData} 
+                    handleInputChange={handleInputChange}
+                    inspectionId={selectedInspection?.inspection_id}
+                  />
+                )}
+                {currentStep === 3 && (
+                  <SteelDamageStep 
+                    formData={formData} 
+                    handleInputChange={handleInputChange}
+                    inspectionId={selectedInspection?.inspection_id}
+                  />
+                )}
+                {currentStep === 4 && (
+                  <DelaminationStep 
+                    formData={formData} 
+                    handleInputChange={handleInputChange}
+                    inspectionId={selectedInspection?.inspection_id}
+                  />
+                )}
+                {currentStep === 5 && (
+                  <RebarExposureStep 
+                    formData={formData} 
+                    handleInputChange={handleInputChange}
+                    inspectionId={selectedInspection?.inspection_id}
+                  />
+                )}
+                {currentStep === 6 && (
+                  <PaintDamageStep 
+                    formData={formData} 
+                    handleInputChange={handleInputChange}
+                    inspectionId={selectedInspection?.inspection_id}
+                  />
+                )}
+                {currentStep === 7 && (
+                  <OverallAssessmentStep
+                    formData={formData}
+                    handleInputChange={handleInputChange}
+                    handleSubmit={handleSubmit}
+                    inspectionId={selectedInspection?.inspection_id}
+                  />
+                )}
+
+                <div className="form-navigation">
+                  <button type="button" onClick={handlePrev} disabled={currentStep === 0}>
+                    이전
+                  </button>
+
+                  {currentStep < steps.length - 1 ? (
+                    <button type="button" onClick={handleNext}>
+                      다음
+                    </button>
+                  ) : (
+                    <button type="submit">제출</button>
+                  )}
                 </div>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="checklist-form-section">
-            <div className="checklist-form-header">
+              </form>
+            </div>
+          )}
+        </div>
+      </div>
+      {showCompleteModal && (
+        <div className="checklist-modal-overlay">
+          <div className="checklist-modal-content">
+            <h2>체크리스트 제출 완료</h2>
+            <p>체크리스트가 성공적으로 제출되었습니다.</p>
+            <div className="checklist-modal-actions">
               <button 
-                className="return-to-list-btn"
-                onClick={() => setSelectedInspection(null)}
+                onClick={() => navigate('/checklist/complete', {
+                  state: {
+                    inspectionId: selectedInspection.inspection_id,
+                    checklistData: {
+                      buildingName: formData.basicInfo.address,
+                      inspectorName: formData.basicInfo.inspectorName,
+                      inspectionDate: formData.basicInfo.inspectionDate,
+                      defectTypes: formData.basicInfo.defectTypes,
+                    },
+                    downloadReady: true
+                  }
+                })}
               >
-                ← 점검 목록으로 돌아가기
+                보고서 다운로드 페이지로 이동
+              </button>
+              <button onClick={() => navigate('/dashboard')}>
+                대시보드로 돌아가기
               </button>
             </div>
-            <div className="step-indicator">
-              {steps.map((step, index) => (
-                <div
-                  key={step}
-                  className={`step ${index === currentStep ? 'active' : ''}`}
-                  onClick={() => setCurrentStep(index)}
-                >
-                  {step}
-                </div>
-              ))}
-            </div>
-            <form className="checklist-form" onSubmit={handleSubmit}>
-              {currentStep === 0 && (
-                <BasicInfoStep
-                  formData={formData}
-                  handleInputChange={handleInputChange}
-                  handleCheckboxChange={handleCheckboxChange}
-                  inspection={selectedInspection}
-                  inspectionId={selectedInspection?.inspection_id}
-                />
-              )}
-              {currentStep === 1 && (
-                <ConcreteCrackStep 
-                  formData={formData} 
-                  handleInputChange={handleInputChange}
-                  inspectionId={selectedInspection?.inspection_id} 
-                />
-              )}
-              {currentStep === 2 && (
-                <LeakEfloStep 
-                  formData={formData} 
-                  handleInputChange={handleInputChange}
-                  inspectionId={selectedInspection?.inspection_id}
-                />
-              )}
-              {currentStep === 3 && (
-                <SteelDamageStep 
-                  formData={formData} 
-                  handleInputChange={handleInputChange}
-                  inspectionId={selectedInspection?.inspection_id}
-                />
-              )}
-              {currentStep === 4 && (
-                <DelaminationStep 
-                  formData={formData} 
-                  handleInputChange={handleInputChange}
-                  inspectionId={selectedInspection?.inspection_id}
-                />
-              )}
-              {currentStep === 5 && (
-                <RebarExposureStep 
-                  formData={formData} 
-                  handleInputChange={handleInputChange}
-                  inspectionId={selectedInspection?.inspection_id}
-                />
-              )}
-              {currentStep === 6 && (
-                <PaintDamageStep 
-                  formData={formData} 
-                  handleInputChange={handleInputChange}
-                  inspectionId={selectedInspection?.inspection_id}
-                />
-              )}
-              {currentStep === 7 && (
-                <OverallAssessmentStep
-                  formData={formData}
-                  handleInputChange={handleInputChange}
-                  handleSubmit={handleSubmit}
-                  inspectionId={selectedInspection?.inspection_id}
-                />
-              )}
-
-              <div className="form-navigation">
-                <button type="button" onClick={handlePrev} disabled={currentStep === 0}>
-                  이전
-                </button>
-
-                {currentStep < steps.length - 1 ? (
-                  <button type="button" onClick={handleNext}>
-                    다음
-                  </button>
-                ) : (
-                  <button type="submit">제출</button>
-                )}
-              </div>
-            </form>
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      )}
+    </>
   );
 }
 

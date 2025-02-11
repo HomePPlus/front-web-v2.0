@@ -27,34 +27,47 @@
   display: flex;
   gap: 1rem;
   justify-content: center;
-}
-
-.download-btn, .return-btn {
-  padding: 0.8rem 1.5rem;
-  border-radius: 8px;
-  font-family: 'eMedium';
-  cursor: pointer;
-  transition: all 0.2s ease;
+  margin-top: 2rem;
 }
 
 .download-btn {
-  background: #3b82f6;
+  padding: 1rem 3rem;
+  background-color: #3b82f6;
   color: white;
   border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: 'eMedium';
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 180px;
 }
 
 .download-btn:hover {
-  background: #2563eb;
+  background-color: #2563eb;
+  transform: translateY(-1px);
+}
+
+.download-btn:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
 }
 
 .return-btn {
+  padding: 1rem 3rem;
   background: #f1f5f9;
   color: #475569;
   border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-family: 'eMedium';
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 180px;
 }
 
 .return-btn:hover {
   background: #e2e8f0;
+  transform: translateY(-1px);
 }
 
 .game-wrapper {

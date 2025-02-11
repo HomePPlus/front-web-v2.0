@@ -23,7 +23,8 @@ const UserReportTable = ({ onUpdateStats, onAlert }) => {
         report_detail_address: report.report_detail_address,
         defect_type: report.defect_type,
         images: report.images,
-        detection_result: report.detection_result
+        detection_result: report.detection_result,
+        total_score: report.total_score
       }));
       setReports(availableReports);
       setError(null);
@@ -91,8 +92,65 @@ const UserReportTable = ({ onUpdateStats, onAlert }) => {
     });
   };
 
+// 결함 유형 한글 변환 함수
+const translateDefectType = (englishTypes) => {
+  // 문자열일 경우 콤마로 구분된 배열로 변환
+  const typesArray = Array.isArray(englishTypes) ? englishTypes : englishTypes.split(',');
+
+  // 숫자 제거 정규식 추가
+  const typesWithoutNumbers = typesArray.map(type => type.replace(/[0-9_]/g, '').trim());
+
+  const defectTypes = {
+    CRACK: '균열',
+    crack: '균열',
+    LEAK_WHITENING: '백태/누수',
+    leak_whitening: '백태/누수',
+    Efflorescence_Level: '백태/누수',
+    EfflorescenceLevel: '백태/누수',
+    STEEL_DAMAGE: '강재 손상',
+    steel_damage: '강재 손상',
+    SteelDefectLevel: '강재 손상',
+    PAINT_DAMAGE: '도장 손상',
+    paint_damage: '도장 손상',
+    PaintDamage: '도장 손상',
+    PEELING: '박리',
+    peeling: '박리',
+    Spalling: '박리',
+    REBAR_EXPOSURE: '철근 노출',
+    rebar_exposure: '철근 노출',
+    Exposure: '철근 노출',
+    UNKNOWN: '모름',
+    unknown: '모름',
+  };
+
+  const translatedTypes = typesWithoutNumbers.map(type => {
+    const normalizedType = type.toLowerCase();
+    const matchedType = Object.entries(defectTypes).find(([key]) => key.toLowerCase() === normalizedType);
+
+    return matchedType ? matchedType[1] : type;
+  });
+
+  // 중복 제거
+  const uniqueTypes = [...new Set(translatedTypes)];
+
+  return uniqueTypes;
+};
+
   if (loading) return <div>로딩 중...</div>;
   if (error) return <div className="userReport-error">{error}</div>;
+
+  // 위험 점수에 따른 클래스 결정
+  // const getRiskScoreClass = (score) => {
+  //   if (score >= 80) return 'risk-score-high';
+  //   if (score >= 50) return 'risk-score-medium';
+  //   return 'risk-score-low';
+  // };
+
+  // 내용 텍스트 줄이기
+  const truncateText = (text, maxLength = 50) => {
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + '...';
+  };
 
   return (
     <div className="userReport-table-container">
@@ -103,7 +161,9 @@ const UserReportTable = ({ onUpdateStats, onAlert }) => {
             <th>신고일</th>
             <th>신고 내용</th>
             <th>주소</th>
-            <th>결함 유형</th>
+            <th>신고 결함 유형</th>
+            <th>AI 분석 결함</th>
+            <th>위험 점수</th>
             <th>예약하기</th>
           </tr>
         </thead>
@@ -113,9 +173,13 @@ const UserReportTable = ({ onUpdateStats, onAlert }) => {
               <tr key={report.id}>
                 <td>{report.id}</td>
                 <td>{formatDate(report.report_date)}</td>
-                <td>{report.report_description}</td>
-                <td>{report.report_detail_address}</td>
+                <td title={report.report_description}>{report.report_description}</td>
+                <td title={report.report_detail_address}>{report.report_detail_address}</td>
                 <td>{report.defect_type}</td>
+                <td title={translateDefectType(report.detection_result).join(', ')}>
+                  {translateDefectType(report.detection_result).join(', ')}
+                </td>
+                <td>{report.total_score}</td>
                 <td>
                   <button className="userReport-schedule-button" onClick={() => handleSchedule(report.id)}>
                     예약하기
@@ -125,7 +189,7 @@ const UserReportTable = ({ onUpdateStats, onAlert }) => {
             ))
           ) : (
             <tr>
-              <td colSpan="6" style={{ textAlign: "center" }}>
+              <td colSpan="8" style={{ textAlign: "center" }}>
                 데이터가 없습니다.
               </td>
             </tr>
