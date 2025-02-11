@@ -1,35 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "./DropDown.css";
 
-const Dropdown = ({ options = [], placeholder = "선택", onSelect }) => {
-  const [isOpen, setIsOpen] = useState(false); // 드롭다운 열림/닫힘 상태 관리
-  const [selectedOption, setSelectedOption] = useState(null); // 선택된 옵션
+const DropDown = ({ options, placeholder, onSelect }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedValue, setSelectedValue] = useState('');
+  const dropdownRef = useRef(null);
 
-  const toggleDropdown = () => {
-    setIsOpen((prev) => !prev);
-  };
-
-  const handleSelect = (option) => {
-    setSelectedOption(option); // 선택된 옵션 업데이트
-    setIsOpen(false); // 드롭다운 닫기
-    if (onSelect) onSelect(option); // 부모 컴포넌트에 선택된 값 전달
+  const handleSelect = (value) => {
+    setSelectedValue(value);
+    setIsOpen(false);
+    onSelect(value);
   };
 
   return (
-    <div className="dropdown">
-      <button className="dropdown-button" onClick={toggleDropdown}>
-        <span className="dropdown-text">{selectedOption || placeholder}</span>
-        <span className="dropdown-icon">▼</span>
-      </button>
+    <div className="dropdown" ref={dropdownRef}>
+      <div 
+        className="dropdown-header" 
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        {selectedValue || placeholder}
+      </div>
       {isOpen && (
         <ul className="dropdown-menu">
           {options.map((option, index) => (
             <li
               key={index}
-              className="dropdown-item"
-              onClick={() => handleSelect(option)}
+              className={`dropdown-item ${option.className}`}
+              onMouseEnter={() => option.onMouseEnter && option.onMouseEnter()}
+              onMouseLeave={() => option.onMouseLeave && option.onMouseLeave()}
+              onClick={() => handleSelect(option.value)}
             >
-              {option}
+              {option.value}
             </li>
           ))}
         </ul>
@@ -38,4 +39,4 @@ const Dropdown = ({ options = [], placeholder = "선택", onSelect }) => {
   );
 };
 
-export default Dropdown;
+export default DropDown;

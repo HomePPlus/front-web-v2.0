@@ -13,7 +13,6 @@ const PostList = ({ posts, onDelete }) => {
           <th>글쓴이</th>
           <th>작성일</th>
           <th>조회수</th>
-          <th>관리</th>
         </tr>
       </thead>
       <tbody>

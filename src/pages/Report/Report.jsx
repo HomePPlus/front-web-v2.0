@@ -8,6 +8,7 @@ import FormGroup from '../../components/FormGroup/FormGroup';
 import FileUpload from '../../components/FileUpload/FileUpload';
 import { getUserInfo } from '../../utils/auth';
 import { createReport } from '../../api/apiClient'; // 신고 생성 API 호출 함수 임포트
+import defectTypes from '../../components/defect/defectTypes';
 
 const Report = () => {
   const navigate = useNavigate();
@@ -21,6 +22,8 @@ const Report = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // 결과 모달
   const [isLoading, setIsLoading] = useState(false);
   const [loadingProgress, setLoadingProgress] = useState(0);
+  const [selectedDefect, setSelectedDefect] = useState(null); // 선택된 결함 유형 정보 상태 추가
+  const [hoveredDefect, setHoveredDefect] = useState(null); // 호버된 결함 정보 상태 추가
 
   const handleModalClose = () => {
     setIsModalOpen(false);
@@ -50,9 +53,35 @@ const Report = () => {
     }).open();
   };
 
-  // 드롭다운 선택 핸들러
+  // 결함 유형별 색상 매핑
+  const defectColors = {
+    CRACK: '#FF6B6B',
+    PEELING: '#4ECDC4',
+    LEAK: '#45B7D1',
+    REBAR_EXPOSURE: '#96CEB4',
+    STEEL_DAMAGE: '#D4A373',
+    PAINT_DAMAGE: '#9B5DE5',
+    UNKNOWN: '#666666'
+  };
+
+  // 드롭다운 옵션 수정
+  const defectOptions = Object.entries(defectTypes).map(([key, type]) => ({
+    value: type.label,
+    className: key, // 결함 유형별 클래스 추가
+    onMouseEnter: () => setHoveredDefect(type),
+    onMouseLeave: () => setHoveredDefect(null)
+  }));
+
+  // 드롭다운 선택 핸들러 수정
   const handleDropdownSelect = (value) => {
     setSelectedOption(value);
+    // defectTypes에서 선택된 결함 유형 찾기
+    const selectedType = Object.entries(defectTypes).find(
+      ([_, type]) => type.label === value
+    );
+    if (selectedType) {
+      setSelectedDefect(selectedType[1]); // 선택된 결함 정보 저장
+    }
     console.log('선택된 값:', value);
   };
 
@@ -215,13 +244,13 @@ const Report = () => {
             </div>
           </div>
           <div className="loading-tip">{tip}</div>
-          <div className="progress-bar">
+          <div className="report-progress-bar">
             <div 
-              className="progress-fill"
+              className="report-progress-fill"
               style={{ width: `${loadingProgress}%` }}
             ></div>
           </div>
-          <div className="progress-text">
+          <div className="report-progress-text">
             {loadingProgress}%
           </div>
         </div>
@@ -289,11 +318,53 @@ const Report = () => {
             </div>
 
             {/* 결함 유형 선택 */}
-            <DropDown
-              options={['균열', '박리', '백태/누수', '철근 노출', '강재 손상', '도장 손상', '모름']}
-              placeholder="선택"
-              onSelect={handleDropdownSelect}
-            />
+            <div className="defect-selection-wrapper">
+              <div className="defect-dropdown">
+                <DropDown
+                  options={defectOptions}
+                  placeholder="결함 유형 선택"
+                  onSelect={handleDropdownSelect}
+                />
+              </div>
+              
+              {hoveredDefect && (
+                <div className={`defect-info-popup ${hoveredDefect ? 'visible' : ''}`}>
+                  <h4 style={{ 
+                    color: defectColors[Object.keys(defectTypes).find(key => defectTypes[key] === hoveredDefect)] 
+                  }}>
+                    {hoveredDefect.label}
+                  </h4>
+                  <p>{hoveredDefect.description}</p>
+                  {hoveredDefect.exampleImage && (
+                    <img 
+                      src={hoveredDefect.exampleImage} 
+                      alt={`${hoveredDefect.label} 예시`} 
+                    />
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* 선택된 결함 정보 표시 */}
+            {selectedDefect && (
+              <div className="defect-info">
+                <h4>{selectedDefect.label}</h4>
+                <p>{selectedDefect.description}</p>
+                {selectedDefect.exampleImage && (
+                  <img 
+                    src={selectedDefect.exampleImage} 
+                    alt={`${selectedDefect.label} 예시`} 
+                    style={{ 
+                      width: '100%', 
+                      maxHeight: '200px', 
+                      objectFit: 'cover',
+                      borderRadius: '8px',
+                      marginTop: '10px'
+                    }} 
+                  />
+                )}
+              </div>
+            )}
 
             {/* 파일 업로드 */}
             <FileUpload className="report-upload" onFileSelect={(file) => setSelectedFile(file)} />

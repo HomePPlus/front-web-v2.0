@@ -6,7 +6,7 @@
   border-radius: 15px;
 }
 .today-inspection-title {
-  color: #0d2bd8 !important;
+  color: #5167e6a8 !important;
 }
 
 .inspection-cards {
@@ -136,4 +136,8 @@
   overflow-y: auto;
   background: rgba(255, 255, 255, 0.4);
   border-radius: 10px;
+}
+
+.no-inspection-message {
+  color: #2e3b88e0 !important;
 }

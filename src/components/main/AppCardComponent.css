@@ -1,6 +1,7 @@
 /* 전체 카드를 감싸는 컨테이너 */
 .app-card-perspective {
   width: 100%;
+  margin-top: 30px;
   perspective: 1000px;
   background-color: transparent;
   padding: 30px; /* 배경 카드와의 여백 */
@@ -8,19 +9,22 @@
 
 /* 배경 카드 - 메인 카드를 감싸는 큰 카드 */
 .app-card {
-  width: 290px; /* 메인 카드보다 약간 크게 */
-  height: 433px;
+  width: 290px;
+  height: 470px;
   margin: auto;
   background: linear-gradient(145deg, #ec8a8a, #3e5231);
   border-radius: 20px;
   box-shadow: 
     15px 15px 30px rgba(0, 0, 0, 0.3),
     -15px -15px 30px rgba(255, 255, 255, 0.8),
-    inset 5px 5px 15px rgba(255, 247, 178, 0.5), /* 노란빛 내부 그림자 */
-    inset -5px -5px 15px rgba(255, 238, 147, 0.3); /* 노란빛 내부 그림자 */
+    inset 5px 5px 15px rgba(255, 247, 178, 0.5),
+    inset -5px -5px 15px rgba(255, 238, 147, 0.3);
   transform-style: preserve-3d;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease-out;
   position: relative;
+  cursor: pointer;
+  transform: rotateX(0deg) rotateY(0deg);
+  will-change: transform;
 }
 
 /* 실제 컨텐츠를 담는 내부 카드 */
@@ -35,7 +39,7 @@
   box-shadow: 
     8px 8px 15px rgba(0, 0, 0, 0.2),
     -8px -8px 15px rgba(255, 255, 255, 0.7);
-  transform: translateZ(20px); /* 배경 카드로부터 약간 띄움 */
+  transform: translateZ(20px);
 }
 
 /* 카드 제목 스타일링 */
@@ -45,7 +49,7 @@
   width: 100%;
   font-size: 40px;
   font-weight: 100;
-  transform: translateZ(80px);
+  transform: translateZ(40px);
   color: #ffffff;
   text-align: center;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
@@ -58,7 +62,7 @@
   bottom: 20px;
   width: 100%;
   left: 50%;
-  transform: translate(-50%, 0) translateZ(50px);
+  transform: translate(-50%, 0) translateZ(30px);
   font-size: 37px;
   font-weight: 600;
   color: #fff;
@@ -67,14 +71,13 @@
   z-index: 2;
 }
 
-/* 호버 효과 */
+/* hover 효과 제거 (선택사항) */
 .app-card:hover {
-  transform: translateY(-5px) rotateX(5deg);
   box-shadow: 
-    20px 20px 40px rgba(0, 0, 0, 0.4),
-    -20px -20px 40px rgba(255, 255, 255, 0.8),
-    inset 5px 5px 15px rgba(255, 247, 178, 0.6),
-    inset -5px -5px 15px rgba(255, 238, 147, 0.4);
+    15px 15px 30px rgba(0, 0, 0, 0.3),
+    -15px -15px 30px rgba(255, 255, 255, 0.8),
+    inset 5px 5px 15px rgba(255, 247, 178, 0.5),
+    inset -5px -5px 15px rgba(255, 238, 147, 0.3);
 }
 
 /* 배경 카드의 노란빛 효과 */

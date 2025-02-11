@@ -223,12 +223,14 @@ export const getAllReports = () => apiClient.get('/api/reports');
 export const getReportDetail = (reportId) => apiClient.get(`/api/reports/${reportId}`);
 
 // 신고 수정
-export const updateReport = (reportId, formData) =>
-  apiClient.put(`/api/reports/${reportId}`, formData, {
+export const updateReport = (reportId, data) => {
+  return apiClient.put(`/api/reports/${reportId}`, data, {
     headers: {
-      'Content-Type': 'multipart/form-data',
-    },
+      'Authorization': `Bearer ${getToken()}`, // 토큰 추가
+      'Content-Type': 'multipart/form-data'
+    }
   });
+};
 
 // 신고 삭제
 export const deleteReport = (reportId) => apiClient.delete(`/api/reports/${reportId}`);

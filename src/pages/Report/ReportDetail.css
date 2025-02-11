@@ -35,22 +35,15 @@
   margin-bottom: 10px;
 }
 
-/* 내용 영역 - 커뮤니티와 동일한 스타일 적용 */
+/* 내용 영역 */
 .report-content {
-  position: relative;
-  border-bottom: 1px solid #eee;
-  width: 850px;
-  height: 100px !important;
-  margin: 10px;
+  background: rgba(255, 255, 255, 0.9); /* 부드러운 흰색 배경 */
   padding: 20px;
-  font-family: 'eLight';
-  font-size: 20px;
-  border: none;
-  outline: none;
-  background-color: #f1f1f1;
-  border-radius: 8px;
-  box-shadow: inset 2px 2px 4px #d5d2ba, inset -2px -2px 4px #ffffe4;
-  transition: all 0.3s ease;
+  border-radius: 12px;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #34495e;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 추가 */
 }
 
 /* 이미지 영역 */
@@ -229,6 +222,9 @@
 
 .image-item {
   margin: 5px 0;
+  left: -80px;
+  background-color: #8b303000;
+  font-size: 18px;
 }
 
 .image-item a {
@@ -240,11 +236,11 @@
   text-decoration: underline;
 }
 
+/* 분석 결과 영역 */
 .detection-result {
-  margin-top: 20px;
-  padding: 15px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
+  padding: 20px;
+  border-radius: 12px;
+  min-height: 100px;
 }
 
 .detection-result h3 {
@@ -346,4 +342,17 @@
   height: 20%;
   font-size: 13px;
   font-family: 'eLight';
+}
+
+/* 첨부파일 아이콘 스타일 */
+.attach-icon {
+  margin-left: 10px;
+  font-size: 1.2rem; /* 아이콘 크기 조정 */
+  color: #2c3e50; /* 아이콘 색상 */
+  cursor: pointer; /* 클릭 가능하게 설정 */
+  transition: color 0.2s ease;
+}
+
+.attach-icon:hover {
+  color: #047a00; /* 호버 시 색상 변경 */
 }

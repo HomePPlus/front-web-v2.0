@@ -18,7 +18,7 @@ const sampleImages = [
   },
   { 
     id: 3, 
-    fileName: 'Spalling.jpg', 
+    fileName: 'spalling.jpg', 
     title: '박리 샘플 1',
     url: require('../../assets/images/model/Spalling.jpg')
   },
@@ -166,7 +166,7 @@ const MainDefect = () => {
             disabled={loading}
             className="detect-button"
           >
-            {loading ? '분석 중...' : '결함 탐지하기'}
+            {loading ? '분석 중...' : '결함 탐지해보기'}
           </button>
         </div>
 
@@ -176,12 +176,12 @@ const MainDefect = () => {
               <h3>결함 탐지 결과</h3>
               <div className="result-content">
                 <p>결함 유형: {detectionResult.defectLabel}</p>
-                <p>안전도 점수: {detectionResult.score.toFixed(1)} / 10.0</p>
+                <p>위험 점수: {detectionResult.score.toFixed(1)} / 10.0</p>
               </div>
             </div>
             
             <div className="result-section">
-              <h3>상세 설명</h3>
+              <h3>결함 설명</h3>
               <p className="result-content">
                 {defectInfo.details.content[detectionResult.defectLabel]}
               </p>

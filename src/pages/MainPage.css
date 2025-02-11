@@ -1,6 +1,6 @@
 .main-container {
   width: 100%;
-  height: 300vh;
+  height: 350vh;
   overflow-y: auto;
   padding-top: 80px; /* 메인 콘텐츠가 헤더 높이만큼 아래로 밀려나도록 설정 */
   background: linear-gradient(
@@ -12,6 +12,7 @@
     rgba(242, 200, 200, 1) 100%
   );
   position: relative;
+  overflow-x: hidden;  /* 추가: 가로 스크롤 방지 */
 }
 
 .typing-text-section {
@@ -82,15 +83,15 @@
   color: rgba(34, 32, 32, 0.8);
   font-weight: bold;
   opacity: 0;
-  margin-top: -200px;
-  transform: translateY(50px);
-  transition: all 1s ease-out;
-  margin-bottom: 10rem;
+  margin-top: 50vh;
+  transition: opacity 1s ease-out;
+  margin-bottom: 3rem;
+  position: relative;
+  will-change: transform;
 }
 
 .carousel-intro-text.show {
   opacity: 1;
-  transform: translateY(0);
 }
 
 .carousel-container {
@@ -120,4 +121,31 @@
 .fixed-scroll-image img {
   width: 80px;
   height: auto;
+}
+
+/* app-card-section 스타일 제거하고 아래 스타일로 대체 */
+.app-download-section {
+  position: absolute;
+  bottom: 30vh;
+  left: 0;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.4s ease-out;
+  padding: 60px 0;
+  z-index: 10;
+}
+
+.app-download-section.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+.defect-diagnosis {
+  color: #2d323d; /* 예를 들어 주황색으로 변경 */
 }

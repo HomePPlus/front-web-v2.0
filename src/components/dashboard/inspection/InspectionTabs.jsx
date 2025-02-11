@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import InspectionTable from "./InspectionTable";
 import UserReportTable from "../userReportTable/UserReportTable";
+import RegularInspection from "./RegularInspection";
 import "./InspectionTabs.css";
 
 const InspectionTabs = ({ onAlert, onUpdateStats }) => {
@@ -40,6 +41,19 @@ const InspectionTabs = ({ onAlert, onUpdateStats }) => {
           <label htmlFor="inspections-tab" className={`tab-label ${activeTab === "inspections" ? "active" : ""}`}>
             점검 목록
           </label>
+
+          <input
+            type="radio"
+            id="regular-tab"
+            name="inspection-tabs"
+            value="regular"
+            checked={activeTab === "regular"}
+            onChange={() => handleTabChange("regular")}
+            className="tab-input"
+          />
+          <label htmlFor="regular-tab" className={`tab-label ${activeTab === "regular" ? "active" : ""}`}>
+            정기 점검
+          </label>
         </div>
         
         {/* 점검 목록 탭이 활성화될 때만 필터 표시 */}
@@ -68,6 +82,7 @@ const InspectionTabs = ({ onAlert, onUpdateStats }) => {
             setStatusFilter={setStatusFilter}
           />
         )}
+        {activeTab === "regular" && <RegularInspection onAlert={onAlert} />}
       </div>
     </div>
   );
