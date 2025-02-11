@@ -1,9 +1,159 @@
 /* ChecklistForm.css */
 .checklist-container {
-  width: 100%;
+  padding: 2rem 2rem 2rem 280px; /* 왼쪽 패딩을 사이드바 너비만큼 추가 */
+  background: #e0e5ec;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.checklist-title {
+  color: #2d4059;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
+}
+
+.checklist-layout {
   max-width: 1200px;
   margin: 0 auto;
+  height: calc(100vh - 4rem); /* 컨테이너 높이 설정 */
+  overflow-y: auto; /* 세로 스크롤 추가 */
+  padding-right: 20px; /* 스크롤바 여백 */
+}
+
+/* 스크롤바 스타일링 */
+.checklist-layout::-webkit-scrollbar {
+  width: 8px;
+}
+
+.checklist-layout::-webkit-scrollbar-track {
+  background: #e0e5ec;
+  border-radius: 4px;
+}
+
+.checklist-layout::-webkit-scrollbar-thumb {
+  background: #a3b1c6;
+  border-radius: 4px;
+}
+
+.checklist-layout::-webkit-scrollbar-thumb:hover {
+  background: #8b9bb4;
+}
+
+.inspection-list-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
   padding: 1rem;
+}
+
+.checklist-inspection-item {
+  background: #e0e5ec;
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 8px 8px 15px #a3b1c6,
+              -8px -8px 15px #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.checklist-inspection-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 12px 12px 20px #a3b1c6,
+              -12px -12px 20px #ffffff;
+}
+
+.checklist-inspection-item.selected {
+  box-shadow: inset 8px 8px 15px #a3b1c6,
+              inset -8px -8px 15px #ffffff;
+}
+
+.inspection-info {
+  display: grid;
+  gap: 1rem;
+}
+
+.inspection-title {
+  color: #2d4059;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.inspection-details {
+  display: grid;
+  gap: 0.5rem;
+  color: #4d648d;
+}
+
+.status-select {
+  padding: 0.8rem 1.2rem;
+  border: none;
+  border-radius: 10px;
+  background: #e0e5ec;
+  color: #2d4059;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 5px 5px 10px #a3b1c6,
+              -5px -5px 10px #ffffff;
+  transition: all 0.3s ease;
+}
+
+.status-select:focus {
+  outline: none;
+  box-shadow: inset 5px 5px 10px #a3b1c6,
+              inset -5px -5px 10px #ffffff;
+}
+
+.form-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+  gap: 1rem;
+}
+
+.form-navigation button {
+  padding: 0.8rem 2rem;
+  border: none;
+  border-radius: 10px;
+  background: #e0e5ec;
+  color: #2d4059;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 5px 5px 10px #a3b1c6,
+              -5px -5px 10px #ffffff;
+  transition: all 0.3s ease;
+}
+
+.form-navigation button:hover:not(:disabled) {
+  box-shadow: inset 5px 5px 10px #a3b1c6,
+              inset -5px -5px 10px #ffffff;
+}
+
+.form-navigation button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.return-to-list-btn {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 10px;
+  background: #e0e5ec;
+  color: #2d4059;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 5px 5px 10px #a3b1c6,
+              -5px -5px 10px #ffffff;
+  margin-bottom: 2rem;
+  transition: all 0.3s ease;
+}
+
+.return-to-list-btn:hover {
+  box-shadow: inset 5px 5px 10px #a3b1c6,
+              inset -5px -5px 10px #ffffff;
 }
 
 /* 점검 목록 섹션 */
@@ -19,14 +169,6 @@
   color: #1e293b;
   margin-bottom: 1.5rem;
   font-size: 1.5rem;
-}
-
-/* 점검 목록 그리드 레이아웃 */
-.inspection-list-form {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-  gap: 1.2rem;
-  padding: 0.5rem;
 }
 
 /* 점검 아이템 카드 스타일 */
@@ -218,6 +360,7 @@
 .checklist-title {
   font-family: 'eBold';
   margin-top: 1%;
+  color: #1d304e;
   margin-left: -200px;
 }
 

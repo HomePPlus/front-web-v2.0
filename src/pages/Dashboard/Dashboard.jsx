@@ -10,28 +10,23 @@ import ChecklistPage from "./ChecklistPage";
 import { getTodayInspections } from "../../api/apiClient";
 import InspectionTabs from "../../components/dashboard/inspection/InspectionTabs";
 import DetectionStats from "../../components/dashboard/detection/DetectionStats";
+import UserReportTable from "../../components/dashboard/userReportTable/UserReportTable";
+import { useAlert } from "../../contexts/AlertContext";
+import ChecklistCompleteList from '../../components/dashboard/checklist/ChecklistCompleteList';
 
 const Dashboard = () => {
   const [activeView, setActiveView] = useState("전체");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [inspections, setInspections] = useState([]);
   const [reports, setReports] = useState([]); // 신고 데이터를 저장
-  const [alerts, setAlerts] = useState([]); // 알람 메시지 저장
   const reportDashboardRef = useRef(); // useRef를 컴포넌트 최상위 레벨에서 선언
   const [currentPage, setCurrentPage] = useState(0);
   const ITEMS_PER_PAGE = 2;
+  const { showAlert } = useAlert();  // 대신 useAlert 훅 사용
 
   // 점검 데이터와 신고 데이터를 구분
   const userReports = reports.filter((report) => report.type === "신고");
   const inspectionReports = inspections.filter((inspection) => inspection.type === "점검");
-
-  const handleAlert = (message) => {
-    console.log("알림 메시지 호출됨:", message); // 알림 로그 추가
-    setAlerts((prevAlerts) => [...prevAlerts, message]);
-    setTimeout(() => {
-      setAlerts((prevAlerts) => prevAlerts.slice(1));
-    }, 3000);
-  };
 
   const handleDateClick = async (date) => {
     try {
@@ -97,6 +92,10 @@ const Dashboard = () => {
           <div className="checklist-page-container">
             <ChecklistPage />
           </div>
+        ) : activeView === "완료목록" ? (
+          <div className="checklist-complete-container">
+            <ChecklistCompleteList />
+          </div>
         ) : activeView === "전체" ? (
           <div className="total-dashboard-view">
             <div className="map-container">
@@ -111,12 +110,7 @@ const Dashboard = () => {
           <div className="my-area-dashboard">
             <div className="inspection-list-row">
               <div className="dashboard-item inspection-list">
-                <InspectionTabs
-                  onAlert={handleAlert}
-                  userReports={userReports}
-                  inspectionReports={inspectionReports}
-                  onUpdateStats={handleUpdateStats}
-                />
+                <InspectionTabs />
               </div>
             </div>
             <div className="dashboard-bottom-row">
@@ -129,21 +123,8 @@ const Dashboard = () => {
               <div className="dashboard-item">
                 <TodayInspection />
               </div>
-              {alerts.length > 0 && (
-                <div className="alert-container">
-                  {alerts.map((alert, index) => (
-                    <div
-                      key={index}
-                      className={`alert-message ${
-                        alert.includes("실패") || alert.includes("없습니다") ? "alert-error" : "alert-success"
-                      }`}
-                    >
-                      {alert}
-                    </div>
-                  ))}
-                </div>
-              )}
             </div>
+
           </div>
         )}
 

@@ -17,29 +17,33 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import { getUserInfo } from "./utils/auth";
 import ChecklistComplete from "./components/dashboard/checklist/ChecklistComplete";
 import ErrorPage from "./pages/ErrorPage";
+import { AlertProvider } from './contexts/AlertContext';
+import './contexts/AlertContext.css';
 
 function App() {
   const userInfo = getUserInfo();
   console.log("User Info:", userInfo);
 
   return (
-    <Router>
-      <Header />
-      <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/auth" element={<Auth />} />
-        <Route path="/report" element={<Report />} />
-        <Route path="/report/list" element={<ReportList />} />
-        <Route path="/report/:reportId" element={<ReportDetail />} />
-        <Route path="/community" element={<CommunityBoard />} />
-        <Route path="/community/:postId" element={<PostDetail />} />
-        <Route path="/health" element={<HealthCheck />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/create-post" element={<CreateCommunityPost />} />
-        <Route path="/checklist/complete" element={<ChecklistComplete />} />
-        <Route path="*" element={<ErrorPage />} />
-      </Routes>
-    </Router>
+    <AlertProvider>
+      <Router>
+        <Header />
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/report" element={<Report />} />
+          <Route path="/report/list" element={<ReportList />} />
+          <Route path="/report/:reportId" element={<ReportDetail />} />
+          <Route path="/community" element={<CommunityBoard />} />
+          <Route path="/community/:postId" element={<PostDetail />} />
+          <Route path="/health" element={<HealthCheck />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/create-post" element={<CreateCommunityPost />} />
+          <Route path="/checklist/complete" element={<ChecklistComplete />} />
+          <Route path="*" element={<ErrorPage />} />
+        </Routes>
+      </Router>
+    </AlertProvider>
   );
 }
 

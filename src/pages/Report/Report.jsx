@@ -9,9 +9,11 @@ import FileUpload from '../../components/FileUpload/FileUpload';
 import { getUserInfo } from '../../utils/auth';
 import { createReport } from '../../api/apiClient'; // 신고 생성 API 호출 함수 임포트
 import defectTypes from '../../components/defect/defectTypes';
+import { useAlert } from '../../contexts/AlertContext';
 
 const Report = () => {
   const navigate = useNavigate();
+  const { showAlert } = useAlert();
   const [address, setAddress] = useState(''); // 기본 주소
   const [detailAddress, setDetailAddress] = useState(''); // 상세 주소
   const [title, setTitle] = useState(''); // 신고 제목
@@ -190,9 +192,10 @@ const Report = () => {
         );
       }
       setIsModalOpen(true);
+      showAlert('신고가 성공적으로 접수되었습니다.');
     } catch (error) {
       console.error('신고 제출 중 오류:', error);
-      alert('신고 제출 중 오류가 발생했습니다.');
+      showAlert(error.response?.data?.message || '신고 접수 중 오류가 발생했습니다.', 'error');
     } finally {
       setIsLoading(false);
     }

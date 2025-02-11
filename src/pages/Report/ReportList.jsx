@@ -8,6 +8,7 @@ import "./ReportList.css";
 import Loading from "../../components/common/Loading/Loading";
 import { getUserInfo } from "../../utils/auth";
 import SliderToggle from "../../components/common/Button/SliderToggle";
+import { useAlert } from '../../contexts/AlertContext';
 
 const ReportList = () => {
   const [reports, setReports] = useState([]);
@@ -17,6 +18,7 @@ const ReportList = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState("mine");
+  const { showAlert } = useAlert();
 
   const userInfo = getUserInfo();
   const loggedInEmail = userInfo?.email;
@@ -33,63 +35,64 @@ const ReportList = () => {
 
   const handleReportClick = (reportId, isAuthor) => {
     if (!isAuthor) {
-      alert("본인이 작성한 글만 확인할 수 있습니다.");
+      showAlert("본인이 작성한 글만 확인할 수 있습니다.", 'error');
       return;
     }
     navigate(`/report/${reportId}`);
   };
 
-  useEffect(() => {
-    const fetchReports = async () => {
-      try {
-        console.groupCollapsed('[API 요청 시작]');
-        console.log('요청 파라미터:', { 
-          viewMode, 
-          userId: loggedInUserId 
-        });
+  const fetchReports = async () => {
+    try {
+      console.groupCollapsed('[API 요청 시작]');
+      console.log('요청 파라미터:', { 
+        viewMode, 
+        userId: loggedInUserId 
+      });
 
-        const response = await getAllReports(viewMode, loggedInUserId);
-        console.log('API 원본 응답:', response);
+      const response = await getAllReports(viewMode, loggedInUserId);
+      console.log('API 원본 응답:', response);
 
-        // 데이터 유효성 검사
-        if (!response.data?.data) {
-          throw new Error('잘못된 응답 구조');
-        }
-
-        // 데이터 변환 및 로깅
-        const processedData = response.data.data.map((report, index) => {
-          console.log(`신고 ${index + 1} 처리:`, {
-            raw: report,
-            formatted: {
-              id: report.report_id,
-              title: report.report_title,
-              date: new Date(report.report_date).toLocaleDateString(),
-              type: report.defect_type,
-              userId: report.user_id
-            }
-          });
-          return {
-            ...report,
-            report_date: new Date(report.report_date) // 날짜 객체 변환
-          };
-        });
-
-        console.log('처리된 데이터:', processedData);
-        setReports(processedData);
-        setError(null);
-      } catch (error) {
-        console.error('[에러 상세 정보]', {
-          message: error.message,
-          stack: error.stack,
-          response: error.response
-        });
-        setError('신고 목록 불러오기 실패: ' + error.message);
-      } finally {
-        setLoading(false);
-        console.groupEnd();
+      // 데이터 유효성 검사
+      if (!response.data?.data) {
+        throw new Error('잘못된 응답 구조');
       }
-    };
 
+      // 데이터 변환 및 로깅
+      const processedData = response.data.data.map((report, index) => {
+        console.log(`신고 ${index + 1} 처리:`, {
+          raw: report,
+          formatted: {
+            id: report.report_id,
+            title: report.report_title,
+            date: new Date(report.report_date).toLocaleDateString(),
+            type: report.defect_type,
+            userId: report.user_id
+          }
+        });
+        return {
+          ...report,
+          report_date: new Date(report.report_date) // 날짜 객체 변환
+        };
+      });
+
+      console.log('처리된 데이터:', processedData);
+      setReports(processedData);
+      setError(null);
+    } catch (error) {
+      console.error('[에러 상세 정보]', {
+        message: error.message,
+        stack: error.stack,
+        response: error.response
+      });
+      setError('신고 목록 불러오기 실패: ' + error.message);
+      showAlert('신고 목록을 불러오는데 실패했습니다.', 'error');
+    } finally {
+      setLoading(false);
+      console.groupEnd();
+    }
+  };
+
+  useEffect(() => {
     fetchReports();
   }, [viewMode, loggedInUserId]); // 뷰 모드 변경 시 재요청
 

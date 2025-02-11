@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getReportDetail, deleteReport, updateReport } from '../../api/apiClient';
+import { getReportDetail, deleteReport, updateReport} from '../../api/apiClient';
 import FormGroup from '../../components/FormGroup/FormGroup';
 import './ReportDetail.css';
 import Loading from '../../components/common/Loading/Loading';
 import { getUserInfo } from '../../utils/auth';
+import { useAlert } from '../../contexts/AlertContext';
 
 const ReportDetail = () => {
   const { reportId } = useParams();
@@ -19,26 +20,28 @@ const ReportDetail = () => {
   const userInfo = getUserInfo();
   const loggedInEmail = userInfo?.email;
   const loggedInUserId = userInfo?.userId;
+  const { showAlert } = useAlert();
 
   // userId 비교 로직
   const isAuthor = (reportUserId) => {
     return Number(reportUserId) === Number(userInfo?.userId);
   };
 
-  useEffect(() => {
-    const fetchReportDetail = async () => {
-      try {
-        const response = await getReportDetail(reportId);
-        setReport(response.data.data); // 응답 구조에 맞게 수정
-        setError(null);
-      } catch (error) {
-        setError('신고 세부 정보를 불러오는데 실패했습니다.');
-        console.error('Error fetching report detail:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // fetchReportDetails 함수 추가
+  const fetchReportDetail = async () => {
+    try {
+      const response = await getReportDetail(reportId);
+      setReport(response.data.data);
+      setError(null);
+    } catch (error) {
+      showAlert('신고 세부 정보를 불러오는데 실패했습니다.', 'error');
+      console.error('Error fetching report detail:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchReportDetail();
   }, [reportId]);
 
@@ -46,11 +49,11 @@ const ReportDetail = () => {
     if (window.confirm('정말 삭제하시겠습니까?')) {
       try {
         await deleteReport(reportId);
-        alert('삭제가 완료되었습니다.'); // 삭제 성공 알림 추가
+        showAlert('신고가 성공적으로 삭제되었습니다.');
         navigate('/report/list');
       } catch (error) {
-        console.error('신고 삭제 중 오류:', error);
-        alert('삭제 중 오류가 발생했습니다.'); // 에러 발생 시 알림 추가
+        console.error('신고 삭제 실패:', error);
+        showAlert('신고 삭제 중 오류가 발생했습니다.', 'error');
       }
     }
   };
@@ -133,12 +136,14 @@ const ReportDetail = () => {
       }
 
       await updateReport(reportId, formData);
+      showAlert('신고가 성공적으로 수정되었습니다.');
       setIsEditing(false);
       // 업데이트 후 데이터 다시 불러오기
       const response = await getReportDetail(reportId);
       setReport(response.data.data);
     } catch (error) {
-      console.error('신고 수정 중 오류:', error);
+      showAlert('신고 수정 중 오류가 발생했습니다.', 'error');
+
     }
   };
 

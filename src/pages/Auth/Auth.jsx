@@ -5,6 +5,7 @@ import { login } from "../../api/apiClient";
 import { setUserType, setToken, getToken } from "../../utils/auth";
 import Cookies from "js-cookie";
 import "./Auth.css";
+import { useAlert } from "../../contexts/AlertContext";
 
 import {
   registerResident,
@@ -14,14 +15,40 @@ import {
   checkEmail,
 } from "../../api/apiClient";
 
+// 로깅 유틸리티 함수
+const logApiResponse = (label, response) => {
+  console.group(`🌐 API Response: ${label}`);
+  console.log('전체 응답:', response);
+  console.log('Status:', response?.status);
+  console.log('Response.data:', response?.data);
+  console.log('Response.data.data:', response?.data?.data);
+  console.log('Response.data.message:', response?.data?.message);
+  console.groupEnd();
+};
+
+// 에러 로깅 유틸리티 함수
+const logApiError = (label, error) => {
+  console.group(`❌ API Error: ${label}`);
+  console.log('Error:', error);
+  console.log('Error Response:', error.response);
+  console.log('Error Response Data:', error.response?.data);
+  console.log('Error Message:', error.response?.data?.message);
+  console.log('Error Status:', error.response?.status);
+  console.groupEnd();
+};
+
 function Auth() {
   const navigate = useNavigate();
+  const {showAlert} = useAlert();
+
+
   // 로그인 상태
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showEmailVerification, setShowEmailVerification] = useState(false);
+
 
   // 회원가입 상태
   const [registerEmail, setRegisterEmail] = useState("");
@@ -51,20 +78,22 @@ function Auth() {
 
     try {
       const response = await login({ email, password });
+      logApiResponse('로그인', response);
+
       if (response.data.status === 200) {
-        // 응답 데이터에서 토큰을 직접 가져와서 저장
         const token = response.data.data.token;
         setToken(token);
         setUserType(response.data.data.userType);
-        // userId를 쿠키에 저장
         Cookies.set("userId", response.data.data.userId);
 
-        // 루트 페이지로 이동 후 새로고침
-        navigate("/", { replace: true }); // replace: true로 설정하여 뒤로가기 방지
+        await showAlert('안주에 오신 걸 환영해요!', 'success');
+        navigate("/", { replace: true });
         window.location.reload();
       }
     } catch (err) {
+      logApiError('로그인 실패', err);
       setError(err.response?.data?.message || "로그인 중 오류가 발생했습니다.");
+      await showAlert(err.response?.data?.message || "로그인에 실패했습니다.", 'error');
     } finally {
       setIsLoading(false);
     }
@@ -74,25 +103,41 @@ function Auth() {
   const handleEmailVerification = async (email) => {
     try {
       const checkResponse = await checkEmail(email);
+      logApiResponse('이메일 중복 체크', checkResponse);
+
+      // response.data.status로 상태 확인
+      if (checkResponse.data.status === 400 || checkResponse.data.status === 409) {
+        await showAlert(checkResponse.data.message, 'warning');
+        return;
+      }
+
+      // 이메일 중복 체크 성공
       if (checkResponse.data.status === 200) {
-        // 이미 인증 코드가 전송된 이메일인지 확인
-        if (checkResponse.data.isCodeSent) {
-          alert("이미 인증 코드가 전송된 이메일입니다.");
-          return; // 함수 종료
+        // 이미 코드가 전송된 경우
+        if (checkResponse.data.data?.isCodeSent) {
+          await showAlert("이미 인증 코드가 전송된 이메일입니다.", 'info');
+          return;
         }
 
+        // 인증 코드 전송
         const response = await sendVerificationCode(email);
+        logApiResponse('인증 코드 전송', response);
+
         if (response.data.status === 200) {
-          alert(response.data.message);
+          await showAlert("인증 코드가 이메일로 전송되었습니다.", 'success');
           setShowEmailVerification(true);
-          setCodeRequestTime(Date.now()); // 현재 시간을 저장
-          setIsCodeExpired(false); // 코드 만료 상태 초기화
+          setCodeRequestTime(Date.now());
+          setIsCodeExpired(false);
+        } else {
+          // 200이 아닌 경우 (400 등)
+          await showAlert(response.data.message, 'warning');
         }
       }
     } catch (error) {
-      const errorMessage = error.response?.data?.message;
-      setVerificationError(errorMessage || "인증 코드 전송에 실패했습니다.");
-      alert(errorMessage);
+      logApiError('이메일 인증 실패', error);
+      const errorMessage = error.response?.data?.message || "인증 코드 전송에 실패했습니다.";
+      setVerificationError(errorMessage);
+      await showAlert(errorMessage, 'error');
     }
   };
 
@@ -101,37 +146,82 @@ function Auth() {
     try {
       // 반드시 email과 code 모두 전달
       const response = await verifyEmail(registerEmail, verificationCode);
+      logApiResponse('인증 코드 확인', response);
+
+      if (response.data.status === 400) {
+        await showAlert(response.data.message, 'warning');
+        return;
+      }
+
       if (response.data.status === 200) {
         setIsEmailVerified(true);
         setVerificationError("");
-        alert("인증 성공: " + response.data.message);
+        await showAlert(response.data.message || "이메일 인증이 완료되었습니다.", 'success');
       }
     } catch (error) {
+      logApiError('인증 코드 확인 실패', error);
       const errorMessage = error.response?.data?.message || "인증 처리 실패";
       setVerificationError(errorMessage);
-      alert("오류: " + errorMessage);
+      await showAlert(errorMessage, 'error');
     }
   };
 
   // 회원가입 핸들러
   const handleRegister = async (userType, userData) => {
     try {
+      await showAlert("회원가입 처리 중입니다...", 'info');
+
       const registerFn = userType === "resident" ? registerResident : registerInspector;
       const response = await registerFn(userData);
+      logApiResponse('회원가입', response);
+      
+      // response.data.status로 상태 확인
+      if (response.data.status === 400 || response.data.status === 409) {
+        // 유효성 검사 오류 처리
+        if (response.data.data) {
+          // 각각의 유효성 검사 오류 메시지를 순차적으로 표시
+          const errorData = response.data.data;
+          for (const key in errorData) {
+            await showAlert(errorData[key], 'warning');
+          }
+        } else {
+          // 일반적인 오류 메시지
+          await showAlert(response.data.message || "입력값을 확인해주세요.", 'warning');
+        }
+        return;
+      }
+      
       if (response.data.status === 200) {
-        alert(response.data.message);
+        await showAlert('회원가입이 완료되었습니다.', 'success');
         return response;
       }
     } catch (error) {
-      // 에러 응답 처리 수정
+      logApiError('회원가입 실패', error);
+
       if (error.response?.data) {
-        const validationErrors = error.response.data;
-        // 유효성 검증 에러 메시지 표시
-        Object.keys(validationErrors).forEach((key) => {
-          alert(`${key}: ${validationErrors[key]}`);
-        });
+        const errorData = error.response.data;
+        
+        if (errorData.status === 409) {
+          await showAlert(errorData.message, 'warning');
+          return;
+        }
+        
+        if (errorData.status === 400) {
+          // 유효성 검사 오류 처리
+          if (errorData.data) {
+            const validationErrors = errorData.data;
+            for (const key in validationErrors) {
+              await showAlert(validationErrors[key], 'warning');
+            }
+          } else {
+            await showAlert(errorData.message || "입력값을 확인해주세요.", 'warning');
+          }
+          return;
+        }
+
+        await showAlert(errorData.message || "회원가입에 실패했습니다.", 'error');
       } else {
-        alert("회원가입에 실패했습니다.");
+        await showAlert("서버와의 통신에 실패했습니다.", 'error');
       }
       throw error;
     }

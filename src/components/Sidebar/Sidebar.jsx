@@ -3,8 +3,7 @@ import React, { useState, useRef } from 'react';
 import {
   MdDashboard,
   MdShowChart,
-  MdMenuBook,
-  MdTouchApp,
+  MdAssignment,
   MdCheckCircle,
   MdFeedback,
   MdPeople,
@@ -65,22 +64,6 @@ const Sidebar = ({ onViewChange }) => {
         </span>
         <ul className="sidebar-items">
           <li className="sidebar-item">
-            <a className="sidebar-item-box" href="#" title="Guides">
-              <span className="sidebar-item-icon">
-                <MdMenuBook size={24} />
-              </span>
-              <span className="sidebar-item-text">가이드</span>
-            </a>
-          </li>
-          {/* <li className="sidebar-item">
-            <a className="sidebar-item-box" href="#" title="Hotspots">
-              <span className="sidebar-item-icon">
-                <MdTouchApp size={24} />
-              </span>
-              <span className="sidebar-item-text">Hotspots</span>
-            </a>
-          </li> */}
-          <li className="sidebar-item">
             <button className="sidebar-item-box" onClick={() => onViewChange('체크리스트')} title="Checklists">
               <span className="sidebar-item-icon">
                 <MdCheckCircle size={24} />
@@ -88,14 +71,14 @@ const Sidebar = ({ onViewChange }) => {
               <span className="sidebar-item-text">체크리스트</span>
             </button>
           </li>
-          {/* <li className="sidebar-item">
-            <a className="sidebar-item-box" href="#" title="NPS">
+          <li className="sidebar-item">
+            <button className="sidebar-item-box" onClick={() => onViewChange('완료목록')} title="CompletedChecklists">
               <span className="sidebar-item-icon">
-                <MdFeedback size={24} />
+                <MdAssignment size={24} />
               </span>
-              <span className="sidebar-item-text">NPS</span>
-            </a>
-          </li> */}
+              <span className="sidebar-item-text">AI 보고서</span>
+            </button>
+          </li>
         </ul>
 
         {/* Customize 섹션 */}
@@ -103,14 +86,6 @@ const Sidebar = ({ onViewChange }) => {
           <span className="sidebar-heading-text">Customize</span>
         </span>
         <ul className="sidebar-items">
-          {/* <li className="sidebar-item">
-            <a className="sidebar-item-box" href="#" title="Segments">
-              <span className="sidebar-item-icon">
-                <MdPeople size={24} />
-              </span>
-              <span className="sidebar-item-text">Segments</span>
-            </a>
-          </li> */}
           <li className="sidebar-item">
             <a className="sidebar-item-box" href="#" title="Themes">
               <span className="sidebar-item-icon">

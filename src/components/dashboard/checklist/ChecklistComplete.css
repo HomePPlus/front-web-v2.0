@@ -1,15 +1,36 @@
 .checklist-complete-container {
-  max-width: 600px;
+  max-width: 800px;
   margin: 4rem auto;
-  padding: 2rem;
-  text-align: center;
+  padding: 2rem 2rem 2rem 280px;
+  height: calc(100vh - 8rem);
+  overflow-y: auto;
+}
+
+.checklist-complete-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.checklist-complete-container::-webkit-scrollbar-track {
+  background: #e0e5ec;
+  border-radius: 4px;
+}
+
+.checklist-complete-container::-webkit-scrollbar-thumb {
+  background: #a3b1c6;
+  border-radius: 4px;
+}
+
+.checklist-complete-container::-webkit-scrollbar-thumb:hover {
+  background: #8b9bb4;
 }
 
 .complete-content {
   background: #ffffff;
   border-radius: 12px;
   padding: 3rem 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 8px 8px 15px #a3b1c6,
+              -8px -8px 15px #ffffff;
+  margin-bottom: 2rem;
 }
 
 .complete-content h1 {
@@ -252,4 +273,30 @@
 @keyframes shimmer {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
+}
+
+/* 보고서 미리보기 섹션 스크롤 */
+.preview-content {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 15px;
+}
+
+/* 미리보기 스크롤바 스타일링 */
+.preview-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.preview-content::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.preview-content::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.preview-content::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 } 

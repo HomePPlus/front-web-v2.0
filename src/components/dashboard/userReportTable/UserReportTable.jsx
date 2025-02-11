@@ -3,6 +3,7 @@ import "./UserReportTable.css";
 import { getReservableReports, createInspectionReports } from "../../../api/apiClient";
 import DatePicker from "react-datepicker"; // DatePicker 라이브러리 설치 필요
 import "react-datepicker/dist/react-datepicker.css"; // DatePicker 스타일링
+import { useAlert } from '../../../contexts/AlertContext';
 
 const UserReportTable = ({ onUpdateStats, onAlert }) => {
   const [reports, setReports] = useState([]); // 신고 목록
@@ -11,6 +12,7 @@ const UserReportTable = ({ onUpdateStats, onAlert }) => {
   const [selectedReportId, setSelectedReportId] = useState(null); // 선택한 신고 ID
   const [scheduleDate, setScheduleDate] = useState(new Date()); // 예약 날짜
   const [showDatePicker, setShowDatePicker] = useState(false); // DatePicker 표시 여부
+  const { showAlert } = useAlert();
 
   const fetchReports = async () => {
     try {
@@ -31,7 +33,7 @@ const UserReportTable = ({ onUpdateStats, onAlert }) => {
     } catch (error) {
       console.error("API Error:", error);
       setError("신고 목록을 불러오는데 실패했습니다.");
-      onAlert("신고 목록을 불러오는데 실패했습니다.");
+      showAlert("신고 목록을 불러오는데 실패했습니다.", 'error');
     } finally {
       setLoading(false);
     }
@@ -43,7 +45,7 @@ const UserReportTable = ({ onUpdateStats, onAlert }) => {
 
   const handleReserve = async () => {
     if (!selectedReportId) {
-      alert("신고를 선택해주세요.");
+      showAlert("신고를 선택해주세요.", 'error');
       return;
     }
 
@@ -54,14 +56,15 @@ const UserReportTable = ({ onUpdateStats, onAlert }) => {
 
     try {
       const response = await createInspectionReports(requestData);
-      alert(response.data.message || "예약이 성공적으로 등록되었습니다.");
+
+      showAlert(response.data.message || "예약이 성공적으로 등록되었습니다.");
       fetchReports();
       setShowDatePicker(false);
       setSelectedReportId(null);
       onUpdateStats(); // API를 통해 최신 통계 가져오기
     } catch (error) {
       console.error("API Error:", error);
-      onAlert("예약 등록에 실패했습니다.");
+      showAlert("예약 등록에 실패했습니다.", 'error');
     }
   };
 
@@ -77,7 +80,7 @@ const UserReportTable = ({ onUpdateStats, onAlert }) => {
     selectedDate.setHours(0, 0, 0, 0);
 
     if (selectedDate.getTime() === today.getTime()) {
-      onAlert("오늘 날짜는 예약할 수 없습니다. 다른 날짜를 선택해주세요.");
+      showAlert("오늘 날짜는 예약할 수 없습니다. 다른 날짜를 선택해주세요.", 'error');
       return;
     }
     setScheduleDate(date);

@@ -13,6 +13,7 @@ import { HiMail } from "react-icons/hi";
 import React, { useState } from "react";
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import "./AuthForm.css";
+import { useAlert } from "../../contexts/AlertContext";
 
 function AuthForm({
   // 로그인 관련 props
@@ -53,6 +54,7 @@ function AuthForm({
     roadAddress: "",
     detailAddress: "",
   });
+  const { showAlert } = useAlert();
 
   const switchForm = () => setIsLogin(!isLogin);
   const open = useDaumPostcodePopup(
@@ -94,7 +96,7 @@ function AuthForm({
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();
     if (!isEmailVerified) {
-      alert("이메일 인증을 완료해주세요.");
+      showAlert("이메일 인증을 완료해주세요.", "warning");
       return;
     }
     try {
@@ -112,6 +114,7 @@ function AuthForm({
       switchForm();
     } catch (error) {
       console.error("Registration error:", error);
+      showAlert("회원가입에 실패했습니다. 다시 시도해주세요.", "error");
     }
   };
 

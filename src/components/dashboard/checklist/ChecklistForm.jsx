@@ -12,6 +12,7 @@ import OverallAssessmentStep from './ChecklistSteps/OverallAssessmentStep';
 import { getInspectionReports, updateInspectionStatus, submitChecklist } from "../../../api/apiClient";
 import Loading from "../../common/Loading/Loading";
 import { useNavigate } from 'react-router-dom';
+import { useAlert } from "../../../contexts/AlertContext";
 
 const initialFormData = {
   basicInfo: {
@@ -88,7 +89,30 @@ const initialFormData = {
 
 const steps = ['기본 정보', '콘크리트 균열', '누수/백태', '강재 손상', '박리', '철근 노출', '도장 손상', '종합 평가'];
 
+// 로깅 유틸리티 함수 추가
+const logApiResponse = (label, response) => {
+  console.group(`🌐 API Response: ${label}`);
+  console.log('전체 응답:', response);
+  console.log('Status:', response?.status);
+  console.log('Response.data:', response?.data);
+  console.log('Response.data.data:', response?.data?.data);
+  console.log('Response.data.message:', response?.data?.message);
+  console.groupEnd();
+};
+
+// 에러 로깅 유틸리티 함수 추가
+const logApiError = (label, error) => {
+  console.group(`❌ API Error: ${label}`);
+  console.log('Error:', error);
+  console.log('Error Response:', error.response);
+  console.log('Error Response Data:', error.response?.data);
+  console.log('Error Message:', error.response?.data?.message);
+  console.log('Error Status:', error.response?.status);
+  console.groupEnd();
+};
+
 const ChecklistForm = ({ onError, onSuccess }) => {
+  const { showAlert } = useAlert();
   const [formData, setFormData] = useState(initialFormData);
   const [currentStep, setCurrentStep] = useState(0);
   const [inspections, setInspections] = useState([]);
@@ -162,19 +186,31 @@ const ChecklistForm = ({ onError, onSuccess }) => {
   const handleStatusChange = async (inspectionId, newStatus) => {
     try {
       const response = await updateInspectionStatus(inspectionId, newStatus);
+      logApiResponse('상태 변경', response);
       
-      if (response.data.status === 200 || response.status === 200) {
+      // response.data.status로 상태 체크
+      if (response.data.status === 409) {
+        // 상태 변경 불가능한 경우
+        await showAlert(response.data.message, 'warning');
+        // 상태 변경이 실패했으므로 목록을 새로고침하여 원래 상태로 되돌림
         await fetchInspections();
-        onSuccess?.("상태가 성공적으로 변경되었습니다.");
+        return;
+      }
+      
+      if (response.data.status === 200) {
+        await fetchInspections();
+        await showAlert(`점검 상태가 "${newStatus}"(으)로 변경되었습니다.`, 'success');
       } else {
-        const errorMessage = "상태 변경에 실패했습니다.";
-        onError?.(errorMessage);
-        console.error("상태 변경 실패:", response.data.message);
+        // 그 외의 실패 케이스
+        const errorMessage = response.data.message || "상태 변경에 실패했습니다.";
+        await showAlert(errorMessage, 'error');
+        await fetchInspections(); // 목록 새로고침
       }
     } catch (error) {
-      const errorMessage = "상태 변경 중 오류가 발생했습니다.";
-      onError?.(errorMessage);
-      console.error("상태 변경 실패. 에러 상세:", error);
+      logApiError('상태 변경 실패', error);
+      const errorMessage = error.response?.data?.message || "상태 변경 중 오류가 발생했습니다.";
+      await showAlert(errorMessage, 'error');
+      await fetchInspections(); // 에러 발생 시에도 목록 새로고침
     }
   };
 
@@ -205,11 +241,12 @@ const ChecklistForm = ({ onError, onSuccess }) => {
     
     try {
       if (!selectedInspection) {
-        alert("점검할 신고를 선택해주세요.");
+        await showAlert("점검할 신고를 선택해주세요.", 'warning');
         return;
       }
 
       setLoading(true);
+      await showAlert("체크리스트 제출 중...", 'info');
 
       const requestData = {
         inspection_id: selectedInspection.inspection_id,
@@ -284,7 +321,7 @@ const ChecklistForm = ({ onError, onSuccess }) => {
       console.log('제출 시도:', requestData); // 디버깅용 로그
 
       const response = await submitChecklist(requestData);
-      console.log('서버 응답:', response); // 디버깅용 로그
+      logApiResponse('체크리스트 제출', response);
       
       if (response.status === 200 || response.data.status === 200) {
         await handleStatusChange(selectedInspection.inspection_id, '완료');
@@ -296,6 +333,7 @@ const ChecklistForm = ({ onError, onSuccess }) => {
           inspection_date: formData.basicInfo.inspectionDate,
           inspector_name: formData.basicInfo.inspectorName,
           defect_types: formData.basicInfo.defectTypes,
+          detection_label: selectedInspection.detection_label
         };
         
         // localStorage에 저장
@@ -305,12 +343,14 @@ const ChecklistForm = ({ onError, onSuccess }) => {
 
         setSubmitSuccess(true);
         setShowCompleteModal(true);
+        await showAlert("체크리스트가 성공적으로 제출되었습니다.", 'success');
       } else {
         throw new Error('서버 응답이 올바르지 않습니다.');
       }
     } catch (error) {
-      console.error('체크리스트 제출 실패:', error);
-      alert('체크리스트 제출에 실패했습니다.');
+      logApiError('체크리스트 제출 실패', error);
+      const errorMessage = error.response?.data?.message || "체크리스트 제출에 실패했습니다.";
+      await showAlert(errorMessage, 'error');
     } finally {
       setLoading(false);
     }
@@ -381,7 +421,7 @@ const ChecklistForm = ({ onError, onSuccess }) => {
                         <span>예정일: {inspection.schedule_date}</span>
                         <span>주소: {reportInfo.detail_address || "-"}</span>
                         <span>신고된 결함: {translateDefectType(reportInfo.defect_type) || "-"}</span>
-                        <span>AI 분석 결과: {translateDefectType(reportInfo.defect_type) || "-"}</span>
+                        <span>AI 분석 결과: {translateDefectType(inspection.detection_label) || "-"}</span>
                       </div>
                     </div>
                     <div className="inspection-status-form">
