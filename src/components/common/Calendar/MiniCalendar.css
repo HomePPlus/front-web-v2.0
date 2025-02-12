@@ -241,6 +241,7 @@
 /* 모달 닫기 버튼 */
 .modal-content button {
   background-color: #d5dbe5;
+  margin: 0 auto;
   color: #0a2c14;
   border: none;
   padding: 10px 20px;
@@ -261,19 +262,19 @@
   transform: scale(0.98);
 }
 /* 점검 정보 아이템 */
-.inspection-item {
+.calendar-inspection-item {
   margin-bottom: 20px;
   padding-bottom: 10px;
   border-bottom: 1px solid #d1d9e6;
 }
 
-.inspection-item h3 {
+.calendar-inspection-item h3 {
   font-weight: 700;
   font-size: 16px;
   margin-bottom: 10px;
 }
-
-.inspection-item p {
+ 
+.calendar-inspection-item p {
   font-family: 'eLight';
   color: #0a2c14;
   margin-bottom: 10px;

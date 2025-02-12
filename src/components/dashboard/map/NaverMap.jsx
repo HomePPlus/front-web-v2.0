@@ -128,7 +128,7 @@ const NaverMap = () => {
             mapTypeControl: true,
             zoomControl: true,
             zoomControlOptions: {
-              position: window.naver.maps.Position.TOP_RIGHT,
+              position: window.naver.maps.Position.TOP_LEFT,
             },
           });
 

@@ -136,7 +136,7 @@ const Dashboard = () => {
                 <>
                   <div className="inspection-items-container">
                     {currentInspections.map((inspection, index) => (
-                      <div key={index} className="inspection-item">
+                      <div key={index} className="calendar-inspection-item">
                         <h3>점검 {currentPage * ITEMS_PER_PAGE + index + 1}</h3>
                         <p>날짜: {inspection.schedule_date}</p>
                         <p>상태: {inspection.status}</p>
