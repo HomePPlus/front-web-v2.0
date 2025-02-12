@@ -130,6 +130,10 @@
   display: block;
 }
 
+.form-group{
+  position:  relative !important;
+}
+
 .button-report:hover {
   background-color: #0a8d15;
   color: rgb(240, 227, 108);
@@ -137,12 +141,18 @@
 }
 
 .pagination-container-report {
-  position: relative;
+  position: absolute;
   display: flex;
   justify-content: center;
-  top: -3.5vh;
+  bottom: 7%;
   margin-top: 20px;
 }
+
+.arrow:hover,
+.pg-link:hover{
+  cursor: pointer;
+}
+
 
 .delete-button {
   background-color: #d1d1d1;

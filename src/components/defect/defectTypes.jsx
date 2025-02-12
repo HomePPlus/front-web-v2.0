@@ -5,6 +5,7 @@ import efforescenceImage from '../../assets/images/model/efforescence.jpg';
 import exposureImage from '../../assets/images/model/exposure.jpg';
 import steeldefectImage from '../../assets/images/model/steeldefect.jpg';
 import paintdamageImage from '../../assets/images/model/paintdamage.jpg';
+import gptImg from '../../assets/images/model/gptimg.png';
 
 const defectTypes = {
   CRACK: {
@@ -40,6 +41,7 @@ const defectTypes = {
   UNKNOWN: {
     label: '모름',
     description: '결함 유형을 모르실 경우 선택해주세요.',
+    exampleImage: gptImg,
   },
   // 추가 결함 유형...
 };

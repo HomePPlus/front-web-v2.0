@@ -348,7 +348,6 @@
 
 .defect-selection-wrapper {
   position: absolute;
-  /* min-height: 200px; */
   left:103%;
   top: 10px;
 }
@@ -357,27 +356,13 @@
   width: 200px;
 }
 
-.defect-info-popup {
-  position: absolute;
-  right: 20px;
-  top: 100%;
-  background: white;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: 300px;
-  height: 260px;  /* 팝업 전체 높이 고정 */
-  z-index: 1000;
-  pointer-events: none;
-  display: flex;  /* flex 컨테이너로 설정 */
-  flex-direction: column;  /* 세로 방향 정렬 */
-}
-
 /* 팝업이 보일 때의 스타일 */
 .defect-info-popup.visible {
   opacity: 1;
-  visibility: visible;
-  top: 100% !important;
+  top: -50% !important;
+  z-index: 1000;
+  min-height: 350px !important;
+  box-sizing: border-box;
 }
 
 .defect-info-popup h4 {
@@ -389,13 +374,18 @@
   flex-shrink: 0;  /* 텍스트 영역 크기 고정 */
 }
 
-.defect-info-popup img {
-  width: 300px;
-  height: 200px;
+.defect-example-image {
+  overflow: hidden;
+  width: 100%;
+  height: auto !important;  /* 고정 높이 대신 자동으로 조정 */
+  max-height: 200px !important;  /* 최대 높이 제한 */
   object-fit: contain;
-  border-radius: 4px;
-  margin-top: auto;  /* 이미지를 하단에 배치 */
+  border-radius: 10px;
+  margin: 15px 0;
   background-color: #f5f5f5;
+  box-shadow: 
+    inset 4px 4px 8px #bebebe,
+    inset -4px -4px 8px #ffffff;
 }
 
 
