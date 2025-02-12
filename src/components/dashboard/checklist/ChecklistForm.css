@@ -217,7 +217,9 @@
 
 .checklist-title {
   font-family: 'eBold';
-  margin-top: 1%;
+  color: #1e293b;
+  margin-top: 5%;
+  margin-left: -19%;
 }
 
 .checklist-section {
@@ -537,6 +539,7 @@
 .defect-selection-title {
   color: #64748b;
   font-size: 0.9rem;
+
   margin-bottom: 1rem;
 }
 
@@ -552,6 +555,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem;
+  font-family: 'eMedium';
   background: white;
   border-radius: 6px;
   border: 1px solid #e2e8f0;
