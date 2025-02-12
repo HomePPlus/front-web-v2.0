@@ -334,5 +334,9 @@
   align-items: center;
   font-family: 'eMedium';
   justify-content: center;
+}
 
+.cal-close-btn {
+  display: flex;
+  justify-content: center;
 }
