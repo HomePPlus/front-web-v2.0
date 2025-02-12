@@ -5,17 +5,27 @@ import { Link } from "react-router-dom";
 import "./CommunityBoard.css";
 
 const PostItem = ({ post, onDelete }) => {
+  console.group(`PostItem(${post.communityPostId}) 렌더링`);
+  console.log('게시글 데이터:', post);
+  console.log('작성일:', post.communityCreatedAt);
+  console.log('조회수:', post.communityViews);
+  console.groupEnd();
+
   const formatDate = (dateString) => {
-    if (!dateString) return '';
+    if (!dateString) {
+      console.warn('날짜 문자열이 없습니다.');
+      return '';
+    }
     
     try {
       const date = new Date(dateString);
       if (isNaN(date.getTime())) {
-        return ''; // 유효하지 않은 날짜인 경우 빈 문자열 반환
+        console.error('유효하지 않은 날짜:', dateString);
+        return '';
       }
       return format(date, 'yyyy-MM-dd HH:mm');
     } catch (error) {
-      console.error('Date formatting error:', error);
+      console.error('날짜 포맷 에러:', error);
       return '';
     }
   };
@@ -31,14 +41,6 @@ const PostItem = ({ post, onDelete }) => {
       <td>{post.userName}</td>
       <td>{formatDate(post.communityCreatedAt)}</td>
       <td>{post.communityViews}</td>
-      <td>
-        <button
-          onClick={() => onDelete(post.communityPostId)}
-          className="delete-button"
-        >
-          삭제
-        </button>
-      </td>
     </tr>
   );
 };

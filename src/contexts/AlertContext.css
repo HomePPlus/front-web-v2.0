@@ -87,19 +87,14 @@
     bottom: 0;
     left: 0;
     height: 3px;
-    width: 100%;
     background: rgba(255, 255, 255, 0.4);
-    animation: progress 3s linear forwards;
+    animation: progress 3s linear;
   }
   
   /* 호버 효과 */
   .alert-message:hover {
     transform: translateY(-2px);
     transition: transform 0.2s ease;
-  }
-  
-  .alert-message:hover::after {
-    animation-play-state: paused;
   }
   
   /* 슬라이드 인 애니메이션 */
@@ -128,11 +123,11 @@
   
   /* 프로그레스 바 애니메이션 */
   @keyframes progress {
-    0% {
+    from {
       width: 100%;
     }
-    100% {
-      width: 0;
+    to {
+      width: 0%;
     }
   }
   

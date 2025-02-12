@@ -23,18 +23,26 @@ const PostDetail = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      console.group('PostDetail - 데이터 로딩');
       try {
+        console.log('게시글 ID:', postId);
         const postResponse = await getCommunityPost(postId);
+        console.log('게시글 응답:', postResponse);
+        
         const commentsResponse = await getCommunityComments(postId);
+        console.log('댓글 응답:', commentsResponse);
 
         setPost(postResponse.data.data);
         setComments(commentsResponse.data.data);
-        setError(null);
+        console.log('데이터 설정 완료');
       } catch (error) {
+        console.error('데이터 로딩 에러:', error);
         setError('게시글을 불러오는데 실패했습니다.');
       } finally {
+        console.log('로딩 상태 해제');
         setLoading(false);
       }
+      console.groupEnd();
     };
 
     fetchData();

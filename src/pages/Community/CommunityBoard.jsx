@@ -80,7 +80,10 @@ const CommunityBoard = () => {
           </div>
           {showCreateForm && <CreatePost onCreate={handleCreatePost} />}
         </FormGroup>
-        <button className="write-button" onClick={() => navigate('/create-post')}>
+        <button 
+          className="write-button" 
+          onClick={() => navigate('/community/write')}
+        >
           글쓰기
         </button>
       </div>

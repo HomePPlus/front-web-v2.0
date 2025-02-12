@@ -38,8 +38,8 @@ function App() {
           <Route path="/community/:postId" element={<PostDetail />} />
           <Route path="/health" element={<HealthCheck />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/create-post" element={<CreateCommunityPost />} />
           <Route path="/checklist/complete" element={<ChecklistComplete />} />
+          <Route path="/community/write" element={<CreateCommunityPost />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </Router>

@@ -210,8 +210,8 @@ const Report = () => {
     if (!isOpen) return null;
 
     return (
-      <div className="modal-overlay">
-        <div className="modal-content">
+      <div className="report-modal-overlay">
+        <div className="report-modal-content">
           <div className="detection-message">{children}</div>
           <Button onClick={onClose}>닫기</Button>
         </div>

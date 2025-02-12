@@ -122,11 +122,86 @@ export const logout = () => {
 //   });
 
 // * 입주민 커뮤니티 관련 API
-export const createCommunityPost = (requestDto) => apiClient.post('/api/resident_communities', requestDto);
+export const createCommunityPost = async (requestDto) => {
+  console.group('API - createCommunityPost 호출');
+  console.log('요청 데이터:', requestDto);
+  
+  try {
+    // 요청 전 토큰 확인
+    const token = getToken();
+    console.log('인증 토큰:', token);
+
+    if (!token) {
+      throw new Error('인증 토큰이 없습니다.');
+    }
+
+    const response = await apiClient.post('/api/resident_communities', requestDto, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    
+    console.log('API 응답:', {
+      status: response.status,
+      statusText: response.statusText,
+      headers: response.headers,
+      data: response.data
+    });
+    console.groupEnd();
+    
+    // 응답 데이터 확인
+    if (!response.data) {
+      throw new Error('서버 응답에 데이터가 없습니다.');
+    }
+    
+    return response;
+    
+  } catch (error) {
+    console.group('API - createCommunityPost 에러');
+    console.error('에러 타입:', error.name);
+    console.error('에러 메시지:', error.message);
+    console.error('요청 설정:', error.config);
+    if (error.response) {
+      console.error('응답 데이터:', error.response.data);
+      console.error('응답 상태:', error.response.status);
+      console.error('응답 헤더:', error.response.headers);
+    } else {
+      console.error('응답 없음');
+    }
+    console.groupEnd();
+    
+    throw error;
+  }
+};
 
 export const getCommunityPost = (communityPostId) => apiClient.get(`/api/resident_communities/${communityPostId}`);
 
-export const getAllCommunityPosts = () => apiClient.get('/api/resident_communities');
+export const getAllCommunityPosts = async () => {
+  try {
+    console.group('API - 커뮤니티 게시글 목록 조회');
+    
+    const response = await apiClient.get('/api/resident_communities');
+    
+    console.log('전체 응답:', response);
+    console.log('응답 상태:', response.status);
+    console.log('응답 데이터:', response.data);
+    console.log('응답 데이터 내용:', response.data.data);
+    console.log('응답 메시지:', response.data.message);
+    console.groupEnd();
+    
+    return response;
+  } catch (error) {
+    console.group('API - 커뮤니티 게시글 목록 조회 에러');
+    console.error('에러 객체:', error);
+    console.error('에러 응답:', error.response);
+    console.error('에러 데이터:', error.response?.data);
+    console.error('에러 메시지:', error.response?.data?.message);
+    console.error('에러 상태:', error.response?.status);
+    console.groupEnd();
+    throw error;
+  }
+};
 
 export const updateCommunityPost = (communityPostId, requestDto) =>
   apiClient.put(`/api/resident_communities/${communityPostId}`, requestDto);

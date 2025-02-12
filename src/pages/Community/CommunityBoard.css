@@ -74,10 +74,31 @@
   font-size: 0.9rem;
 }
 
+.post-content {
+  position: relative;
+  border-bottom: 1px solid #eee;
+  width: calc(100% - 40px); /* 양쪽 여백을 고려한 너비 */
+  margin: 10px auto; /* 자동으로 중앙 정렬 */
+  padding: 20px;
+  font-family: "eLight";
+  font-size: 20px;
+  border: none;
+  outline: none;
+  background-color: #f1f1f1;
+  border-radius: 8px;
+  box-shadow: inset 2px 2px 4px #d5d2ba, inset -2px -2px 4px #ffffe4;
+  transition: all 0.3s ease;
+  overflow: hidden; /* 내용이 넘칠 경우 숨김 처리 */
+  text-overflow: ellipsis; /* 넘치는 텍스트를 ...으로 표시 */
+  white-space: normal; /* 텍스트가 여러 줄로 표시되도록 설정 */
+  min-height: 200px; /* 최소 높이 설정 */
+  line-height: 1.6; /* 줄 간격 조정 */
+}
+
 .post-content p {
-  color: #34495e;
-  line-height: 1.6;
-  margin: 1rem 0;
+  margin: 0 3px; /* 기본 마진 제거 */
+  overflow: hidden; /* 넘치는 텍스트 숨김 처리 */
+  text-overflow: ellipsis; /* 넘치는 텍스트를 ...으로 표시 */
 }
 
 .post-meta {
@@ -259,7 +280,6 @@
   display: flex;
   flex-direction: column;
 
-  margin-top: -2rem;
   padding-bottom: -1rem;
 }
 
@@ -274,24 +294,6 @@
   gap: 2rem;
   color: #7f8c8d;
   font-size: 0.9rem;
-}
-
-.post-content {
-  position: relative;
-  /* line-height: 1.6px; */
-  border-bottom: 1px solid #eee;
-  width: 850px;
-  height: 100px !important;
-  margin: 10px;
-  padding: 20px;
-  font-family: "eLight";
-  font-size: 20px;
-  border: none;
-  outline: none;
-  background-color: #f1f1f1;
-  border-radius: 8px;
-  box-shadow: inset 2px 2px 4px #d5d2ba, inset -2px -2px 4px #ffffe4;
-  transition: all 0.3s ease;
 }
 
 .post-actions {
@@ -315,8 +317,8 @@
 }
 
 .comment-section {
-  /* margin-top: -1rem; */
-  margin-left: -24rem;
+  margin-top: 15px; /* 댓글 섹션과 게시글 간격 조정 */
+  margin-left: -37rem;
 }
 
 .comment-section h3 {
@@ -329,28 +331,23 @@
 }
 
 .comment-section textarea {
-  width: 350px;
-  height: 40px;
+  width: 100%;
+  height: 20px; /* 댓글 입력창 높이 조정 */
   margin: 8px 0;
-  padding: 14px;
-  /* padding-left: 25px; */
+  padding: 10px;
   font-family: "eLight";
-  font-size: 15px;
-  border: none;
-  outline: none;
-  background-color: #f1f1f1;
-  border-radius: 8px;
-  box-shadow: inset 2px 2px 4px #d5d2ba, inset -2px -2px 4px #ffffe4;
-  transition: all 0.3s ease;
-  resize: none;
+  font-size: 14px; /* 댓글 폰트 크기 조정 */
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 
 .comment-section button {
   position: relative;
-  left: 3px;
-  bottom: 36px;
-  height: 67px;
+  left: 20rem;
+  bottom: 53px;
+  height: 40px;
   width: 80px;
+  font-size: 16px;
   background: #949494;
   color: white;
   padding: 0.5rem 1.5rem;

@@ -3,6 +3,12 @@ import React from "react";
 import "./CommunityBoard.css";
 
 const CommentItem = ({ comment }) => {
+  console.group(`CommentItem(${comment.commentId}) 렌더링`);
+  console.log('댓글 데이터:', comment);
+  console.log('작성자:', comment.userName);
+  console.log('작성일:', comment.commentCreatedAt);
+  console.groupEnd();
+
   return (
     <div className="comment-item">
       <div className="comment-header">

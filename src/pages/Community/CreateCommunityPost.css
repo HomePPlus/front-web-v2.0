@@ -22,17 +22,48 @@
   position: relative;
   z-index: 1;
 }
+.form-textarea{
+  width: 100%;
+  height: 100px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
 
 /* 버튼 스타일 수정 */
-.community-post-button-wrapper {
+.community-post-write-container {
+  width: 100%;
+  height: 100vh;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  margin-top: 30px;
+  justify-content: center;
+  padding: 0 20px;
+  margin-top: 13px;
+  background: linear-gradient(180deg, #ffffff, #ebe8d5);
+}
+
+.community-post-input-wrapper {
+  margin-bottom: 20px;
   width: 100%;
 }
 
-.create-community-submit-button {
+.community-post-input-wrapper label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.community-post-button-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.community-post-submit-button,
+.community-post-cancel-button {
   padding: 8px 30px;
   border-radius: 20px;
   font-size: 14px;
@@ -40,78 +71,49 @@
   cursor: pointer;
   border: none;
   min-width: 100px;
-  background-color: rgb(10, 90, 24) !important;
-  color: rgb(255, 255, 255) !important;
-  transition: background-color 0.3s, transform 0.2s;
 }
 
-.create-community-submit-button:hover {
+.community-post-submit-button {
+  background-color: rgb(10, 90, 24) !important;
+  color: white !important;
+}
+
+.community-post-submit-button:hover {
   background-color: rgb(10, 110, 24) !important;
   color: rgb(240, 227, 108) !important;
   transform: scale(1.04);
 }
 
-.create-community-cancel-button {
-  padding: 8px 30px;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-  border: none;
-  min-width: 100px;
+.community-post-cancel-button {
   background-color: #ffd84d;
   color: #333;
-  transition: background-color 0.3s, transform 0.2s;
 }
 
-.create-community-cancel-button:hover {
+.community-post-cancel-button:hover {
   background-color: rgb(10, 110, 24) !important;
   color: white !important;
   transform: scale(1.02);
 }
 
-.write-button,
-.cancel-button {
-  padding: 8px 30px;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-  border: none;
-  min-width: 100px;
-  margin: 0;
-}
-
-.write-button {
-  background-color: rgb(10, 90, 24) !important;
-  color: rgb(255, 255, 255) !important;
-  margin-right: 10px;
-}
-
-.write-button:hover {
-  background-color: rgb(10, 90, 24) !important;
-  color: rgb(240, 227, 108) !important;
-  transform: scale(1.04);
-}
-
-.cancel-button {
-  margin-left: 0;
-}
-
-.cancel-button:hover {
-  background-color: rgb(10, 110, 24) !important;
-  color: white !important;
-  transform: scale(1.02);
+.community-post-submit-button:disabled,
+.community-post-cancel-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 @media (max-width: 768px) {
-  .community-container {
-    padding: 10px;
+  .community-post-write-container {
+    padding: 16px;
+    margin-top: 40px;
   }
 
-  .write-button,
-  .cancel-button {
-    margin-left: -50;
+  .community-post-button-wrapper {
+    flex-direction: column;
+  }
+
+  .community-post-submit-button,
+  .community-post-cancel-button {
     width: 100%;
+    margin: 5px 0;
   }
 }

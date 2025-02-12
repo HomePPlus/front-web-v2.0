@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { createCommunityPost } from "../../api/apiClient";
 import FormGroup from "../FormGroup/FormGroup";
 import Input from "../common/Input/Input";
 import Button from "../common/Button/Button";
@@ -25,11 +26,33 @@ const CommunityPostForm = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      console.log("Form submitted:", formData);
-      navigate("/community");
+      console.group('커뮤니티 게시글 생성 요청');
+      console.log('요청 데이터:', formData);
+      
+      const response = await createCommunityPost(formData);
+      
+      console.log('전체 응답:', response);
+      console.log('응답 상태:', response.status);
+      console.log('응답 데이터:', response.data);
+      console.log('응답 데이터 내용:', response.data.data);
+      console.log('응답 메시지:', response.data.message);
+      console.groupEnd();
+
+      if (response.data.success) {
+        navigate("/community");
+      } else {
+        throw new Error(response.data.message || '게시글 작성에 실패했습니다.');
+      }
     } catch (error) {
-      console.error("Error submitting form:", error);
-      alert("게시글 작성 중 오류가 발생했습니다.");
+      console.group('커뮤니티 게시글 생성 에러');
+      console.error('에러 객체:', error);
+      console.error('에러 응답:', error.response);
+      console.error('에러 데이터:', error.response?.data);
+      console.error('에러 메시지:', error.response?.data?.message);
+      console.error('에러 상태:', error.response?.status);
+      console.groupEnd();
+      
+      alert(error.response?.data?.message || "게시글 작성 중 오류가 발생했습니다.");
     } finally {
       setLoading(false);
     }
