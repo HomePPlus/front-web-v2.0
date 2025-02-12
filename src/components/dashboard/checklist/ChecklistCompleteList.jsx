@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './ChecklistCompleteList.css';
+import { MdDownload, MdDelete, MdNavigateBefore, MdNavigateNext, MdSearch } from 'react-icons/md';
 import { downloadChecklist } from '../../../api/apiClient';
 import { useAlert } from "../../../contexts/AlertContext";
 import Loading from "../../common/Loading/Loading";
-import { MdDownload, MdDelete, MdNavigateBefore, MdNavigateNext } from 'react-icons/md';
+import './ChecklistCompleteList.css';
 
 const ChecklistCompleteList = () => {
   const [completedChecklists, setCompletedChecklists] = useState([]);
@@ -31,49 +31,7 @@ const ChecklistCompleteList = () => {
     }
   };
 
-  // 검색 및 필터링된 체크리스트
-  const filteredChecklists = completedChecklists.filter(checklist =>
-    checklist.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    checklist.inspector_name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  // 페이지네이션 계산
-  const totalPages = Math.ceil(filteredChecklists.length / itemsPerPage);
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredChecklists.slice(indexOfFirstItem, indexOfLastItem);
-
-  // 페이지 변경 핸들러
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
-  // 결함 유형 변환 함수
-  const translateDefectType = (type) => {
-    const defectTypeMap = {
-      'Crack': '균열',
-      'Leak/Efflorescence': '누수/백태',
-      'Steel Corrosion': '강재 부식',
-      'Spalling': '박리',
-      'Rebar Exposure': '철근 노출',
-      'PaintDamage': '도장 손상',
-      'crack': '균열',
-      'leak': '누수/백태',
-      'steel': '강재 부식',
-      'spalling': '박리',
-      'rebar': '철근 노출',
-      'paint': '도장 손상',
-      'normal': '정상',
-    };
-    return defectTypeMap[type] || type;
-  };
-
-  const handleDownloadReport = async (inspectionId) => {
-    if (!inspectionId) {
-      await showAlert('다운로드할 보고서 정보가 없습니다.', 'error');
-      return;
-    }
-
+  const handleDownload = async (inspectionId) => {
     try {
       setLoading(true);
       const response = await downloadChecklist(inspectionId);
@@ -83,43 +41,59 @@ const ChecklistCompleteList = () => {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `checklist_${inspectionId}.pdf`);
+      link.setAttribute('download', `inspection_report_${inspectionId}.pdf`);
       document.body.appendChild(link);
       link.click();
       link.remove();
       window.URL.revokeObjectURL(url);
-      
-      await showAlert('보고서가 성공적으로 다운로드되었습니다.', 'success');
+
+      showAlert('보고서가 다운로드되었습니다.', 'success');
     } catch (error) {
-      console.error('보고서 다운로드 실패:', error);
-      await showAlert('보고서 다운로드에 실패했습니다.', 'error');
+      console.error('다운로드 실패:', error);
+      showAlert('보고서 다운로드에 실패했습니다.', 'error');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDeleteChecklist = async (inspectionId) => {
+  const handleDelete = (inspectionId) => {
     try {
-      const savedChecklists = JSON.parse(localStorage.getItem('completedChecklists') || '[]');
-      const updatedChecklists = savedChecklists.filter(
+      const updatedChecklists = completedChecklists.filter(
         checklist => checklist.inspection_id !== inspectionId
       );
       localStorage.setItem('completedChecklists', JSON.stringify(updatedChecklists));
       setCompletedChecklists(updatedChecklists);
-      await showAlert('체크리스트가 삭제되었습니다.', 'success');
+      showAlert('체크리스트가 삭제되었습니다.', 'success');
     } catch (error) {
-      console.error('체크리스트 삭제 실패:', error);
-      await showAlert('체크리스트 삭제에 실패했습니다.', 'error');
+      showAlert('체크리스트 삭제에 실패했습니다.', 'error');
     }
   };
 
-  if (loading) return <Loading />;
+  // 검색어에 따른 필터링
+  const filteredChecklists = completedChecklists.filter(checklist =>
+    checklist.address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    checklist.inspector_name?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const currentItems = filteredChecklists.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const totalPages = Math.ceil(filteredChecklists.length / itemsPerPage);
+  const emptyCards = Array(6 - currentItems.length).fill(null);
+
+  // 검색어 변경시 첫 페이지로 이동
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
 
   return (
     <div className="completed-checklist-container">
-      <div className="checklist-header">
-        <h2>완료된 체크리스트 목록</h2>
-        <div className="search-box">
+      <div className="checklist-complete-list-header">
+        <h2>생성 완료된 AI 보고서 목록</h2>
+        <div className="checklist-complete-list-search-box">
+          <MdSearch className="checklist-complete-list-search-icon" />
           <input
             type="text"
             placeholder="주소 또는 점검자 검색..."
@@ -128,73 +102,66 @@ const ChecklistCompleteList = () => {
           />
         </div>
       </div>
-
-      {filteredChecklists.length === 0 ? (
-        <div className="no-completed-checklists">
-          완료된 체크리스트가 없습니다.
-        </div>
+      
+      {loading ? (
+        <Loading />
       ) : (
         <>
-          <div className="checklist-grid">
+          <div className="completed-checklist-grid">
             {currentItems.map((checklist) => (
-              <div key={checklist.inspection_id} className="checklist-card">
-                <div className="card-header">
-                  <span className="inspection-id">ID: {checklist.inspection_id}</span>
-                  <span className="inspection-date">{checklist.inspection_date}</span>
+              <div key={checklist.inspection_id} className="checklist-complete-list-checklist-card">
+                <div className="checklist-complete-list-card-header">
+                  <span>ID: {checklist.inspection_id}</span>
+                  <span>{checklist.inspection_date}</span>
                 </div>
-                <div className="card-body">
+                <div className="checklist-complete-list-card-body">
                   <h3>{checklist.address}</h3>
                   <p className="inspector">점검자: {checklist.inspector_name}</p>
-                  <div className="defect-tags">
-                    {checklist.defect_types.map((defect, index) => (
-                      <span key={index} className="defect-tag">{defect}</span>
+                  <div className="checklist-complete-list-defect-tags">
+                    {checklist.defect_types?.map((defect, index) => (
+                      <span key={index} className="checklist-complete-list-defect-tag">
+                        {defect}
+                      </span>
                     ))}
                   </div>
                 </div>
                 <div className="card-actions">
                   <button 
-                    onClick={() => handleDownloadReport(checklist.inspection_id)}
-                    className="action-btn download"
-                    disabled={loading}
+                    onClick={() => handleDownload(checklist.inspection_id)}
+                    className="checklist-complete-list-action-btn download"
                   >
-                    <MdDownload /> {loading ? '다운로드 중' : '보고서'}
+                    <MdDownload size={20} />
+                    <span>보고서</span>
                   </button>
                   <button 
-                    onClick={() => handleDeleteChecklist(checklist.inspection_id)}
-                    className="action-btn delete"
-                    disabled={loading}
+                    onClick={() => handleDelete(checklist.inspection_id)}
+                    className="checklist-complete-list-action-btn delete"
                   >
-                    <MdDelete />
+                    <MdDelete size={20} />
                   </button>
                 </div>
               </div>
+            ))}
+            {emptyCards.map((_, index) => (
+              <div key={`empty-${index}`} className="checklist-complete-list-checklist-card" style={{ visibility: 'hidden' }} />
             ))}
           </div>
 
           {totalPages > 1 && (
             <div className="pagination">
               <button 
-                onClick={() => handlePageChange(currentPage - 1)}
+                onClick={() => setCurrentPage(prev => prev - 1)}
                 disabled={currentPage === 1}
-                className="page-btn"
+                className="checklist-complete-list-page-btn"
               >
-                <MdNavigateBefore />
+                <MdNavigateBefore size={24} />
               </button>
-              {[...Array(totalPages)].map((_, i) => (
-                <button
-                  key={i + 1}
-                  onClick={() => handlePageChange(i + 1)}
-                  className={`page-btn ${currentPage === i + 1 ? 'active' : ''}`}
-                >
-                  {i + 1}
-                </button>
-              ))}
               <button 
-                onClick={() => handlePageChange(currentPage + 1)}
+                onClick={() => setCurrentPage(prev => prev + 1)}
                 disabled={currentPage === totalPages}
-                className="page-btn"
+                className="checklist-complete-list-page-btn"
               >
-                <MdNavigateNext />
+                <MdNavigateNext size={24} />
               </button>
             </div>
           )}
@@ -204,4 +171,4 @@ const ChecklistCompleteList = () => {
   );
 };
 
-export default ChecklistCompleteList; 
+export default ChecklistCompleteList;

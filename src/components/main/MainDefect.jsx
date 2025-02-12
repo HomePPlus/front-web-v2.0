@@ -173,10 +173,10 @@ const MainDefect = () => {
         {detectionResult && (
           <div className="result-card">
             <div className="result-section">
-              <h3>결함 탐지 결과</h3>
+              <h2>결함 탐지 결과</h2>
               <div className="result-content">
                 <p>결함 유형: {detectionResult.defectLabel}</p>
-                <p>위험 점수: {detectionResult.score.toFixed(1)} / 10.0</p>
+                <p>위험 점수: {detectionResult.score.toFixed(1)}</p>
               </div>
             </div>
             

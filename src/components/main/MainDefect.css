@@ -196,18 +196,24 @@
   transform: translateY(-3px);
 }
 
-.result-section h3 {
+.result-section h2 {
   font-weight: 600;
-  font-size: 18px;
+  font-size: 20px;
   margin-bottom: 12px;
   color: rgb(46, 66, 85);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
-
+.result-section h3 {
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 12px;
+  color: rgb(46, 66, 85);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
 .result-content {
   line-height: 1.8;
   color: rgba(93, 68, 99, 0.966);
-  font-size: 15px;
+  font-size: 18px;
   font-family: "eLight";
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }

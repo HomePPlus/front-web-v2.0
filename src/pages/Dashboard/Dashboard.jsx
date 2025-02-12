@@ -87,8 +87,8 @@ const Dashboard = () => {
   return (
     <div className="app-container">
       <Sidebar onViewChange={(view) => setActiveView(view)} activeView={activeView} />
-      <div className={`dashboard-container ${activeView === "체크리스트" ? "checklist-view-enabled" : ""}`}>
-        {activeView === "체크리스트" ? (
+      <div className={`dashboard-container ${activeView === "체크리스트 작성" ? "checklist-view-enabled" : ""}`}>
+        {activeView === "체크리스트 작성" ? (
           <div className="checklist-page-container">
             <ChecklistPage />
           </div>

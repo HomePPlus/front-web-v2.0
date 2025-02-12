@@ -1,9 +1,9 @@
 .checklist-complete-container {
   max-width: 800px;
   margin: 4rem auto;
+  margin-left: 25rem;
   padding: 2rem 2rem 2rem 280px;
   height: calc(100vh - 8rem);
-  overflow-y: auto;
 }
 
 .checklist-complete-container::-webkit-scrollbar {

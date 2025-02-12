@@ -9,8 +9,8 @@
 
 /* 배경 카드 - 메인 카드를 감싸는 큰 카드 */
 .app-card {
-  width: 290px;
-  height: 470px;
+  width: 330px;
+  height: 500px;
   margin: auto;
   background: linear-gradient(145deg, #ec8a8a, #3e5231);
   border-radius: 20px;

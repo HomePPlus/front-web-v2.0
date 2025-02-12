@@ -178,6 +178,7 @@ const ChecklistForm = ({ onError, onSuccess }) => {
           inspectionDate: new Date().toISOString().split('T')[0], // 오늘 날짜
           address: reportInfo.detail_address || '',
           detectionResult: reportInfo.detection_result || '',
+          detectionLabel: selectedInspection.detection_label || '',
         }
       }));
     }
@@ -421,7 +422,6 @@ const ChecklistForm = ({ onError, onSuccess }) => {
                         <span>예정일: {inspection.schedule_date}</span>
                         <span>주소: {reportInfo.detail_address || "-"}</span>
                         <span>신고된 결함: {translateDefectType(reportInfo.defect_type) || "-"}</span>
-                        <span>AI 분석 결과: {translateDefectType(inspection.detection_label) || "-"}</span>
                       </div>
                     </div>
                     <div className="inspection-status-form">

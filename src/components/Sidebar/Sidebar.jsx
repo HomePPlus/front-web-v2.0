@@ -64,11 +64,11 @@ const Sidebar = ({ onViewChange }) => {
         </span>
         <ul className="sidebar-items">
           <li className="sidebar-item">
-            <button className="sidebar-item-box" onClick={() => onViewChange('체크리스트')} title="Checklists">
+            <button className="sidebar-item-box" onClick={() => onViewChange('체크리스트 작성')} title="Checklists">
               <span className="sidebar-item-icon">
                 <MdCheckCircle size={24} />
               </span>
-              <span className="sidebar-item-text">체크리스트</span>
+              <span className="sidebar-item-text">체크리스트 작성</span>
             </button>
           </li>
           <li className="sidebar-item">
