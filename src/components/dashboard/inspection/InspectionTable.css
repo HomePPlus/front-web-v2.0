@@ -16,6 +16,7 @@
   border-collapse: collapse;
   background-color: #d4f0a8;
   font-family: "eLight";
+  table-layout: fixed;
 }
 
 .inspection-table th,
@@ -23,6 +24,9 @@
   padding: 12px;
   text-align: left;
   border-bottom: 1px solid #f0d7d7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .inspection-table th {
@@ -158,3 +162,14 @@
   color: #333;
   padding: 8px;
 }
+
+/* 각 열의 너비 조정 */
+.inspection-table th:nth-child(1) { width: 5%; }  /* 점검 ID */
+.inspection-table th:nth-child(2) { width: 6%; }  /* 유형 */
+.inspection-table th:nth-child(3) { width: 6%; }  /* 상태 */
+.inspection-table th:nth-child(4) { width: 10%; } /* 예정일 */
+.inspection-table th:nth-child(5) { width: 10%; } /* 완료일 */
+.inspection-table th:nth-child(6) { width: 6%; }  /* 점검자 */
+.inspection-table th:nth-child(7) { width: 30%; } /* 신고 내용 */
+.inspection-table th:nth-child(8) { width: 20%; } /* 주소 */
+.inspection-table th:nth-child(9) { width: 8%; }  /* 결함 유형 */
