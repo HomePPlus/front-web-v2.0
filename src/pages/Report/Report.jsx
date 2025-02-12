@@ -201,6 +201,11 @@ const Report = () => {
     }
   };
 
+  // 취소 버튼 핸들러 추가
+  const handleCancel = () => {
+    navigate('/report/list');  // 신고 리스트 페이지로 이동
+  };
+
   const Modal = ({ isOpen, onClose, children }) => {
     if (!isOpen) return null;
 
@@ -341,6 +346,7 @@ const Report = () => {
                           <p>{hoveredDefect.description}</p>
                           {hoveredDefect.exampleImage && (
                             <img 
+                              className="defect-example-image"
                               src={hoveredDefect.exampleImage} 
                               alt={`${hoveredDefect.label} 예시`} 
                             />
@@ -363,7 +369,7 @@ const Report = () => {
           <Button className="report-button" onClick={handleSubmit}>
             확인
           </Button>
-          <Button className="report-cancel">취소</Button>
+          <Button className="report-cancel" onClick={handleCancel}>취소</Button>
 
           {/* 결과 표시 */}
           {detectionResult && (
