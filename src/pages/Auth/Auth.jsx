@@ -80,6 +80,19 @@ function Auth() {
       const response = await login({ email, password });
       logApiResponse('로그인', response);
 
+      // response.data.status로 상태 확인
+      if (response.data.status === 404) {
+        setError("아이디를 찾을 수 없습니다.");
+        await showAlert("아이디를 찾을 수 없습니다.", 'error');
+        return;
+      }
+      if (response.data.status === 401) {
+        setError(response.data.message, 'error');
+        await showAlert(response.data.message, 'error');
+        return;
+      }
+      
+
       if (response.data.status === 200) {
         const token = response.data.data.token;
         setToken(token);

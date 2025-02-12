@@ -164,8 +164,7 @@ function AuthForm({
               {showPassword ? "🔓" : "🔒"}
             </button>
           </div>
-
-          {error && <p className="auth-error-message">{error}</p>}
+          
           <button
             type="submit"
             className="auth-submit-button"

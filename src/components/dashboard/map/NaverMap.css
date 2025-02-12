@@ -79,6 +79,11 @@
   margin-top: 10px;
 }
 
+.content-wrapper{
+  width: 90% !important;
+  height: 90% !important;
+}
+
 /* 스크롤 방지를 위한 스타일 수정 */
 .dashboard-section {
   width: 100%;

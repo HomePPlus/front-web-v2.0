@@ -6,6 +6,10 @@
   padding: 29px;
 }
 
+#root{
+  background: linear-gradient(180deg, #ffffff, #ebe8d5);
+}
+
 .write-button {
   position: relative;
   left: 440px;
@@ -267,14 +271,15 @@
 }
 
 /* CommunityBoard.css 추가 내용 */
-/* .post-detail-container {
+.post-detail-container {
   max-width: 800px;
-  margin: 4rem auto;
+  margin: 0 auto;
   padding: 1rem;
-  background: white;
+  min-height: 100vh;
+  background: transparent;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-} */
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+}
 
 .post-header {
   display: flex;
@@ -317,7 +322,7 @@
 }
 
 .comment-section {
-  margin-top: 15px; /* 댓글 섹션과 게시글 간격 조정 */
+  margin-top: 0px; /* 댓글 섹션과 게시글 간격 조정 */
   margin-left: -37rem;
 }
 
@@ -388,10 +393,12 @@
   color: #34495e;
 }
 
-.pagination-container {
-  margin-top: 20px; /* 테이블과의 간격 */
+.pagination-container-community {
+  position: absolute;
   display: flex;
-  justify-content: center; /* 가운데 정렬 */
+  justify-content: center;
+  bottom: 7%;
+  margin-top: 20px;
 }
 
 .pagination-wrapper {

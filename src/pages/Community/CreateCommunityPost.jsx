@@ -99,56 +99,55 @@ const CreateCommunityPost = () => {
   console.groupEnd();
 
   return (
-    <div className="community-post-write-container">
-      <h1>글쓰기</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="community-post-input-wrapper">
-          <label>제목</label>
-          <Input
-            type="text"
-            name="communityTitle"
-            value={formData.communityTitle}
-            onChange={handleChange}
-            placeholder="제목을 입력하세요"
-            required
-          />
+     
+      <div className="community-post-write-container">
+          <h1>글쓰기</h1>
+          <form onSubmit={handleSubmit}>
+            <div className="community-post-input-wrapper">
+              <label>제목</label>
+              <Input
+                type="text"
+                name="communityTitle"
+                value={formData.communityTitle}
+                onChange={handleChange}
+                placeholder="제목을 입력하세요"
+                required
+              />
+            </div>
+            <div className="community-post-input-wrapper">
+              <label>내용</label>
+              <Input
+                type="textarea"
+                name="communityContent"
+                value={formData.communityContent}
+                onChange={handleChange}
+                placeholder="내용을 입력하세요"
+                required
+              />
+            </div>
+            <div className="community-post-button-wrapper">
+              <Button
+                type="button"
+                onClick={handleCancel}
+                disabled={loading}
+                className="community-post-cancel-button"
+              >
+                취소
+              </Button>
+              <Button
+                type="submit"
+                disabled={loading}
+                className="community-post-submit-button"
+                onClick={(e) => {
+                  console.log('제출 버튼 클릭됨');
+                  // handleSubmit(e); // 필요한 경우 직접 호출
+                }}
+              >
+                작성완료
+              </Button>
+            </div>
+          </form>
         </div>
-
-        <div className="community-post-input-wrapper">
-          <label>내용</label>
-          <Input
-            type="textarea"
-            name="communityContent"
-            value={formData.communityContent}
-            onChange={handleChange}
-            placeholder="내용을 입력하세요"
-            required
-          />
-        </div>
-
-        <div className="community-post-button-wrapper">
-          <Button
-            type="button"
-            onClick={handleCancel}
-            disabled={loading}
-            className="community-post-cancel-button"
-          >
-            취소
-          </Button>
-          <Button
-            type="submit"
-            disabled={loading}
-            className="community-post-submit-button"
-            onClick={(e) => {
-              console.log('제출 버튼 클릭됨');
-              // handleSubmit(e); // 필요한 경우 직접 호출
-            }}
-          >
-            작성완료
-          </Button>
-        </div>
-      </form>
-    </div>
   );
 };
 

@@ -13,11 +13,13 @@ import { logout } from "../../../api/apiClient";
 import Cookies from "js-cookie";
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
+import { useAlert } from '../../../contexts/AlertContext';
 
 const Header = () => {
   const [loggedIn, setLoggedIn] = useState(getToken());
   const [isInspectorUser, setIsInspectorUser] = useState(isInspector());
   const navigate = useNavigate();
+  const { showAlert } = useAlert();
 
   useEffect(() => {
     setLoggedIn(getToken());
@@ -33,9 +35,12 @@ const Header = () => {
       Cookies.remove("userId");
       setLoggedIn(false);
       setIsInspectorUser(false);
+      await showAlert('로그아웃 되었습니다.', 'success');
       navigate("/");
+      window.location.reload();
     } catch (error) {
-      console.error("로그아웃 실패:", error);
+      console.error("로그아웃 중 오류 발생:", error);
+      await showAlert('로그아웃 중 오류가 발생했습니다.', 'error');
     }
   };
 
@@ -49,7 +54,7 @@ const Header = () => {
     },
     {
       url: isInspectorUser ? "/dashboard" : "#",
-      label: isInspectorUser ? "대시보드" : "인스타그램",
+      label: isInspectorUser ? "대시보드" : "앱",
     },
   ];
 
