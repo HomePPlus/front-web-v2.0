@@ -3,7 +3,6 @@ import "./UserReportTable.css";
 import { getReservableReports, createInspectionReports } from "../../../api/apiClient";
 import DatePicker from "react-datepicker"; // DatePicker 라이브러리 설치 필요
 import "react-datepicker/dist/react-datepicker.css"; // DatePicker 스타일링
-import { useAlert } from '../../../contexts/AlertContext';
 
 const UserReportTable = ({ onUpdateStats, onAlert }) => {
   const [reports, setReports] = useState([]); // 신고 목록
@@ -12,7 +11,6 @@ const UserReportTable = ({ onUpdateStats, onAlert }) => {
   const [selectedReportId, setSelectedReportId] = useState(null); // 선택한 신고 ID
   const [scheduleDate, setScheduleDate] = useState(new Date()); // 예약 날짜
   const [showDatePicker, setShowDatePicker] = useState(false); // DatePicker 표시 여부
-  const { showAlert } = useAlert();
 
   const fetchReports = async () => {
     try {
@@ -26,6 +24,7 @@ const UserReportTable = ({ onUpdateStats, onAlert }) => {
         defect_type: report.defect_type,
         images: report.images,
         detection_result: report.detection_result,
+        detection_label: report.detection_label,
         total_score: report.total_score
       }));
       setReports(availableReports);
@@ -33,7 +32,7 @@ const UserReportTable = ({ onUpdateStats, onAlert }) => {
     } catch (error) {
       console.error("API Error:", error);
       setError("신고 목록을 불러오는데 실패했습니다.");
-      showAlert("신고 목록을 불러오는데 실패했습니다.", 'error');
+      onAlert("신고 목록을 불러오는데 실패했습니다.", "error");
     } finally {
       setLoading(false);
     }
@@ -45,7 +44,7 @@ const UserReportTable = ({ onUpdateStats, onAlert }) => {
 
   const handleReserve = async () => {
     if (!selectedReportId) {
-      showAlert("신고를 선택해주세요.", 'error');
+      onAlert("신고를 선택해주세요.", "error");
       return;
     }
 
@@ -56,15 +55,14 @@ const UserReportTable = ({ onUpdateStats, onAlert }) => {
 
     try {
       const response = await createInspectionReports(requestData);
-
-      showAlert(response.data.message || "예약이 성공적으로 등록되었습니다.");
+      onAlert(response.data.message || "예약이 성공적으로 등록되었습니다.", "success");
       fetchReports();
       setShowDatePicker(false);
       setSelectedReportId(null);
-      onUpdateStats(); // API를 통해 최신 통계 가져오기
+      onUpdateStats();
     } catch (error) {
       console.error("API Error:", error);
-      showAlert("예약 등록에 실패했습니다.", 'error');
+      onAlert("예약 등록에 실패했습니다.", "error");
     }
   };
 
@@ -72,7 +70,50 @@ const UserReportTable = ({ onUpdateStats, onAlert }) => {
     setSelectedReportId(reportId);
     setShowDatePicker(true);
   };
+  // 결함 유형 한글 변환 함수
+  const translateDefectType = (englishTypes) => {
+    if (!englishTypes) return []; // null 또는 undefined일 경우 빈 배열 반환
+    // 문자열일 경우 콤마로 구분된 배열로 변환
+    const typesArray = Array.isArray(englishTypes) ? englishTypes : englishTypes.split(',');
 
+    // 숫자 제거 정규식 추가
+    const typesWithoutNumbers = typesArray.map(type => type.replace(/[0-9_]/g, '').trim());
+
+    const defectTypes = {
+      CRACK: '균열',
+      crack: '균열',
+      LEAK_WHITENING: '백태/누수',
+      leak_whitening: '백태/누수',
+      Efflorescence_Level: '백태/누수',
+      EfflorescenceLevel: '백태/누수',
+      STEEL_DAMAGE: '강재 손상',
+      steel_damage: '강재 손상',
+      SteelDefectLevel: '강재 손상',
+      PAINT_DAMAGE: '도장 손상',
+      paint_damage: '도장 손상',
+      PaintDamage: '도장 손상',
+      PEELING: '박리',
+      peeling: '박리',
+      Spalling: '박리',
+      REBAR_EXPOSURE: '철근 노출',
+      rebar_exposure: '철근 노출',
+      Exposure: '철근 노출',
+      UNKNOWN: '모름',
+      unknown: '모름',
+    };
+
+    const translatedTypes = typesWithoutNumbers.map(type => {
+      const normalizedType = type.toLowerCase();
+      const matchedType = Object.entries(defectTypes).find(([key]) => key.toLowerCase() === normalizedType);
+
+      return matchedType ? matchedType[1] : type;
+    });
+
+  // 중복 제거
+  const uniqueTypes = [...new Set(translatedTypes)];
+
+  return uniqueTypes;
+};
   const handleDateChange = (date) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -80,7 +121,7 @@ const UserReportTable = ({ onUpdateStats, onAlert }) => {
     selectedDate.setHours(0, 0, 0, 0);
 
     if (selectedDate.getTime() === today.getTime()) {
-      showAlert("오늘 날짜는 예약할 수 없습니다. 다른 날짜를 선택해주세요.", 'error');
+      onAlert("오늘 날짜는 예약할 수 없습니다. 다른 날짜를 선택해주세요.", "error");
       return;
     }
     setScheduleDate(date);
@@ -95,60 +136,8 @@ const UserReportTable = ({ onUpdateStats, onAlert }) => {
     });
   };
 
-// 결함 유형 한글 변환 함수
-const translateDefectType = (englishTypes) => {
-  // 문자열일 경우 콤마로 구분된 배열로 변환
-  const typesArray = Array.isArray(englishTypes) ? englishTypes : englishTypes.split(',');
-
-  // 숫자 제거 정규식 추가
-  const typesWithoutNumbers = typesArray.map(type => type.replace(/[0-9_]/g, '').trim());
-
-  const defectTypes = {
-    CRACK: '균열',
-    crack: '균열',
-    LEAK_WHITENING: '백태/누수',
-    leak_whitening: '백태/누수',
-    Efflorescence_Level: '백태/누수',
-    EfflorescenceLevel: '백태/누수',
-    STEEL_DAMAGE: '강재 손상',
-    steel_damage: '강재 손상',
-    SteelDefectLevel: '강재 손상',
-    PAINT_DAMAGE: '도장 손상',
-    paint_damage: '도장 손상',
-    PaintDamage: '도장 손상',
-    PEELING: '박리',
-    peeling: '박리',
-    Spalling: '박리',
-    REBAR_EXPOSURE: '철근 노출',
-    rebar_exposure: '철근 노출',
-    Exposure: '철근 노출',
-    UNKNOWN: '모름',
-    unknown: '모름',
-  };
-
-  const translatedTypes = typesWithoutNumbers.map(type => {
-    const normalizedType = type.toLowerCase();
-    const matchedType = Object.entries(defectTypes).find(([key]) => key.toLowerCase() === normalizedType);
-
-    return matchedType ? matchedType[1] : type;
-  });
-
-  // 중복 제거
-  const uniqueTypes = [...new Set(translatedTypes)];
-
-  return uniqueTypes;
-};
-
   if (loading) return <div>로딩 중...</div>;
   if (error) return <div className="userReport-error">{error}</div>;
-
-  // 위험 점수에 따른 클래스 결정
-  // const getRiskScoreClass = (score) => {
-  //   if (score >= 80) return 'risk-score-high';
-  //   if (score >= 50) return 'risk-score-medium';
-  //   return 'risk-score-low';
-  // };
-
   // 내용 텍스트 줄이기
   const truncateText = (text, maxLength = 50) => {
     if (text.length <= maxLength) return text;
@@ -164,8 +153,8 @@ const translateDefectType = (englishTypes) => {
             <th>신고일</th>
             <th>신고 내용</th>
             <th>주소</th>
-            <th>신고 결함 유형</th>
-            <th>AI 분석 결함</th>
+            <th>신고된 결함 유형</th>
+            <th>AI가 분석한 결함</th>
             <th>위험 점수</th>
             <th>예약하기</th>
           </tr>
@@ -179,9 +168,7 @@ const translateDefectType = (englishTypes) => {
                 <td title={report.report_description}>{report.report_description}</td>
                 <td title={report.report_detail_address}>{report.report_detail_address}</td>
                 <td>{report.defect_type}</td>
-                <td title={translateDefectType(report.detection_result).join(', ')}>
-                  {translateDefectType(report.detection_result).join(', ')}
-                </td>
+                <td title={translateDefectType(report.detection_result).join(', ')}>{truncateText(translateDefectType(report.detection_result).join(', '))}</td>
                 <td>{report.total_score}</td>
                 <td>
                   <button className="userReport-schedule-button" onClick={() => handleSchedule(report.id)}>
@@ -192,7 +179,7 @@ const translateDefectType = (englishTypes) => {
             ))
           ) : (
             <tr>
-              <td colSpan="8" style={{ textAlign: "center" }}>
+              <td colSpan="6" style={{ textAlign: "center" }}>
                 데이터가 없습니다.
               </td>
             </tr>

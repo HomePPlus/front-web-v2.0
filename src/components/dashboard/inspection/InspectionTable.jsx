@@ -2,13 +2,11 @@ import React, { useState, useEffect } from "react";
 import { getInspectionReports, updateInspectionStatus } from "../../../api/apiClient";
 import "./InspectionTable.css";
 import Loading from "../../common/Loading/Loading";
-import { useAlert } from '../../../contexts/AlertContext';
 
-const InspectionTable = ({ onUpdateStats, statusFilter, setStatusFilter }) => {
+const InspectionTable = ({ onUpdateStats, onAlert, statusFilter, setStatusFilter }) => {
   const [inspections, setInspections] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { showAlert } = useAlert();
 
   const fetchInspections = async () => {
     try {
@@ -24,7 +22,6 @@ const InspectionTable = ({ onUpdateStats, statusFilter, setStatusFilter }) => {
       setError(null);
     } catch (error) {
       setError("점검 목록을 불러오는데 실패했습니다.");
-      showAlert("점검 목록을 불러오는데 실패했습니다.", 'error');
       console.error("Error fetching inspections:", error);
     } finally {
       setLoading(false);
@@ -43,13 +40,13 @@ const InspectionTable = ({ onUpdateStats, statusFilter, setStatusFilter }) => {
 
       if (response.data.status === 409) {
         console.log("상태 변경 규칙 위반:", response.data.message);
-        showAlert(response.data.message, 'error');
+        onAlert(response.data.message);
         return;
       }
 
       if (response.data.status === 200 || response.status === 200) {
         console.log("상태 변경 성공:", response.data.message);
-        showAlert(response.data.message || "점검 상태가 업데이트 되었습니다.");
+        onAlert(response.data.message || "점검 상태가 업데이트 되었습니다.");
 
         console.log("목록 새로고침 시작");
         await fetchInspections();
@@ -64,7 +61,7 @@ const InspectionTable = ({ onUpdateStats, statusFilter, setStatusFilter }) => {
         }
       } else {
         console.error("상태 변경 실패:", response.data.message);
-        showAlert(response.data.message || "상태 변경에 실패했습니다.", 'error');
+        onAlert(response.data.message || "상태 변경에 실패했습니다.");
       }
     } catch (error) {
       console.error("상태 변경 실패. 에러 상세:", {
@@ -74,9 +71,9 @@ const InspectionTable = ({ onUpdateStats, statusFilter, setStatusFilter }) => {
       });
 
       if (error.response?.data?.message) {
-        showAlert(error.response.data.message, 'error');
+        onAlert(error.response.data.message);
       } else {
-        showAlert("상태 변경에 실패했습니다.", 'error');
+        onAlert("상태 변경에 실패했습니다.");
       }
     }
   };
