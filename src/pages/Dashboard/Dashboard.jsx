@@ -204,7 +204,7 @@ const Dashboard = () => {
               ) : (
                 <p>해당 날짜에 예약된 점검이 없습니다.</p>
               )}
-              <button onClick={handleCloseModal} className="modal-close-button">닫기</button>
+              <button onClick={handleCloseModal} className="modal-close-button cal-close-btn">닫기</button>
             </div>
           </div>
         )}
