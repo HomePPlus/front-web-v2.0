@@ -115,7 +115,7 @@ const PostDetail = () => {
             </button>
           </div>
 
-          <div className="comment-section">
+          {/* <div className="comment-section">
             <h3>댓글 ({comments.length})</h3>
             <form onSubmit={handleCommentSubmit}>
               <textarea
@@ -127,7 +127,7 @@ const PostDetail = () => {
               <button type="submit">확인</button>
             </form>
             <CommentList comments={comments} />
-          </div>
+          </div> */}
         </FormGroup>
       </div>
     </div>

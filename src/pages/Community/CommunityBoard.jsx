@@ -29,6 +29,7 @@ const CommunityBoard = () => {
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     fetchPosts();
@@ -66,12 +67,12 @@ const CommunityBoard = () => {
   if (error) return <div className="error">{error}</div>;
 
   return (
-    <div className="report-wrapper">
+    
       <div className="community-container">
         <h1>입주민 커뮤니티</h1>
         <FormGroup>
           <PostList posts={currentPosts} onDelete={handleDeletePost} />
-          <div className="pagination-container">
+          <div className="pagination-container-community">
             <Pagination
               totalPage={Math.ceil(posts.length / postsPerPage)}
               page={currentPage}
@@ -87,7 +88,6 @@ const CommunityBoard = () => {
           글쓰기
         </button>
       </div>
-    </div>
   );
 };
 

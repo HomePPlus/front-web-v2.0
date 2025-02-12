@@ -125,11 +125,16 @@ const NaverMap = () => {
           const mapInstance = new window.naver.maps.Map(mapRef.current, {
             center: busanCityHall,
             zoom: 14,
-            mapTypeControl: true,
             zoomControl: true,
             zoomControlOptions: {
+              style: window.naver.maps.ZoomControlStyle.SMALL,
               position: window.naver.maps.Position.TOP_LEFT,
+              legendDisabled: true
             },
+            mapTypeControl: true,
+            mapTypeControlOptions: {
+              position: window.naver.maps.Position.TOP_RIGHT
+            }
           });
 
           new window.naver.maps.Marker({
@@ -137,6 +142,14 @@ const NaverMap = () => {
             map: mapInstance,
             title: '부산광역시청',
           });
+
+          // 줌 컨트롤 직접 추가
+          const zoomControl = new window.naver.maps.ZoomControl({
+            position: window.naver.maps.Position.TOP_RIGHT
+          });
+
+          // 줌 컨트롤을 지도에 추가
+          zoomControl.setMap(mapInstance);
 
           setMap(mapInstance);
           setLoading(false);

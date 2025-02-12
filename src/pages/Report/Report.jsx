@@ -209,11 +209,21 @@ const Report = () => {
   const Modal = ({ isOpen, onClose, children }) => {
     if (!isOpen) return null;
 
+    // children이 문자열인지 확인하고 처리
+    const messageLines = typeof children === 'string' 
+      ? children.split('\n').filter(line => line.trim() !== '')
+      : [];
+
     return (
       <div className="report-modal-overlay">
         <div className="report-modal-content">
-          <div className="detection-message">{children}</div>
-          <Button onClick={onClose}>닫기</Button>
+          <h3>이미지 분석 결과</h3>
+          <div className="detection-message">
+            {messageLines.map((line, index) => (
+              <p key={index} className="result-line">{line.trim()}</p>
+            ))}
+          </div>
+          <button onClick={onClose}>닫기</button>
         </div>
       </div>
     );
@@ -374,8 +384,7 @@ const Report = () => {
           {/* 결과 표시 */}
           {detectionResult && (
             <Modal isOpen={isModalOpen} onClose={handleModalClose}>
-              <h3>이미지 분석 결과</h3>
-              <p>{detectionResult}</p>
+              {detectionResult}
             </Modal>
           )}
         </div>

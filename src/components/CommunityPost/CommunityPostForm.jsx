@@ -68,50 +68,52 @@ const CommunityPostForm = () => {
   };
 
   return (
-    <div className="community-post-write-container">
-      <h1>글쓰기</h1>
-      <FormGroup onSubmit={handleSubmit}>
-        <div className="community-post-input-wrapper">
-          <label>제목</label>
-          <Input
-            type="text"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            placeholder="제목을 입력하세요"
-            required
-          />
-        </div>
+    <div className="report-wrapper">
+      <div className="community-post-write-container">
+        <h1>글쓰기</h1>
+        <FormGroup onSubmit={handleSubmit}>
+          <div className="community-post-input-wrapper">
+            <label>제목</label>
+            <Input
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              placeholder="제목을 입력하세요"
+              required
+            />
+          </div>
 
-        <div className="community-post-input-wrapper">
-          <label>내용</label>
-          <Input
-            type="textarea"
-            name="content"
-            value={formData.content}
-            onChange={handleChange}
-            placeholder="내용을 입력하세요"
-            required
-          />
-        </div>
+          <div className="community-post-input-wrapper">
+            <label>내용</label>
+            <Input
+              type="textarea"
+              name="content"
+              value={formData.content}
+              onChange={handleChange}
+              placeholder="내용을 입력하세요"
+              required
+            />
+          </div>
 
-        <div className="community-post-button-wrapper">
-          <Button
-            onClick={handleCancel}
-            disabled={loading}
-            className="create-community-cancel-button"
-          >
-            취소
-          </Button>
-          <Button
-            type="submit"
-            disabled={loading}
-            className="create-community-submit-button"
-          >
-            작성완료
-          </Button>
-        </div>
-      </FormGroup>
+          <div className="community-post-button-wrapper">
+            <Button
+              onClick={handleCancel}
+              disabled={loading}
+              className="create-community-cancel-button"
+            >
+              취소
+            </Button>
+            <Button
+              type="submit"
+              disabled={loading}
+              className="create-community-submit-button"
+            >
+              작성완료
+            </Button>
+          </div>
+        </FormGroup>
+      </div>
     </div>
   );
 };
