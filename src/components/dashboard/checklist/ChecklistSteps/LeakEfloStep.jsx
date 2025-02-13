@@ -25,13 +25,14 @@ const LeakEfloStep = ({ formData, handleInputChange, inspectionId }) => (
       </div>
       <div className="checklist-input-group">
         <RadioGroup
-          title="누수/백태의 원인"
+          title="누수의 원인"
           name="leak_eflo_cause"
           options={[
-            '시공 불량',
-            '재료적 문제',
-            '환경적 요인',
-            '구조적 요인'
+            '기온 변화',
+            '습도 변화',
+            '시공 결함',
+            '재료적 원인',
+            '배수 및 통풍 문제'
           ]}
           value={formData.leakEflo.cause}
           onChange={(value) => handleInputChange('leakEflo', 'cause', value)}
@@ -63,10 +64,13 @@ const LeakEfloStep = ({ formData, handleInputChange, inspectionId }) => (
           title="수리 계획"
           name="leak_eflo_repair_plan"
           options={[
-            '표면 처리',
             '방수 처리',
+            '배수 시스템 점검',
             '균열 보수',
-            '구조 보강'
+            '표면 복원 작업',
+            '내부 압력 차단',
+            '그라우팅 주입',
+            '구조적 개선'
           ]}
           value={formData.leakEflo.repairPlan}
           onChange={(value) => handleInputChange('leakEflo', 'repairPlan', value)}

@@ -27,10 +27,10 @@ const DelaminationStep = ({ formData, handleInputChange, inspectionId }) => (
           title="박리의 원인"
           name="delamination_cause"
           options={[
+            '내부 압력 증가',
             '시공 불량',
-            '재료적 문제',
-            '환경적 요인',
-            '구조적 요인'
+            '외부 환경 요인',
+            '구조적 문제'
           ]}
           value={formData.delamination.delaminationCause}
           onChange={(value) => handleInputChange('delamination', 'delaminationCause', value)}
@@ -71,10 +71,10 @@ const DelaminationStep = ({ formData, handleInputChange, inspectionId }) => (
           title="수리 계획"
           name="delamination_repair_plan"
           options={[
-            '단면 복구',
+            '패칭 보수',
             '표면 보수',
-            '도장 보수',
-            '구조 보강'
+            '철근 보강 후 보수',
+            '구조적 보강 및 보수'
           ]}
           value={formData.delamination.repairPlan}
           onChange={(value) => handleInputChange('delamination', 'repairPlan', value)}

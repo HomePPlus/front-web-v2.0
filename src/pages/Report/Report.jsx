@@ -90,7 +90,13 @@ const Report = () => {
   // 신고 제출 핸들러
   const handleSubmit = async () => {
     if (!address || !detailAddress || !report || !selectedOption) {
-      alert('모든 항목을 입력해주세요.');
+      showAlert('모든 항목을 입력해주세요.', 'error');
+      return;
+    }
+
+    // 신고 내용 길이 체크 추가
+    if (report.length > 1000) {  // 예시로 1000자로 제한
+      showAlert('신고 내용은 1000자를 초과할 수 없습니다.', 'error');
       return;
     }
 
@@ -101,9 +107,9 @@ const Report = () => {
     formData.append(
       'report',
       JSON.stringify({
-        reportTitle: title,
-        reportDetailAddress: `${address} ${detailAddress}`,
-        reportDescription: report,
+        reportTitle: title.slice(0, 100),  // 제목 길이 제한
+        reportDetailAddress: `${address} ${detailAddress}`.slice(0, 255),  // 주소 길이 제한
+        reportDescription: report.slice(0, 1000),  // 내용 길이 제한
         defectType: selectedOption,
       })
     );
@@ -127,72 +133,76 @@ const Report = () => {
       clearInterval(progressInterval);
       setLoadingProgress(100);
       
-      const detectionResult = response.data.data.detection_result;
-      console.log("AI 분석 결과:", detectionResult);  // 로그 추가
+      if (response.data && response.data.data) {
+        const detectionResult = response.data.data.detection_result;
+        console.log("AI 분석 결과:", detectionResult);  // 로그 추가
 
-      if (detectionResult && detectionResult.trim() !== '') {
-        // translateDefectType 함수 수정
-        const translateDefectType = (englishType) => {
-          if (!englishType) return '';
-          
-          const typeWithoutNumber = englishType.replace(/[0-9_]/g, '').trim();
-          const defectTypes = {
-            CRACK: '균열',
-            crack: '균열',
-            LEAK_WHITENING: '백태/누수',
-            leak_whitening: '백태/누수',
-            Efflorescence_Level: '백태/누수',
-            EfflorescenceLevel: '백태/누수',
-            STEEL_DAMAGE: '강재 손상',
-            steel_damage: '강재 손상',
-            SteelDefectLevel: '강재 손상',
-            PAINT_DAMAGE: '도장 손상',
-            paint_damage: '도장 손상',
-            PaintDamage: '도장 손상',
-            PEELING: '박리',
-            peeling: '박리',
-            Spalling: '박리',
-            REBAR_EXPOSURE: '철근 노출',
-            rebar_exposure: '철근 노출',
-            Exposure: '철근 노출',
-            UNKNOWN: '모름',
-            unknown: '모름',
+        if (detectionResult && detectionResult.trim() !== '') {
+          // translateDefectType 함수 수정
+          const translateDefectType = (englishType) => {
+            if (!englishType) return '';
+            
+            const typeWithoutNumber = englishType.replace(/[0-9_]/g, '').trim();
+            const defectTypes = {
+              CRACK: '균열',
+              crack: '균열',
+              LEAK_WHITENING: '백태/누수',
+              leak_whitening: '백태/누수',
+              Efflorescence_Level: '백태/누수',
+              EfflorescenceLevel: '백태/누수',
+              STEEL_DAMAGE: '강재 손상',
+              steel_damage: '강재 손상',
+              SteelDefectLevel: '강재 손상',
+              PAINT_DAMAGE: '도장 손상',
+              paint_damage: '도장 손상',
+              PaintDamage: '도장 손상',
+              PEELING: '박리',
+              peeling: '박리',
+              Spalling: '박리',
+              REBAR_EXPOSURE: '철근 노출',
+              rebar_exposure: '철근 노출',
+              Exposure: '철근 노출',
+              UNKNOWN: '모름',
+              unknown: '모름',
+            };
+
+            const normalizedType = typeWithoutNumber.toLowerCase();
+            const matchedType = Object.entries(defectTypes).find(([key]) => 
+              key.toLowerCase() === normalizedType
+            );
+
+            return matchedType ? matchedType[1] : englishType;
           };
 
-          const normalizedType = typeWithoutNumber.toLowerCase();
-          const matchedType = Object.entries(defectTypes).find(([key]) => 
-            key.toLowerCase() === normalizedType
+          // 콤마로 구분된 결함 유형들을 각각 번역
+          const translatedTypes = [...new Set(
+            detectionResult.split(',')
+              .map(type => translateDefectType(type.trim()))
+              .filter(type => type) // 빈 문자열 제거
+          )].join(', ');
+
+          setDetectionResult(
+            `이미지 분석이 완료되었습니다!
+
+            ${translatedTypes} 유형의 결함이 발견되었습니다.
+            
+            빠른 시일 내에 전문가가 방문하여 자세히 살펴보도록 하겠습니다!`
           );
+        } else {
+          setDetectionResult(
+            `분석 결과 즉각적인 조치가 필요한 위험한 결함은 발견되지 않았습니다.
 
-          return matchedType ? matchedType[1] : englishType;
-        };
+            전문 점검자가 이미지를 상세히 검토한 후,
+            필요한 경우 점검 안내를 드리도록 하겠습니다!
 
-        // 콤마로 구분된 결함 유형들을 각각 번역
-        const translatedTypes = [...new Set(
-          detectionResult.split(',')
-            .map(type => translateDefectType(type.trim()))
-            .filter(type => type) // 빈 문자열 제거
-        )].join(', ');
-
-        setDetectionResult(
-          `이미지 분석이 완료되었습니다!
-
-          ${translatedTypes} 유형의 결함이 발견되었습니다.
-          
-          빠른 시일 내에 전문가가 방문하여 자세히 살펴보도록 하겠습니다!`
-        );
+            안전한 주거 환경을 위해 지속적으로 관리하겠습니다.`
+          );
+        }
+        setIsModalOpen(true);
+        showAlert('신고가 성공적으로 접수되었습니다.');
       } else {
-        setDetectionResult(
-          `분석 결과 즉각적인 조치가 필요한 위험한 결함은 발견되지 않았습니다.
-
-          전문 점검자가 이미지를 상세히 검토한 후,
-          필요한 경우 점검 안내를 드리도록 하겠습니다!
-
-          안전한 주거 환경을 위해 지속적으로 관리하겠습니다.`
-        );
+        throw new Error('API 응답 데이터가 올바르지 않습니다.');
       }
-      setIsModalOpen(true);
-      showAlert('신고가 성공적으로 접수되었습니다.');
     } catch (error) {
       console.error('신고 제출 중 오류:', error);
       showAlert(error.response?.data?.message || '신고 접수 중 오류가 발생했습니다.', 'error');
@@ -291,89 +301,88 @@ const Report = () => {
         >
           <h1>신고할 내용을 양식에 맞게 작성해주세요.</h1>
           <FormGroup>
-                  {/* 작성자 */}
-                  <div className="form-row">
-                    <label className="form-label">작성자</label>
-                    <Input className="name-input" value={getUserInfo()?.email || ''} disabled />
-                  </div>
+            {/* 작성자 */}
+            <div className="form-row">
+              <label className="form-label">작성자</label>
+              <Input className="name-input" value={getUserInfo()?.email || ''} disabled />
+            </div>
 
-                  {/* 주소 입력 */}
-                  <div className="form-row">
-                    <div className="address-group">
-                      <label className="form-label">주소</label>
-                      <Input className="address-input" placeholder="주소를 검색해주세요" value={address} disabled />
-                      <Button className="address-search" onClick={handleAddressSearch}>
-                        주소 검색
-                      </Button>
-                      <Input
-                        className="detailAddress-input"
-                        placeholder="상세주소를 입력해주세요"
-                        value={detailAddress}
-                        onChange={(e) => setDetailAddress(e.target.value)}
+            {/* 주소 입력 */}
+            <div className="form-row">
+              <div className="address-group">
+                <label className="form-label">주소</label>
+                <Input className="address-input" placeholder="주소를 검색해주세요" value={address} disabled />
+                <Button className="address-search" onClick={handleAddressSearch}>
+                  주소 검색
+                </Button>
+                <Input
+                  className="detailAddress-input"
+                  placeholder="상세주소를 입력해주세요"
+                  value={detailAddress}
+                  onChange={(e) => setDetailAddress(e.target.value)}
+                />
+              </div>
+            </div>
+
+            {/* 제목 입력 */}
+            <div className="form-row">
+              <label className="form-label">제목</label>
+              <Input
+                className="title-input"
+                placeholder="신고 제목을 입력해주세요"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </div>
+
+            {/* 신고 내용 */}
+            <div className="form-row-text">
+              <label className="form-content-label">내용</label>
+              <textarea
+                className="report-input"
+                placeholder="신고 내용을 자세히 입력해주세요"
+                value={report}
+                onChange={(e) => setReport(e.target.value)}
+                maxLength={1000}
+              />
+            </div>
+
+            {/* 결함 유형 선택 */}
+            <div className="defect-selection-wrapper">
+              <div className="defect-dropdown">
+                <DropDown
+                  options={defectOptions}
+                  placeholder="결함 유형 선택"
+                  onSelect={(value) => {
+                    handleDropdownSelect(value);
+                    setHoveredDefect(null);  // 선택 시 hoveredDefect를 null로 설정
+                  }}
+                />
+                {hoveredDefect && (  // selectedOption 조건 제거
+                  <div className={`defect-info-popup ${hoveredDefect ? 'visible' : ''}`}>
+                    <h4 style={{ 
+                      color: defectColors[Object.keys(defectTypes).find(key => defectTypes[key] === hoveredDefect)] 
+                    }}>
+                      {hoveredDefect.label}
+                    </h4>
+                    <p>{hoveredDefect.description}</p>
+                    {hoveredDefect.exampleImage && (
+                      <img 
+                        className="defect-example-image"
+                        src={hoveredDefect.exampleImage} 
+                        alt={`${hoveredDefect.label} 예시`} 
                       />
-                    </div>
+                    )}
                   </div>
+                )}
+              </div>
+            </div>
 
-                  {/* 제목 입력 */}
-                  <div className="form-row">
-                    <label className="form-label">제목</label>
-                    <Input
-                      className="title-input"
-                      placeholder="신고 제목을 입력해주세요"
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value)}
-                    />
-                  </div>
-
-                  {/* 신고 내용 */}
-                  <div className="form-row-text">
-                    <label className="form-content-label">내용</label>
-                    <textarea
-                      className="report-input"
-                      placeholder="신고 내용을 자세히 입력해주세요"
-                      value={report}
-                      onChange={(e) => setReport(e.target.value)}
-                    />
-
-                  {/* 결함 유형 선택 */}
-                  <div className="defect-selection-wrapper">
-                    <div className="defect-dropdown">
-                      <DropDown
-                        options={defectOptions}
-                        placeholder="결함 유형 선택"
-                        onSelect={(value) => {
-                          handleDropdownSelect(value);
-                          setHoveredDefect(null);  // 선택 시 hoveredDefect를 null로 설정
-                        }}
-                      />
-                      {hoveredDefect && (  // selectedOption 조건 제거
-                        <div className={`defect-info-popup ${hoveredDefect ? 'visible' : ''}`}>
-                          <h4 style={{ 
-                            color: defectColors[Object.keys(defectTypes).find(key => defectTypes[key] === hoveredDefect)] 
-                          }}>
-                            {hoveredDefect.label}
-                          </h4>
-                          <p>{hoveredDefect.description}</p>
-                          {hoveredDefect.exampleImage && (
-                            <img 
-                              className="defect-example-image"
-                              src={hoveredDefect.exampleImage} 
-                              alt={`${hoveredDefect.label} 예시`} 
-                            />
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  </div>
-
-                  {/* 파일 선택 */}
-                  <div className="form-row sel_image">
-                    <FileUpload className="report-upload" onFileSelect={(file) => setSelectedFile(file)} />
-                  </div>
-
-        </FormGroup>
+            {/* 파일 선택 */}
+            <div className="form-row sel_image">
+              <FileUpload className="report-upload" onFileSelect={(file) => setSelectedFile(file)} />
+            </div>
+          </FormGroup>
 
           {/* 버튼 */}
           <Button className="report-button" onClick={handleSubmit}>
