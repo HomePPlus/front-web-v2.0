@@ -19,6 +19,7 @@ import ChecklistComplete from "./components/dashboard/checklist/ChecklistComplet
 import ErrorPage from "./pages/ErrorPage";
 import { AlertProvider } from './contexts/AlertContext';
 import './contexts/AlertContext.css';
+import AppPreview from "./components/main/AppPreview";
 
 function App() {
   const userInfo = getUserInfo();
@@ -40,6 +41,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/checklist/complete" element={<ChecklistComplete />} />
           <Route path="/community/write" element={<CreateCommunityPost />} />
+          <Route path="/app-preview" element={<AppPreview />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </Router>

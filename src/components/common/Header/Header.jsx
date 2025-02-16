@@ -53,7 +53,7 @@ const Header = () => {
       onClick: loggedIn ? handleLogout : null,
     },
     {
-      url: isInspectorUser ? "/dashboard" : "#",
+      url: isInspectorUser ? "/dashboard" : "/app-preview",
       label: isInspectorUser ? "대시보드" : "앱",
     },
   ];

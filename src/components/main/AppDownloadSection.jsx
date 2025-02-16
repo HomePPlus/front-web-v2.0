@@ -4,6 +4,9 @@ import { QRCodeSVG } from 'qrcode.react'; // QRCodeSVG로 변경
 import './AppDownloadSection.css';
 
 const AppDownloadSection = () => {
+  // 예: 192.168.0.xxx:3000/app-preview
+  const previewUrl = 'https://safehouse-react-a5eyc2a9a0byd5hq.koreacentral-01.azurewebsites.net//app-preview';  
+
   return (
     <div className="app-download-container">
       <div className="app-card-wrapper">
@@ -44,9 +47,8 @@ const AppDownloadSection = () => {
         </div>
         <div className="download-options">
           <div className="qr-code">
-            {/* QRCodeSVG 사용 */}
-            <QRCodeSVG value="https://yourapp.com/download" size={100} />
-            <span>QR코드로 다운로드</span>
+            <QRCodeSVG value={previewUrl} size={100} />
+            <span>QR코드로 앱 화면 보기</span>
           </div>
           <div className="store-buttons">
             <button className="store-button google-play">

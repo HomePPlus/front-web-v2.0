@@ -10,9 +10,9 @@
 /* 배경 카드 - 메인 카드를 감싸는 큰 카드 */
 .app-card {
   width: 330px;
-  height: 500px;
+  height: 500px;  /* 기본 높이 */
   margin: auto;
-  background: linear-gradient(145deg, #ec8a8a, #3e5231);
+  background: linear-gradient(145deg, #ec8a8a, #d3f5bc);
   border-radius: 20px;
   box-shadow: 
     15px 15px 30px rgba(0, 0, 0, 0.3),
@@ -91,6 +91,21 @@
   border-radius: 20px;
   background: linear-gradient(145deg, 
     rgba(255, 247, 178, 0.1),
-    rgba(255, 238, 147, 0.2));
+    rgba(255, 239, 147, 0));
   pointer-events: none;
 }
+
+/* preview 모드일 때는 3D 효과 제거하고 단순 호버 효과만 적용 */
+.preview-mode .app-card {
+  transform: none !important;
+  transition: transform 0.3s ease;
+}
+
+.preview-mode .app-card:hover {
+  transform: translateY(-10px) !important;
+}
+
+.preview-mode .app-card-thumb {
+  transform: none !important;
+}
+

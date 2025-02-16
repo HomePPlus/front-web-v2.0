@@ -13,11 +13,13 @@
 }
 
 .MainAnimation-textWrap {
+  position: absolute;
   text-align: center;
   transform-origin: center;
 }
 
 .MainAnimation-textMain {
+
   font-size: 3.5rem;
   font-weight: 700;
   color: rgba(34, 87, 72, 0.95); /* 진한 청록색 텍스트 */

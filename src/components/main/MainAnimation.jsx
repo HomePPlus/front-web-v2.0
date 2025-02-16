@@ -11,6 +11,7 @@ const MainAnimation = ({ onComplete }) => {
   const text1Ref = useRef(null);
   const timeline = useRef();
   const { contextSafe } = useGSAP({ scope: wrapRef });
+  const containerRef = useRef(null); // 컨테이너 참조 추가
 
   const messages = [
     "안전한 주거환경을 만들어드립니다",
@@ -22,13 +23,36 @@ const MainAnimation = ({ onComplete }) => {
     "Safety Starts Here"
   ];
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      const threshold = window.innerHeight; // 임계값: 화면 높이
+
+      if (scrollPosition > threshold) {
+        // 임계값을 넘으면 고정 해제
+        containerRef.current.style.position = 'absolute';
+        containerRef.current.style.top = `${scrollPosition}px`;
+      } else {
+        // 임계값 이하이면 고정 유지
+        containerRef.current.style.position = 'fixed';
+        containerRef.current.style.top = '0px';
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   useGSAP(() => {
     timeline.current = gsap.timeline({
       onComplete: contextSafe(() => {
         onComplete();
       })
     });
-  
+
     timeline.current
       .from(wrapRef.current, {
         duration: 0.7,
@@ -43,13 +67,11 @@ const MainAnimation = ({ onComplete }) => {
         y: 0,
         ease: "power4.out"
       });
-    
-  
-    // 메시지 순차적 표시
+
     messages.slice(1).forEach((msg, i) => {
       timeline.current
         .to(text1Ref.current, {
-          duration: 0.7,  // 표시 시간 증가
+          duration: 0.7,
           text: msg,
           ease: "power2.inOut"
         })
@@ -60,25 +82,24 @@ const MainAnimation = ({ onComplete }) => {
           repeat: 1
         });
     });
-    
-    // 최종 텍스트 사라짐
+
     timeline.current
-      .to(text1Ref.current, { 
-        opacity: 0, 
+      .to(text1Ref.current, {
+        opacity: 0,
         duration: 1.2,
-        ease: "power4.inOut" 
+        ease: "power4.inOut"
       })
-      .to(wrapRef.current, { 
+      .to(wrapRef.current, {
         opacity: 0,
         duration: 0.3
       });
-    
+
     return () => timeline.current.kill();
   },
   { dependencies: [onComplete, messages] });
-  
+
   return (
-    <div className="MainAnimation-container">
+    <div ref={containerRef} className="MainAnimation-container">
       <div className="MainAnimation-textWrap" ref={wrapRef}>
         <span className="MainAnimation-textMain" ref={text1Ref}></span>
       </div>
