@@ -47,17 +47,21 @@ const AppDownloadSection = () => {
         </div>
         <div className="download-options">
           <div className="qr-code">
-            <QRCodeSVG value={previewUrl} size={100} />
-            <span>QR코드로 앱 화면 보기</span>
+            <img 
+              src={require('../../assets/images/app/qrcode.jpeg')} 
+              alt="QR 코드" 
+              className="qr-code"
+            />
+            <span>QR코드로 앱 다운로드</span>
           </div>
-          <div className="store-buttons">
+          {/* <div className="store-buttons">
             <button className="store-button google-play">
               Google Play
             </button>
             <button className="store-button app-store">
               App Store
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
