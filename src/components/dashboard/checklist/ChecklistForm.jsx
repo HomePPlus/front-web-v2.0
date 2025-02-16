@@ -325,7 +325,7 @@ const ChecklistForm = ({ onError, onSuccess }) => {
       logApiResponse('체크리스트 제출', response);
       
       if (response.status === 200 || response.data.status === 200) {
-        await handleStatusChange(selectedInspection.inspection_id, '완료');
+        await handleStatusChange(selectedInspection.inspection_id, '완료됨');
         
         // 완료된 체크리스트 정보 저장
         const completedChecklist = {
@@ -561,7 +561,9 @@ const ChecklistForm = ({ onError, onSuccess }) => {
               >
                 보고서 다운로드 페이지로 이동
               </button>
-              <button onClick={() => navigate('/dashboard')}>
+              <button onClick={() => {
+                window.location.reload();
+              }}>
                 대시보드로 돌아가기
               </button>
             </div>
