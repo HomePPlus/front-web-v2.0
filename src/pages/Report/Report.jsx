@@ -345,9 +345,7 @@ const Report = () => {
                 onChange={(e) => setReport(e.target.value)}
                 maxLength={1000}
               />
-            </div>
-
-            {/* 결함 유형 선택 */}
+              {/* 결함 유형 선택 */}
             <div className="defect-selection-wrapper">
               <div className="defect-dropdown">
                 <DropDown
@@ -376,6 +374,7 @@ const Report = () => {
                   </div>
                 )}
               </div>
+            </div>
             </div>
 
             {/* 파일 선택 */}
