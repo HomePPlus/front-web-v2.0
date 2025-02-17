@@ -12,8 +12,8 @@ const MainPage = () => {
   const [animationDone, setAnimationDone] = useState(false);
   const [moveUp, setMoveUp] = useState(false);
   const [showPostAnimationText, setShowPostAnimationText] = useState(false);
-  const [loadingStates, setLoadingStates] = useState({}); // 로딩 상태 관리
-  const carouselTextRef = useRef(null);  // 텍스트 요소에 대한 ref 추가
+  const [loadingStates, setLoadingStates] = useState({});
+  const carouselTextRef = useRef(null);
   const [showAppCard, setShowAppCard] = useState(false);
 
   useEffect(() => {
@@ -35,13 +35,11 @@ const MainPage = () => {
         }
       }
 
-      // 앱 다운로드 섹션 표시 로직 수정
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
       const scrollPosition = window.scrollY + windowHeight;
       const scrollPercentage = (window.scrollY / (documentHeight - windowHeight)) * 100;
-      
-      // 스크롤이 70% 이상일 때 앱 다운로드 섹션 표시
+
       if (scrollPercentage > 70) {
         setShowAppCard(true);
       } else {
@@ -53,23 +51,21 @@ const MainPage = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // 애니메이션 완료 핸들러
   const handleAnimationComplete = () => {
     if (!animationDone) {
       setMoveUp(true);
       setTimeout(() => {
-        setShowPostAnimationText(true); // 애니메이션 완료 후 텍스트 표시
+        setShowPostAnimationText(true);
         setTimeout(() => {
           setShowCarouselText(true);
           setAnimationDone(true);
         }, 1000);
-      }, 500); // 애니메이션 완료 후 1초 뒤에 텍스트 표시
+      }, 500);
     }
   };
 
   return (
     <div className="main-container">
-      {/* <MovingMascot /> */}
       <div className={`animation-section ${moveUp ? 'move-up' : ''}`}>
         {!animationDone && <MainAnimation onComplete={handleAnimationComplete} />}
       </div>
@@ -88,7 +84,7 @@ const MainPage = () => {
           ref={carouselTextRef}
           className={`carousel-intro-text ${showCarouselText ? 'show' : ''}`}
         >
-     안전한 주거 공간의 시작, <span className="defect-diagnosis">AI 결함 진단</span>을 체험해보세요!
+          안전한 주거 공간의 시작, <span className="defect-diagnosis">AI 결함 진단</span>을 체험해보세요!
         </div>
         <div className={`carousel-container ${showCarouselText ? 'show' : ''}`}>
           <MainDefect />

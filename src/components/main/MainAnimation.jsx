@@ -11,7 +11,7 @@ const MainAnimation = ({ onComplete }) => {
   const text1Ref = useRef(null);
   const timeline = useRef();
   const { contextSafe } = useGSAP({ scope: wrapRef });
-  const containerRef = useRef(null); // 컨테이너 참조 추가
+  const containerRef = useRef(null);
 
   const messages = [
     "안전한 주거환경을 만들어드립니다",
@@ -26,16 +26,12 @@ const MainAnimation = ({ onComplete }) => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
-      const threshold = window.innerHeight; // 임계값: 화면 높이
+      const threshold = window.innerHeight;
 
       if (scrollPosition > threshold) {
-        // 임계값을 넘으면 고정 해제
-        containerRef.current.style.position = 'absolute';
-        containerRef.current.style.top = `${scrollPosition}px`;
+        containerRef.current.style.opacity = '0'; // 스크롤 시 애니메이션 숨기기
       } else {
-        // 임계값 이하이면 고정 유지
-        containerRef.current.style.position = 'fixed';
-        containerRef.current.style.top = '0px';
+        containerRef.current.style.opacity = '1'; // 다시 보이게
       }
     };
 
