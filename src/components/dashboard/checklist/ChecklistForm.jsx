@@ -216,6 +216,7 @@ const ChecklistForm = ({ onError, onSuccess }) => {
   };
 
   const handleInputChange = (section, field, value) => {
+    console.log('handleInputChange called:', { section, field, value });
     setFormData((prev) => ({
       ...prev,
       [section]: {
@@ -249,7 +250,79 @@ const ChecklistForm = ({ onError, onSuccess }) => {
       setLoading(true);
       await showAlert("체크리스트 제출 중...", 'info');
 
+      // const requestData = {
+      //   // 1. 기본 정보
+      //   inspection_id: selectedInspection.inspection_id,
+      //   inspection_date: formData.basicInfo.inspectionDate,
+      //   inspector_name: formData.basicInfo.inspectorName,
+      //   inspector_contact: formData.basicInfo.inspectorContact,
+      //   address: formData.basicInfo.address,
+      //   defect_type: formData.basicInfo.defectTypes,
+        
+      //   // 2. 콘크리트 균열
+      //   concrete_crack_type: formData.concreteCrack.crackType,
+      //   concrete_crack_length_cm: formData.concreteCrack.length,
+      //   concrete_crack_width_mm: formData.concreteCrack.width,
+      //   concrete_crack_depth_mm: formData.concreteCrack.depth,
+      //   concrete_crack_leakage: formData.concreteCrack.leakage,
+      //   concrete_crack_movement: formData.concreteCrack.movement,
+      //   concrete_crack_change: formData.concreteCrack.change,
+      //   concrete_crack_condition: formData.concreteCrack.condition,
+      //   concrete_crack_emergency: formData.concreteCrack.emergency,
+      //   concrete_crack_emergency_action: formData.concreteCrack.emergencyAction,
+      //   concrete_crack_repair_plan: formData.concreteCrack.repairPlan,
+  
+      //   // 3. 누수/백태
+      //   leak_eflo_leakage_range: formData.leakEflo.damageRange,
+      //   leak_eflo_leakage_cause: formData.leakEflo.cause,
+      //   leak_eflo_eflorescence: formData.leakEflo.eflorescence,
+      //   leak_eflo_impact: formData.leakEflo.leakImpact,
+      //   leak_eflo_emergency: formData.leakEflo.emergency,
+      //   leak_eflo_emergency_action: formData.leakEflo.emergencyAction,
+      //   leak_eflo_repair_plan: formData.leakEflo.repairPlan,
+  
+      //   // 4. 강재 손상
+      //   steel_damage_range: formData.steelDamage.damageRange,
+      //   steel_damage_severity: formData.steelDamage.damageSeverity,
+      //   steel_damage_cause: formData.steelDamage.damageCause,
+      //   steel_damage_stability_impact: formData.steelDamage.stabilityImpact,
+      //   steel_damage_emergency: formData.steelDamage.emergency,
+      //   steel_damage_emergency_action: formData.steelDamage.emergencyAction,
+      //   steel_damage_repair_plan: formData.steelDamage.repairPlan,
+  
+      //   // 5. 박리
+      //   delamination_range: formData.delamination.delaminationRange,
+      //   delamination_cause: formData.delamination.delaminationCause,
+      //   delamination_stability_impact: formData.delamination.stabilityImpact,
+      //   delamination_emergency: formData.delamination.emergency,
+      //   delamination_emergency_action: formData.delamination.emergencyAction,
+      //   delamination_repair_plan: formData.delamination.repairPlan,
+  
+      //   // 6. 철근 노출
+      //   rebar_exposure_range: formData.rebarExposure.exposureRange,
+      //   rebar_exposure_condition: formData.rebarExposure.exposureCondition,
+      //   rebar_exposure_cause: formData.rebarExposure.exposureCause,
+      //   rebar_exposure_stability_impact: formData.rebarExposure.stabilityImpact,
+      //   rebar_exposure_emergency: formData.rebarExposure.emergency,
+      //   rebar_exposure_emergency_action: formData.rebarExposure.emergencyAction,
+      //   rebar_exposure_repair_plan: formData.rebarExposure.repairPlan,
+  
+      //   // 7. 도장 손상
+      //   paint_damage_range: formData.paintDamage.damageRange,
+      //   paint_damage_cause: formData.paintDamage.damageCause,
+      //   paint_damage_condition: formData.paintDamage.damageCondition,
+      //   paint_damage_emergency: formData.paintDamage.emergency,
+      //   paint_damage_emergency_action: formData.paintDamage.emergencyAction,
+      //   paint_damage_repair_plan: formData.paintDamage.repairPlan,
+  
+      //   // 8. 종합 평가
+      //   overall_result: formData.overallAssessment.overallResult,
+      //   monitoring_required: formData.overallAssessment.monitoringRequired,
+      //   next_inspection_date: formData.overallAssessment.nextInspectionDate,
+      // };
+
       const requestData = {
+        // 기본 정보
         inspection_id: selectedInspection.inspection_id,
         inspection_date: formData.basicInfo.inspectionDate,
         inspector_name: formData.basicInfo.inspectorName,
@@ -269,16 +342,16 @@ const ChecklistForm = ({ onError, onSuccess }) => {
         concrete_crack_emergency: formData.concreteCrack.emergency,
         concrete_crack_emergency_action: formData.concreteCrack.emergencyAction,
         concrete_crack_repair_plan: formData.concreteCrack.repairPlan,
-
+  
         // 누수/백태
-        leak_eflo_leakage_range: formData.leakEflo.leakageRange,
-        leak_eflo_leakage_cause: formData.leakEflo.leakageCause,
+        leak_eflo_leakage_range: formData.leakEflo.damageRange,
+        leak_eflo_leakage_cause: formData.leakEflo.cause,
         leak_eflo_eflorescence: formData.leakEflo.eflorescence,
         leak_eflo_impact: formData.leakEflo.leakImpact,
         leak_eflo_emergency: formData.leakEflo.emergency,
         leak_eflo_emergency_action: formData.leakEflo.emergencyAction,
         leak_eflo_repair_plan: formData.leakEflo.repairPlan,
-
+  
         // 강재 손상
         steel_damage_range: formData.steelDamage.damageRange,
         steel_damage_severity: formData.steelDamage.damageSeverity,
@@ -287,7 +360,7 @@ const ChecklistForm = ({ onError, onSuccess }) => {
         steel_damage_emergency: formData.steelDamage.emergency,
         steel_damage_emergency_action: formData.steelDamage.emergencyAction,
         steel_damage_repair_plan: formData.steelDamage.repairPlan,
-
+  
         // 박리
         delamination_range: formData.delamination.delaminationRange,
         delamination_cause: formData.delamination.delaminationCause,
@@ -295,7 +368,7 @@ const ChecklistForm = ({ onError, onSuccess }) => {
         delamination_emergency: formData.delamination.emergency,
         delamination_emergency_action: formData.delamination.emergencyAction,
         delamination_repair_plan: formData.delamination.repairPlan,
-
+  
         // 철근 노출
         rebar_exposure_range: formData.rebarExposure.exposureRange,
         rebar_exposure_condition: formData.rebarExposure.exposureCondition,
@@ -304,7 +377,7 @@ const ChecklistForm = ({ onError, onSuccess }) => {
         rebar_exposure_emergency: formData.rebarExposure.emergency,
         rebar_exposure_emergency_action: formData.rebarExposure.emergencyAction,
         rebar_exposure_repair_plan: formData.rebarExposure.repairPlan,
-
+  
         // 도장 손상
         paint_damage_range: formData.paintDamage.damageRange,
         paint_damage_cause: formData.paintDamage.damageCause,
@@ -312,16 +385,18 @@ const ChecklistForm = ({ onError, onSuccess }) => {
         paint_damage_emergency: formData.paintDamage.emergency,
         paint_damage_emergency_action: formData.paintDamage.emergencyAction,
         paint_damage_repair_plan: formData.paintDamage.repairPlan,
-
+  
         // 종합 평가
         overall_result: formData.overallAssessment.overallResult,
         monitoring_required: formData.overallAssessment.monitoringRequired,
-        next_inspection_date: formData.overallAssessment.nextInspectionDate,
+        next_inspection_date: formData.overallAssessment.nextInspectionDate
       };
 
-      console.log('제출 시도:', requestData); // 디버깅용 로그
-
+      console.log('전송할 JSON 데이터:', requestData);
       const response = await submitChecklist(requestData);
+
+  
+      console.log('========================');
       logApiResponse('체크리스트 제출', response);
       
       if (response.status === 200 || response.data.status === 200) {
