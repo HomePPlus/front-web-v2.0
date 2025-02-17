@@ -7,6 +7,7 @@ import {
   getCommunityComments,
   createCommunityComment,
 } from '../../api/apiClient';
+import { getUserInfo } from '../../utils/auth';
 import CommentList from './CommentList';
 import FormGroup from '../../components/FormGroup/FormGroup';
 import './CommunityBoard.css';
@@ -20,14 +21,17 @@ const PostDetail = () => {
   const [newComment, setNewComment] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  const userInfo = getUserInfo();
+  const loggedInEmail = userInfo?.email;
 
   useEffect(() => {
     const fetchData = async () => {
-      console.group('PostDetail - 데이터 로딩');
+      console.group('게시글 데이터 로딩');
       try {
         console.log('게시글 ID:', postId);
         const postResponse = await getCommunityPost(postId);
-        console.log('게시글 응답:', postResponse);
+        console.log('게시글 데이터:', postResponse.data.data);
         
         const commentsResponse = await getCommunityComments(postId);
         console.log('댓글 응답:', commentsResponse);
@@ -36,22 +40,26 @@ const PostDetail = () => {
         setComments(commentsResponse.data.data);
         console.log('데이터 설정 완료');
       } catch (error) {
-        console.error('데이터 로딩 에러:', error);
+        console.error('게시글 로딩 에러:', error);
         setError('게시글을 불러오는데 실패했습니다.');
       } finally {
-        console.log('로딩 상태 해제');
+        console.groupEnd();
         setLoading(false);
       }
-      console.groupEnd();
     };
 
     fetchData();
   }, [postId]);
 
   const handleDeletePost = async () => {
+    console.log('삭제 버튼 클릭됨');
+    console.log('현재 사용자 이메일:', loggedInEmail);
+    console.log('게시글 작성자 이메일:', post?.userEmail);
+
     if (window.confirm('정말 삭제하시겠습니까?')) {
       try {
         await deleteCommunityPost(postId);
+        console.log('게시글 삭제 성공:', postId);
         navigate('/community');
       } catch (error) {
         console.error('게시글 삭제 오류:', error);
@@ -77,6 +85,9 @@ const PostDetail = () => {
   if (loading) return <Loading />;
   if (error) return <div className="error">{error}</div>;
   if (!post) return null;
+
+  console.log('로그인한 사용자 이메일:', loggedInEmail);
+  console.log('게시글 작성자 이메일:', post.userEmail);
 
   return (
     <div className="post-detail-container">
@@ -110,9 +121,11 @@ const PostDetail = () => {
             <button onClick={() => navigate('/community')} className="list-button">
               목록으로
             </button>
-            <button onClick={handleDeletePost} className="delete-button">
-              삭제
-            </button>
+            {loggedInEmail && post.userEmail === loggedInEmail && (
+              <button onClick={handleDeletePost} className="delete-button">
+                삭제
+              </button>
+            )}
           </div>
 
           {/* <div className="comment-section">
