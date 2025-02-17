@@ -80,21 +80,6 @@ const Sidebar = ({ onViewChange }) => {
             </button>
           </li>
         </ul>
-
-        {/* Customize 섹션 */}
-        <span className="sidebar-heading">
-          <span className="sidebar-heading-text">Customize</span>
-        </span>
-        <ul className="sidebar-items">
-          <li className="sidebar-item">
-            <a className="sidebar-item-box" href="#" title="Themes">
-              <span className="sidebar-item-icon">
-                <MdPalette size={24} />
-              </span>
-              <span className="sidebar-item-text">테마</span>
-            </a>
-          </li>
-        </ul>
       </div>
 
       {/* 하단 토글 버튼 */}
