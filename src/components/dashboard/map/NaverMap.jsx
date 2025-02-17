@@ -144,6 +144,7 @@ const NaverMap = () => {
       '수영구': new window.naver.maps.LatLng(35.1500, 129.1160), // 수영구청 좌표
       '사상구': new window.naver.maps.LatLng(35.1395, 128.9790), // 사상구청 좌표
       '중구': new window.naver.maps.LatLng(35.1025, 129.0400), // 중구청 좌표
+      '동구': new window.naver.maps.LatLng(35.1293, 129.0453)
       // 추가적인 구청 좌표를 여기에 추가할 수 있습니다.
     };
 

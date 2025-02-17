@@ -10,7 +10,11 @@ const TodayInspection = () => {
 
   const fetchTodayInspections = async () => {
     try {
-      const response = await apiClient.get("/api/inspections/today");
+      const today = new Date();
+      today.setDate(today.getDate() + 1); // 현재 날짜에 하루를 더함
+      const formattedDate = today.toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 변환
+      console.log(`API 요청 날짜: ${formattedDate}`); // 로깅 추가
+      const response = await apiClient.get(`/api/inspections/today?date=${formattedDate}`);
       setInspections(response.data.data);
       setMessage(response.data.message);
       setError(null);
@@ -48,7 +52,6 @@ const TodayInspection = () => {
       {inspections.length === 0 ? (
         <div className="no-inspection-message">{message}</div>
       ) : (
-
         <div className="inspection-cards">
           {inspections.map((inspection) => {
             const reportInfo = inspection.report_info || {};

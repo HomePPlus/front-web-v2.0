@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React } from 'react';
 import '../ChecklistForm.css';
 import RadioGroup from '../RadioGroup';
 import DatePicker from 'react-datepicker';
@@ -9,14 +9,16 @@ const OverallAssessmentStep = ({ formData, handleInputChange, inspectionId }) =>
   // 날짜 선택 핸들러
   const handleDateChange = (date) => {
     const formattedDate = date ? date.toISOString().split('T')[0] : '';
+    console.log(`handleInputChange called: {section: 'overallAssessment', field: 'nextInspectionDate', value: '${formattedDate}'}`); // 로깅 추가
     handleInputChange('overallAssessment', 'nextInspectionDate', formattedDate);
-
   };
 
   // 문자열 날짜를 Date 객체로 변환
   const selectedDate = formData.overallAssessment.nextInspectionDate 
     ? new Date(formData.overallAssessment.nextInspectionDate) 
-    : null;
+    : new Date(); // 기본값으로 현재 날짜 설정
+
+  console.log(`선택된 날짜: ${selectedDate}`); // 로깅 추가
 
   return (
     <section className="checklist-section">
@@ -55,8 +57,8 @@ const OverallAssessmentStep = ({ formData, handleInputChange, inspectionId }) =>
           <div className="basic-info-input">
             <label>다음 점검 일정:</label>
             <DatePicker
-              selected={selectedDate}
-              onChange={handleDateChange}
+              selected={selectedDate} // 올바른 날짜 선택
+              onChange={handleDateChange} // 날짜 선택 핸들러
               dateFormat="yyyy-MM-dd"
               locale={ko}
               className="date-picker-input"
