@@ -47,58 +47,107 @@ const NaverMap = () => {
       const response = await getInspectionReports();
       const inspections = response.data.data;
 
+      // 기존 마커 제거
       markers.forEach((marker) => marker.setMap(null));
       const newMarkers = [];
 
+      // 첫 번째 유효한 주소를 찾기 위한 변수
+      let firstValidAddress = null;
+
       for (const inspection of inspections) {
-        try {
-          const reportInfo = inspection.report_info || {}; // report_info가 없을 경우 빈 객체로 초기화
-          const address = reportInfo.detail_address; // detail_address를 안전하게 가져옴
+        const reportInfo = inspection.report_info || {};
+        const address = reportInfo.detail_address; // 점검의 주소
 
-          if (address) { // address가 존재할 경우에만 마커 생성
-            const position = await getCoordinatesFromAddress(address);
-            const marker = new window.naver.maps.Marker({
-              position,
-              map: map,
-              title: reportInfo.description,
-            });
-
-            // 정보창 생성
-            const infoWindow = new window.naver.maps.InfoWindow({
-              content: `
-                <div class="info-window">
-                  <h3>점검 정보</h3>
-                  <p><strong>상태:</strong> ${inspection.status}</p>
-                  <p><strong>유형:</strong> ${reportInfo.defect_type}</p>
-                  <p><strong>설명:</strong> ${reportInfo.description}</p>
-                  <p><strong>주소:</strong> ${address}</p>
-                </div>
-              `,
-            });
-
-            // 마커 클릭 이벤트
-            window.naver.maps.Event.addListener(marker, 'click', () => {
-              if (infoWindow.getMap()) {
-                infoWindow.close();
-              } else {
-                infoWindow.open(map, marker);
-              }
-            });
-
-            newMarkers.push(marker);
-          } else {
-            console.warn(`Inspection ${inspection.inspection_id} does not have a valid detail_address.`);
+        if (address) { // 주소가 존재할 경우
+          if (!firstValidAddress) {
+            firstValidAddress = address; // 첫 번째 유효한 주소 저장
           }
-        } catch (error) {
-          console.error(`주소 변환 실패: ${inspection.report_info?.detail_address}`, error);
+
+          // 주소를 좌표로 변환하여 마커 생성
+          const position = await getCoordinatesFromAddress(address);
+          const marker = new window.naver.maps.Marker({
+            position,
+            map: map,
+            title: reportInfo.description,
+          });
+
+          // 정보창 생성
+          const infoWindow = new window.naver.maps.InfoWindow({
+            content: `
+              <div class="info-window">
+                <h3>점검 정보</h3>
+                <p><strong>상태:</strong> ${inspection.status}</p>
+                <p><strong>유형:</strong> ${reportInfo.defect_type}</p>
+                <p><strong>설명:</strong> ${reportInfo.description}</p>
+                <p><strong>주소:</strong> ${address}</p>
+              </div>
+            `,
+          });
+
+          // 마커 클릭 이벤트
+          window.naver.maps.Event.addListener(marker, 'click', () => {
+            if (infoWindow.getMap()) {
+              infoWindow.close();
+            } else {
+              infoWindow.open(map, marker);
+            }
+          });
+
+          newMarkers.push(marker); // 새로운 마커 추가
         }
       }
 
-      setMarkers(newMarkers);
+      // 유효한 주소가 있을 경우 구청 마커 추가
+      if (firstValidAddress) {
+        const district = firstValidAddress.split(' ')[1]; // 예: "부산 해운대구"에서 "해운대구" 추출
+        console.log(`추출된 구: ${district}`); // 구 로깅
+
+        const districtOfficePosition = getDistrictOfficePosition(district); // 구청의 좌표 가져오기
+
+        if (districtOfficePosition) {
+          console.log(`구청 좌표: ${districtOfficePosition}`); // 구청 좌표 로깅
+          const districtOfficeMarker = new window.naver.maps.Marker({
+            position: districtOfficePosition,
+            map: map,
+            title: `${district}청`,
+          });
+          newMarkers.push(districtOfficeMarker); // 구청 마커 추가
+
+          // 지도 중심을 구청 좌표로 설정
+          map.setCenter(districtOfficePosition);
+        }
+      } else {
+        console.warn('신고된 주소가 없습니다. 구청 마커를 설정할 수 없습니다.');
+      }
+
+      setMarkers(newMarkers); // 모든 마커 설정
     } catch (error) {
       console.error('점검 목록 로딩 실패:', error);
       setError('점검 위치를 불러오는데 실패했습니다.');
     }
+  };
+
+  // 구청의 좌표를 반환하는 함수
+  const getDistrictOfficePosition = (district) => {
+    const districtOffices = {
+      '해운대구': new window.naver.maps.LatLng(35.1637221, 129.1847032), // 해운대구청 좌표
+      '부산진구': new window.naver.maps.LatLng(35.1595, 129.0592), // 부산진구청 좌표
+      '서면구': new window.naver.maps.LatLng(35.1595, 129.0592), // 서면구청 좌표 (예시)
+      '동래구': new window.naver.maps.LatLng(35.2023, 129.0755), // 동래구청 좌표
+      '남구': new window.naver.maps.LatLng(35.1304, 129.0865), // 남구청 좌표
+      '북구': new window.naver.maps.LatLng(35.1975, 129.0015), // 북구청 좌표
+      '영도구': new window.naver.maps.LatLng(35.0665, 129.4000), // 영도구청 좌표
+      '사하구': new window.naver.maps.LatLng(35.0965, 128.9930), // 사하구청 좌표
+      '금정구': new window.naver.maps.LatLng(35.2325, 129.0865), // 금정구청 좌표
+      '강서구': new window.naver.maps.LatLng(35.1745, 128.9470), // 강서구청 좌표
+      '기장군': new window.naver.maps.LatLng(35.2395, 129.2270), // 기장군청 좌표
+      '수영구': new window.naver.maps.LatLng(35.1500, 129.1160), // 수영구청 좌표
+      '사상구': new window.naver.maps.LatLng(35.1395, 128.9790), // 사상구청 좌표
+      '중구': new window.naver.maps.LatLng(35.1025, 129.0400), // 중구청 좌표
+      // 추가적인 구청 좌표를 여기에 추가할 수 있습니다.
+    };
+
+    return districtOffices[district] || null; // 해당 구청의 좌표 반환, 없으면 null
   };
 
   // 네이버 지도 초기화
@@ -120,43 +169,24 @@ const NaverMap = () => {
           return;
         }
 
-        try {
-          const busanCityHall = new window.naver.maps.LatLng(35.1798159, 129.0750222);
-          const mapInstance = new window.naver.maps.Map(mapRef.current, {
-            center: busanCityHall,
-            zoom: 14,
-            zoomControl: true,
-            zoomControlOptions: {
-              style: window.naver.maps.ZoomControlStyle.SMALL,
-              position: window.naver.maps.Position.TOP_LEFT,
-              legendDisabled: true
-            },
-            mapTypeControl: true,
-            mapTypeControlOptions: {
-              position: window.naver.maps.Position.TOP_RIGHT
-            }
-          });
-
-          new window.naver.maps.Marker({
-            position: busanCityHall,
-            map: mapInstance,
-            title: '부산광역시청',
-          });
-
-          // 줌 컨트롤 직접 추가
-          const zoomControl = new window.naver.maps.ZoomControl({
+        const busanCityHall = new window.naver.maps.LatLng(35.1798159, 129.0750222);
+        const mapInstance = new window.naver.maps.Map(mapRef.current, {
+          center: busanCityHall,
+          zoom: 14,
+          zoomControl: true,
+          zoomControlOptions: {
+            style: window.naver.maps.ZoomControlStyle.SMALL,
+            position: window.naver.maps.Position.TOP_LEFT,
+            legendDisabled: true
+          },
+          mapTypeControl: true,
+          mapTypeControlOptions: {
             position: window.naver.maps.Position.TOP_RIGHT
-          });
+          }
+        });
 
-          // 줌 컨트롤을 지도에 추가
-          zoomControl.setMap(mapInstance);
-
-          setMap(mapInstance);
-          setLoading(false);
-        } catch (error) {
-          setError('지도를 초기화하는데 실패했습니다.');
-          setLoading(false);
-        }
+        setMap(mapInstance);
+        setLoading(false);
       };
 
       document.head.appendChild(script);
