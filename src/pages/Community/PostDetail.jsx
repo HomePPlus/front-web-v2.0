@@ -12,6 +12,7 @@ import CommentList from './CommentList';
 import FormGroup from '../../components/FormGroup/FormGroup';
 import './CommunityBoard.css';
 import Loading from '../../components/common/Loading/Loading';
+import { useAlert } from '../../contexts/AlertContext';
 
 const PostDetail = () => {
   const { postId } = useParams();
@@ -24,6 +25,7 @@ const PostDetail = () => {
   
   const userInfo = getUserInfo();
   const loggedInEmail = userInfo?.email;
+  const { showAlert } = useAlert();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,19 +54,24 @@ const PostDetail = () => {
   }, [postId]);
 
   const handleDeletePost = async () => {
-    console.log('삭제 버튼 클릭됨');
-    console.log('현재 사용자 이메일:', loggedInEmail);
-    console.log('게시글 작성자 이메일:', post?.userEmail);
+    const confirmed = await showAlert(
+      <div>
+        <p>정말 삭제하시겠습니까?</p>
+        <button className="confirm-button" onClick={async () => {
+          try {
+            await deleteCommunityPost(postId);
+            console.log('게시글 삭제 성공:', postId);
+            navigate('/community');
+          } catch (error) {
+            console.error('게시글 삭제 오류:', error);
+          }
+        }}>확인</button>
+        <button className="cancel-button" onClick={() => { /* 취소 시 아무 작업도 하지 않음 */ }}>취소</button>
+      </div>,
+      'warning'
+    );
 
-    if (window.confirm('정말 삭제하시겠습니까?')) {
-      try {
-        await deleteCommunityPost(postId);
-        console.log('게시글 삭제 성공:', postId);
-        navigate('/community');
-      } catch (error) {
-        console.error('게시글 삭제 오류:', error);
-      }
-    }
+    if (!confirmed) return;
   };
 
   const handleCommentSubmit = async (e) => {

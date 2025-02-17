@@ -425,3 +425,37 @@
     padding: 10px;
   }
 }
+
+.confirm-button {
+  background-color: transparent;
+  color: white;
+  border: none;
+  height:30px;
+  font-size: 13px;
+  font-family: "eLight";
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px; /* 버튼 간격 */
+}
+
+.confirm-button:hover {
+  background-color: #45a049; /* 호버 시 색상 변경 */
+}
+
+.cancel-button {
+  background-color: transparent;
+  color: white;
+  border: none;
+  font-size: 13px;
+  
+  font-family: "eLight";
+  padding: 10px 20px;
+  height:30px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cancel-button:hover {
+  background-color: #e53935; /* 호버 시 색상 변경 */
+}

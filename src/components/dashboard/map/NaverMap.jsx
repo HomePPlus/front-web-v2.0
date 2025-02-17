@@ -183,7 +183,7 @@ const NaverMap = () => {
         <div className="header-section map-title">
           <h2 className="section-title eMedium map-title">부산시 신고 위치</h2>
         </div>
-        <div className="content-wrapper">
+        <div className="map-content-wrapper">
           {loading && <div className="loading">지도를 불러오는 중...</div>}
           {error && <div className="error">{error}</div>}
           <div ref={mapRef} className="naver-map" />

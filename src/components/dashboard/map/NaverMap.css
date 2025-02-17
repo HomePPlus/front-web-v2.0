@@ -75,13 +75,13 @@
 }
 
 .map-title {
-  width: 96%;
+  width: 91%;
   margin-top: 10px;
 }
 
-.content-wrapper{
-  width: 90% !important;
-  height: 90% !important;
+.map-content-wrapper{
+  width: 95% !important;
+  height: 80% !important;
 }
 
 /* 스크롤 방지를 위한 스타일 수정 */

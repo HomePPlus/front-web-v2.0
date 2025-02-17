@@ -23,7 +23,7 @@ const UserReportTable = ({ onUpdateStats, onAlert }) => {
         report_detail_address: report.report_detail_address,
         defect_type: report.defect_type,
         images: report.images,
-        detection_result: report.detection_result,
+        detection_result: report.detection_result || "분석 결과 없음",
         detection_label: report.detection_label,
         total_score: report.total_score
       }));

@@ -132,9 +132,9 @@ const Dashboard = () => {
               <div className="dashboard-item">
                 <ReportDashboard ref={reportDashboardRef} />
               </div>
-              <div className="dashboard-item">
+              {/* <div className="dashboard-item"> */}
                 <MiniCalendar onDateClick={handleDateClick} />
-              </div>
+              {/* </div> */}
               <div className="dashboard-item">
                 <TodayInspection />
               </div>
@@ -148,14 +148,12 @@ const Dashboard = () => {
                       }`}
                     >
                       {alert}
-
-            </div>
-            ))}
-          </div>
-        )}
                     </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
-
         )}
 
         {isModalOpen && (

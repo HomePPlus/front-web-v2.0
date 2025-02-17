@@ -93,7 +93,7 @@
 }
 
 .dashboard-item {
-  
+  height: 90%;
   overflow: auto;
   background: #e0e5ec;
   border-radius: 15px;
@@ -116,8 +116,8 @@
 }
 
 .inspection-list {
-  width: 100%;
-  height: 430px;
+  width: 97.5%;
+  height: 400px;
   max-width: 98%;
 }
 
