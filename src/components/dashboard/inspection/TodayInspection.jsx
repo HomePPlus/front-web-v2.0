@@ -11,7 +11,7 @@ const TodayInspection = () => {
   const fetchTodayInspections = async () => {
     try {
       const today = new Date();
-      today.setDate(today.getDate() + 1); // 현재 날짜에 하루를 더함
+      today.setDate(today.getDate()); // 현재 날짜에 하루를 더함
       const formattedDate = today.toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 변환
       console.log(`API 요청 날짜: ${formattedDate}`); // 로깅 추가
       const response = await apiClient.get(`/api/inspections/today?date=${formattedDate}`);
